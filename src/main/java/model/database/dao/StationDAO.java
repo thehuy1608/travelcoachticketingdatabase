@@ -180,6 +180,10 @@ public class StationDAO {
         return station_list;
     }
 
+    /**
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         Cityordistrict district = CityOrDistrictDAO.get_city_or_district_by_id(33);
         List<Station> station_list = get_station_list_by_cityordistrict(district);
