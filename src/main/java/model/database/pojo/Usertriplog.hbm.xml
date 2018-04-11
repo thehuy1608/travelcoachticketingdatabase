@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Apr 11, 2018 12:54:20 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.database.pojo.Usertriplog" table="usertriplog" catalog="travel_coach_ticketing" optimistic-lock="version">
+        <id name="tripLogId" type="java.lang.Integer">
+            <column name="TripLogID" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="invoice" class="model.database.pojo.Invoice" fetch="select">
+            <column name="FK_InvoiceID" not-null="true" />
+        </many-to-one>
+        <many-to-one name="users" class="model.database.pojo.Users" fetch="select">
+            <column name="FK_UserID" not-null="true" />
+        </many-to-one>
+        <property name="description" type="string">
+            <column name="Description" length="50" />
+        </property>
+        <property name="modifiedDate" type="date">
+            <column name="ModifiedDate" length="10" not-null="true" />
+        </property>
+        <property name="tripLogStatus" type="string">
+            <column name="TripLogStatus" length="50" not-null="true" />
+        </property>
+        <property name="rating" type="float">
+            <column name="Rating" precision="2" scale="1" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

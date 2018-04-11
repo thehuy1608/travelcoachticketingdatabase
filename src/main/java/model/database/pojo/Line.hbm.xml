@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Apr 11, 2018 12:54:20 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.database.pojo.Line" table="line" catalog="travel_coach_ticketing" optimistic-lock="version">
+        <id name="lineId" type="java.lang.Integer">
+            <column name="LineID" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="stationByDepartureStationId" class="model.database.pojo.Station" fetch="select">
+            <column name="Departure_StationID" not-null="true" />
+        </many-to-one>
+        <many-to-one name="stationByDestinationStationId" class="model.database.pojo.Station" fetch="select">
+            <column name="Destination_StationID" not-null="true" />
+        </many-to-one>
+        <property name="lineName" type="string">
+            <column name="LineName" length="50" not-null="true" />
+        </property>
+        <property name="lineDescription" type="string">
+            <column name="LineDescription" length="50" />
+        </property>
+        <property name="modifiedDate" type="date">
+            <column name="ModifiedDate" length="10" not-null="true" />
+        </property>
+        <set name="trips" table="trip" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="FK_LineID" not-null="true" />
+            </key>
+            <one-to-many class="model.database.pojo.Trip" />
+        </set>
+    </class>
+</hibernate-mapping>

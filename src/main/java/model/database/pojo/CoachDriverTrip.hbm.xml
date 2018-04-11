@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Apr 11, 2018 12:54:20 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.database.pojo.CoachDriverTrip" table="coach_driver_trip" catalog="travel_coach_ticketing" optimistic-lock="version">
+        <id name="id" type="java.lang.Integer">
+            <column name="ID" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="coach" class="model.database.pojo.Coach" fetch="select">
+            <column name="FK_CoachID" not-null="true" />
+        </many-to-one>
+        <many-to-one name="driverByFkSubDriverId" class="model.database.pojo.Driver" fetch="select">
+            <column name="FK_Sub_DriverID" />
+        </many-to-one>
+        <many-to-one name="driverByFkDriverId" class="model.database.pojo.Driver" fetch="select">
+            <column name="FK_DriverID" not-null="true" />
+        </many-to-one>
+        <many-to-one name="trip" class="model.database.pojo.Trip" fetch="select">
+            <column name="FK_TripID" not-null="true" />
+        </many-to-one>
+        <property name="description" type="string">
+            <column name="Description" length="50" not-null="true" />
+        </property>
+        <property name="modifiedDate" type="date">
+            <column name="ModifiedDate" length="10" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Apr 11, 2018 12:54:20 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.database.pojo.Specialpromotion" table="specialpromotion" catalog="travel_coach_ticketing" optimistic-lock="version">
+        <id name="promotionId" type="java.lang.Integer">
+            <column name="PromotionID" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="users" class="model.database.pojo.Users" fetch="select">
+            <column name="FK_UserID" not-null="true" />
+        </many-to-one>
+        <property name="promotionName" type="string">
+            <column name="PromotionName" length="50" not-null="true" />
+        </property>
+        <property name="discountPercent" type="float">
+            <column name="DiscountPercent" precision="4" not-null="true" />
+        </property>
+        <property name="usageCount" type="byte">
+            <column name="UsageCount" not-null="true" />
+        </property>
+        <property name="description" type="string">
+            <column name="Description" length="50" />
+        </property>
+        <property name="modifiedDate" type="date">
+            <column name="ModifiedDate" length="10" not-null="true" />
+        </property>
+        <set name="invoices" table="invoice" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="FK_PromotionID" />
+            </key>
+            <one-to-many class="model.database.pojo.Invoice" />
+        </set>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Apr 11, 2018 12:54:20 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.database.pojo.Coach" table="coach" catalog="travel_coach_ticketing" optimistic-lock="version">
+        <id name="coachId" type="java.lang.Integer">
+            <column name="CoachID" />
+            <generator class="identity" />
+        </id>
+        <property name="coachName" type="string">
+            <column name="CoachName" length="50" not-null="true" />
+        </property>
+        <property name="numberPlate" type="string">
+            <column name="NumberPlate" length="20" not-null="true" />
+        </property>
+        <property name="coachDescription" type="string">
+            <column name="CoachDescription" length="50" />
+        </property>
+        <property name="modifiedDate" type="date">
+            <column name="ModifiedDate" length="10" not-null="true" />
+        </property>
+        <property name="numberOfSeats" type="byte">
+            <column name="NumberOfSeats" not-null="true" />
+        </property>
+        <property name="isOnTrip" type="byte">
+            <column name="IsOnTrip" not-null="true" />
+        </property>
+        <set name="seats" table="seat" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="FK_CoachID" not-null="true" />
+            </key>
+            <one-to-many class="model.database.pojo.Seat" />
+        </set>
+        <set name="coachDriverTrips" table="coach_driver_trip" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="FK_CoachID" not-null="true" />
+            </key>
+            <one-to-many class="model.database.pojo.CoachDriverTrip" />
+        </set>
+    </class>
+</hibernate-mapping>

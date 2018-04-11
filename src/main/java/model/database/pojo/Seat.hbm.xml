@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Apr 11, 2018 12:54:20 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.database.pojo.Seat" table="seat" catalog="travel_coach_ticketing" optimistic-lock="version">
+        <id name="seatId" type="java.lang.Integer">
+            <column name="SeatID" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="coach" class="model.database.pojo.Coach" fetch="select">
+            <column name="FK_CoachID" not-null="true" />
+        </many-to-one>
+        <property name="seatNumber" type="byte">
+            <column name="SeatNumber" not-null="true" />
+        </property>
+        <property name="seatStatus" type="byte">
+            <column name="SeatStatus" not-null="true" />
+        </property>
+        <property name="seatDescription" type="string">
+            <column name="SeatDescription" length="50" />
+        </property>
+        <property name="modifiedDate" type="date">
+            <column name="ModifiedDate" length="10" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

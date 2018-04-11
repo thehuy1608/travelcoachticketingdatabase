@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Apr 11, 2018 12:54:20 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.database.pojo.Cityordistrict" table="cityordistrict" catalog="travel_coach_ticketing" optimistic-lock="version">
+        <id name="cityOrDistrictId" type="java.lang.Integer">
+            <column name="CityOrDistrictID" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="country" class="model.database.pojo.Country" fetch="select">
+            <column name="FK_CountryID" not-null="true" />
+        </many-to-one>
+        <property name="cityOrDistrictName" type="string">
+            <column name="CityOrDistrictName" length="50" not-null="true" />
+        </property>
+        <property name="postalCode" type="string">
+            <column name="PostalCode" length="10" not-null="true" />
+        </property>
+        <property name="modifiedDate" type="date">
+            <column name="ModifiedDate" length="10" not-null="true" />
+        </property>
+        <set name="stations" table="station" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="FK_CityOrDistrictID" not-null="true" />
+            </key>
+            <one-to-many class="model.database.pojo.Station" />
+        </set>
+    </class>
+</hibernate-mapping>
