@@ -11,7 +11,7 @@ sourceCompatibility = '1.8'
 // prefer. In this case NetBeans will not add these tasks but you may rely on
 // your own implementation.
 if (!hasProperty('mainClass')) {
-    ext.mainClass = 'model.database.dao.CityOrDistrictDAO'
+    ext.mainClass = 'application.ApplicationInitializer'
 }
 
 sourceSets.main.resources.srcDir 'src/main/java'
@@ -29,5 +29,8 @@ dependencies {
     
     // https://mvnrepository.com/artifact/mysql/mysql-connector-java
     compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.13'
+    
+     //JFoeniX version 8.0.3 for JavaSDK version 8.*
+    compile 'com.jfoenix:jfoenix:8.0.3' 
 
 }
