@@ -2,8 +2,12 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXHamburger?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXTreeTableView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TreeTableColumn?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -105,6 +109,47 @@
          <effect>
             <DropShadow />
          </effect>
+      </AnchorPane>
+      <AnchorPane fx:id="paneCustomerInfo" layoutX="70.0" layoutY="-800.0" prefHeight="800.0" prefWidth="1130.0">
+         <children>
+            <Label fx:id="lblSearchCustomerInfo" layoutX="252.0" layoutY="103.0" prefHeight="50.0" prefWidth="420.0" text="Tìm kiếm thông tin khách hàng:" textFill="#193441">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <JFXTextField fx:id="txtSearchCustomerInfo" focusColor="#193441" layoutX="252.0" layoutY="153.0" prefHeight="50.0" prefWidth="610.0" promptText="Nhập tên hoặc số điện thoại khách hàng" unFocusColor="#3e606f">
+               <font>
+                  <Font name="System Italic" size="15.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="TEXT" />
+               </cursor>
+            </JFXTextField>
+            <JFXButton fx:id="btnSearchCustomerInfo" contentDisplay="GRAPHIC_ONLY" layoutX="862.0" layoutY="153.0" prefHeight="50.0" prefWidth="50.0" ripplerFill="#fcfff5">
+               <graphic>
+                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../icon/ContentIcon/search.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </JFXButton>
+            <JFXTreeTableView fx:id="tblSearchCustomerInfoResult" editable="true" layoutX="32.0" layoutY="275.0" prefHeight="400.0" prefWidth="1050.0">
+               <columns>
+                  <TreeTableColumn fx:id="tblSearchCustomerInfoResult_index" prefWidth="40.0" text="STT" />
+                  <TreeTableColumn fx:id="tblSearchCustomerInfoResult_name" prefWidth="200.0" text="Họ và tên" />
+                  <TreeTableColumn fx:id="tblSearchCustomerInfoResult_phone_number" prefWidth="150.0" text="Số điện thoại" />
+                  <TreeTableColumn fx:id="tblSearchCustomerInfoResult_trip" prefWidth="250.0" text="Chuyến đi" />
+                  <TreeTableColumn fx:id="tblSearchCustomerInfoResult_tickets" prefWidth="50.0" text="Số vé" />
+                  <TreeTableColumn fx:id="tblSearchCustomerInfoResult_payment_status" prefWidth="185.0" text="Tình trạng thanh toán" />
+                  <TreeTableColumn fx:id="tblSearchCustomerInfoResult_detail" prefWidth="75.0" text="Chi tiết" />
+                  <TreeTableColumn fx:id="tblSearchCustomerInfoResult_check_out" prefWidth="100.0" text="Thanh toán" />
+               </columns>
+            </JFXTreeTableView>
+         </children>
       </AnchorPane>
       <AnchorPane fx:id="side_menu_expand_container" layoutX="-305.0" prefHeight="800.0" prefWidth="300.0" style="-fx-background-color: white;">
          <children>

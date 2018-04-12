@@ -7,6 +7,8 @@ package controller;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXHamburger;
+import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.JFXTreeTableView;
 import com.jfoenix.transitions.hamburger.HamburgerBackArrowBasicTransition;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -18,6 +20,8 @@ import javafx.animation.Timeline;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
+import javafx.scene.control.TreeTableColumn;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -48,10 +52,6 @@ public class Controller_staff_home implements Initializable {
     private JFXButton btnLockScreen;
     @FXML
     private JFXButton btnLogOut;
-    @FXML
-    private JFXButton btnClose;
-    @FXML
-    private JFXButton btnMinimize;
     @FXML
     private JFXButton btnCustomerInfo_Side;
     @FXML
@@ -94,6 +94,34 @@ public class Controller_staff_home implements Initializable {
     private Rectangle btnLockScreen_Background;
     @FXML
     private Rectangle btnLogOut_Background;
+    @FXML
+    private AnchorPane paneCustomerInfo;
+    @FXML
+    private Label lblSearchCustomerInfo;
+    @FXML
+    private JFXTextField txtSearchCustomerInfo;
+    @FXML
+    private JFXButton btnSearchCustomerInfo;
+    @FXML
+    private JFXTreeTableView tblSearchCustomerInfoResult;
+    @FXML
+    private TreeTableColumn tblSearchCustomerInfoResult_index;
+    @FXML
+    private TreeTableColumn tblSearchCustomerInfoResult_name;
+    @FXML
+    private TreeTableColumn tblSearchCustomerInfoResult_phone_number;
+    @FXML
+    private TreeTableColumn tblSearchCustomerInfoResult_trip;
+    @FXML
+    private TreeTableColumn tblSearchCustomerInfoResult_tickets;
+    @FXML
+    private TreeTableColumn tblSearchCustomerInfoResult_payment_status;
+    @FXML
+    private TreeTableColumn tblSearchCustomerInfoResult_detail;
+    @FXML
+    private TreeTableColumn tblSearchCustomerInfoResult_check_out;
+    
+    private boolean is_active_customer_scene = false;
 
     /**
      * Initializes the controller class.
@@ -229,7 +257,24 @@ public class Controller_staff_home implements Initializable {
 
         btnLogOut_Side.setOnMouseExited(event -> {
             animate_sidemenu_button_when_lose_hover(btnLogOut_Side_Background);
-        });        
+        });
+        
+        //Display scene when click on corresponding button
+        btnCustomerInfo.setOnMousePressed(event -> {
+            if (is_active_customer_scene) {
+                animate_pane_when_click_on_menu_button(paneCustomerInfo, -800);
+            } else {
+                animate_pane_when_click_on_menu_button(paneCustomerInfo, 0);
+            }
+        });
+        
+        btnCustomerInfo_Side.setOnMousePressed(event -> {
+            if (is_active_customer_scene) {
+                animate_pane_when_click_on_menu_button(paneCustomerInfo, -800);
+            } else {
+                animate_pane_when_click_on_menu_button(paneCustomerInfo, 0);
+            }
+        });
     }
 
     private void animate_sidemenu(final Pane pane, double layoutX) {
@@ -250,4 +295,15 @@ public class Controller_staff_home implements Initializable {
         ft.play();
     }
     
+    private void animate_pane_when_click_on_menu_button(final Pane pane, double layoutY) {
+        Duration transition_duration = Duration.millis(500);
+        Timeline time_line = new Timeline(new KeyFrame(transition_duration, new KeyValue(pane.layoutYProperty(), layoutY, Interpolator.EASE_BOTH)));
+        time_line.play();
+        if (is_active_customer_scene) {
+            is_active_customer_scene = false;
+        } else {
+            is_active_customer_scene = true;
+        }
+    }
+
 }
