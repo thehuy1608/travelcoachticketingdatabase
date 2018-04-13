@@ -1,5 +1,5 @@
 package model.database.pojo;
-// Generated Apr 11, 2018 12:54:19 PM by Hibernate Tools 4.3.1
+// Generated Apr 13, 2018 3:52:30 PM by Hibernate Tools 4.3.1
 
 
 import java.util.Date;
@@ -20,6 +20,7 @@ public class Trip  implements java.io.Serializable {
      private Tripstatus tripstatus;
      private Set<CoachDriverTrip> coachDriverTrips = new HashSet<CoachDriverTrip>(0);
      private Set<Ticket> tickets = new HashSet<Ticket>(0);
+     private Set<Invoice> invoices = new HashSet<Invoice>(0);
      private Schedule schedule;
 
     public Trip() {
@@ -31,7 +32,7 @@ public class Trip  implements java.io.Serializable {
         this.tripName = tripName;
         this.modifiedDate = modifiedDate;
     }
-    public Trip(Line line, String tripName, String description, Date modifiedDate, Tripstatus tripstatus, Set<CoachDriverTrip> coachDriverTrips, Set<Ticket> tickets, Schedule schedule) {
+    public Trip(Line line, String tripName, String description, Date modifiedDate, Tripstatus tripstatus, Set<CoachDriverTrip> coachDriverTrips, Set<Ticket> tickets, Set<Invoice> invoices, Schedule schedule) {
        this.line = line;
        this.tripName = tripName;
        this.description = description;
@@ -39,6 +40,7 @@ public class Trip  implements java.io.Serializable {
        this.tripstatus = tripstatus;
        this.coachDriverTrips = coachDriverTrips;
        this.tickets = tickets;
+       this.invoices = invoices;
        this.schedule = schedule;
     }
    
@@ -97,6 +99,13 @@ public class Trip  implements java.io.Serializable {
     
     public void setTickets(Set<Ticket> tickets) {
         this.tickets = tickets;
+    }
+    public Set<Invoice> getInvoices() {
+        return this.invoices;
+    }
+    
+    public void setInvoices(Set<Invoice> invoices) {
+        this.invoices = invoices;
     }
     public Schedule getSchedule() {
         return this.schedule;

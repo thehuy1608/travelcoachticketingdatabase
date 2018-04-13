@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated Apr 11, 2018 12:54:20 PM by Hibernate Tools 4.3.1 -->
+<!-- Generated Apr 13, 2018 3:52:31 PM by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
     <class name="model.database.pojo.Users" table="users" catalog="travel_coach_ticketing" optimistic-lock="version">
         <id name="userId" type="java.lang.Integer">
@@ -20,28 +20,7 @@
         <property name="modifiedDate" type="date">
             <column name="ModifiedDate" length="10" not-null="true" />
         </property>
-        <one-to-one name="usergoogleaccount" class="model.database.pojo.Usergoogleaccount"></one-to-one>
         <one-to-one name="logininfo" class="model.database.pojo.Logininfo"></one-to-one>
-        <one-to-one name="userpaymentinfo" class="model.database.pojo.Userpaymentinfo"></one-to-one>
         <one-to-one name="userinfo" class="model.database.pojo.Userinfo"></one-to-one>
-        <set name="invoices" table="invoice" inverse="true" lazy="true" fetch="select">
-            <key>
-                <column name="FK_UserID" not-null="true" />
-            </key>
-            <one-to-many class="model.database.pojo.Invoice" />
-        </set>
-        <set name="specialpromotions" table="specialpromotion" inverse="true" lazy="true" fetch="select">
-            <key>
-                <column name="FK_UserID" not-null="true" />
-            </key>
-            <one-to-many class="model.database.pojo.Specialpromotion" />
-        </set>
-        <one-to-one name="userfacebookaccount" class="model.database.pojo.Userfacebookaccount"></one-to-one>
-        <set name="usertriplogs" table="usertriplog" inverse="true" lazy="true" fetch="select">
-            <key>
-                <column name="FK_UserID" not-null="true" />
-            </key>
-            <one-to-many class="model.database.pojo.Usertriplog" />
-        </set>
     </class>
 </hibernate-mapping>

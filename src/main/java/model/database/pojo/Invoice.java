@@ -1,5 +1,5 @@
 package model.database.pojo;
-// Generated Apr 11, 2018 12:54:19 PM by Hibernate Tools 4.3.1
+// Generated Apr 13, 2018 3:52:30 PM by Hibernate Tools 4.3.1
 
 
 import java.util.Date;
@@ -13,36 +13,35 @@ public class Invoice  implements java.io.Serializable {
 
 
      private Integer invoiceId;
-     private Specialpromotion specialpromotion;
-     private Users users;
+     private Customer customer;
+     private Trip trip;
      private Date invoiceDueDate;
      private float totalPrice;
      private String description;
      private Date modifiedDate;
      private String invoiceStatus;
-     private Set<Usertriplog> usertriplogs = new HashSet<Usertriplog>(0);
      private Set<Invoicelineitem> invoicelineitems = new HashSet<Invoicelineitem>(0);
 
     public Invoice() {
     }
 
 	
-    public Invoice(Users users, Date invoiceDueDate, float totalPrice, Date modifiedDate, String invoiceStatus) {
-        this.users = users;
+    public Invoice(Customer customer, Trip trip, Date invoiceDueDate, float totalPrice, Date modifiedDate, String invoiceStatus) {
+        this.customer = customer;
+        this.trip = trip;
         this.invoiceDueDate = invoiceDueDate;
         this.totalPrice = totalPrice;
         this.modifiedDate = modifiedDate;
         this.invoiceStatus = invoiceStatus;
     }
-    public Invoice(Specialpromotion specialpromotion, Users users, Date invoiceDueDate, float totalPrice, String description, Date modifiedDate, String invoiceStatus, Set<Usertriplog> usertriplogs, Set<Invoicelineitem> invoicelineitems) {
-       this.specialpromotion = specialpromotion;
-       this.users = users;
+    public Invoice(Customer customer, Trip trip, Date invoiceDueDate, float totalPrice, String description, Date modifiedDate, String invoiceStatus, Set<Invoicelineitem> invoicelineitems) {
+       this.customer = customer;
+       this.trip = trip;
        this.invoiceDueDate = invoiceDueDate;
        this.totalPrice = totalPrice;
        this.description = description;
        this.modifiedDate = modifiedDate;
        this.invoiceStatus = invoiceStatus;
-       this.usertriplogs = usertriplogs;
        this.invoicelineitems = invoicelineitems;
     }
    
@@ -53,19 +52,19 @@ public class Invoice  implements java.io.Serializable {
     public void setInvoiceId(Integer invoiceId) {
         this.invoiceId = invoiceId;
     }
-    public Specialpromotion getSpecialpromotion() {
-        return this.specialpromotion;
+    public Customer getCustomer() {
+        return this.customer;
     }
     
-    public void setSpecialpromotion(Specialpromotion specialpromotion) {
-        this.specialpromotion = specialpromotion;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
-    public Users getUsers() {
-        return this.users;
+    public Trip getTrip() {
+        return this.trip;
     }
     
-    public void setUsers(Users users) {
-        this.users = users;
+    public void setTrip(Trip trip) {
+        this.trip = trip;
     }
     public Date getInvoiceDueDate() {
         return this.invoiceDueDate;
@@ -101,13 +100,6 @@ public class Invoice  implements java.io.Serializable {
     
     public void setInvoiceStatus(String invoiceStatus) {
         this.invoiceStatus = invoiceStatus;
-    }
-    public Set<Usertriplog> getUsertriplogs() {
-        return this.usertriplogs;
-    }
-    
-    public void setUsertriplogs(Set<Usertriplog> usertriplogs) {
-        this.usertriplogs = usertriplogs;
     }
     public Set<Invoicelineitem> getInvoicelineitems() {
         return this.invoicelineitems;

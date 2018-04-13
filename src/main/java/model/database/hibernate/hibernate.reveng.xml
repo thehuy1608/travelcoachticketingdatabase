@@ -41,27 +41,23 @@ Contributor(s):
 -->
 <hibernate-reverse-engineering>
   <schema-selection match-catalog="travel_coach_ticketing"/>
+  <table-filter match-name="trip"/>
+  <table-filter match-name="cityordistrict"/>
+  <table-filter match-name="driver"/>
+  <table-filter match-name="userinfo"/>
+  <table-filter match-name="ticket"/>
+  <table-filter match-name="line"/>
+  <table-filter match-name="invoicelineitem"/>
+  <table-filter match-name="customer"/>
+  <table-filter match-name="role"/>
+  <table-filter match-name="seat"/>
   <table-filter match-name="tripstatus"/>
   <table-filter match-name="logininfo"/>
-  <table-filter match-name="coach_driver_trip"/>
-  <table-filter match-name="cityordistrict"/>
-  <table-filter match-name="invoicelineitem"/>
-  <table-filter match-name="seat"/>
-  <table-filter match-name="line"/>
-  <table-filter match-name="driver"/>
-  <table-filter match-name="schedule"/>
-  <table-filter match-name="ticket"/>
-  <table-filter match-name="users"/>
-  <table-filter match-name="usergoogleaccount"/>
-  <table-filter match-name="trip"/>
-  <table-filter match-name="coach"/>
   <table-filter match-name="country"/>
-  <table-filter match-name="usertriplog"/>
+  <table-filter match-name="schedule"/>
   <table-filter match-name="invoice"/>
-  <table-filter match-name="userinfo"/>
-  <table-filter match-name="role"/>
-  <table-filter match-name="userfacebookaccount"/>
-  <table-filter match-name="specialpromotion"/>
-  <table-filter match-name="userpaymentinfo"/>
   <table-filter match-name="station"/>
+  <table-filter match-name="coach"/>
+  <table-filter match-name="coach_driver_trip"/>
+  <table-filter match-name="users"/>
 </hibernate-reverse-engineering>

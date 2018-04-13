@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated Apr 11, 2018 12:54:20 PM by Hibernate Tools 4.3.1 -->
+<!-- Generated Apr 13, 2018 3:52:31 PM by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
     <class name="model.database.pojo.Trip" table="trip" catalog="travel_coach_ticketing" optimistic-lock="version">
         <id name="tripId" type="java.lang.Integer">
@@ -32,6 +32,12 @@
                 <column name="FK_TripID" not-null="true" />
             </key>
             <one-to-many class="model.database.pojo.Ticket" />
+        </set>
+        <set name="invoices" table="invoice" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="FK_TripID" not-null="true" />
+            </key>
+            <one-to-many class="model.database.pojo.Invoice" />
         </set>
         <one-to-one name="schedule" class="model.database.pojo.Schedule"></one-to-one>
     </class>
