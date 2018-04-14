@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated Apr 13, 2018 3:52:31 PM by Hibernate Tools 4.3.1 -->
+<!-- Generated Apr 14, 2018 12:13:41 AM by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
     <class name="model.database.pojo.Schedule" table="schedule" catalog="travel_coach_ticketing" optimistic-lock="version">
         <id name="tripId" type="int">
@@ -11,11 +11,17 @@
             </generator>
         </id>
         <one-to-one name="trip" class="model.database.pojo.Trip" constrained="true"></one-to-one>
-        <property name="startTime" type="timestamp">
-            <column name="StartTime" length="19" not-null="true" />
+        <property name="startDate" type="date">
+            <column name="StartDate" length="10" not-null="true" />
         </property>
-        <property name="endTime" type="timestamp">
-            <column name="EndTime" length="19" not-null="true" />
+        <property name="endDate" type="date">
+            <column name="EndDate" length="10" not-null="true" />
+        </property>
+        <property name="startTime" type="time">
+            <column name="StartTime" length="8" not-null="true" />
+        </property>
+        <property name="endTime" type="time">
+            <column name="EndTime" length="8" not-null="true" />
         </property>
         <property name="description" type="string">
             <column name="Description" length="50" not-null="true" />

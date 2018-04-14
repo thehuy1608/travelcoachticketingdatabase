@@ -1,5 +1,5 @@
 package model.database.pojo;
-// Generated Apr 13, 2018 3:52:30 PM by Hibernate Tools 4.3.1
+// Generated Apr 14, 2018 12:13:40 AM by Hibernate Tools 4.3.1
 
 
 import java.util.Date;
@@ -12,6 +12,8 @@ public class Schedule  implements java.io.Serializable {
 
      private int tripId;
      private Trip trip;
+     private Date startDate;
+     private Date endDate;
      private Date startTime;
      private Date endTime;
      private String description;
@@ -20,8 +22,10 @@ public class Schedule  implements java.io.Serializable {
     public Schedule() {
     }
 
-    public Schedule(Trip trip, Date startTime, Date endTime, String description, Date modifiedDate) {
+    public Schedule(Trip trip, Date startDate, Date endDate, Date startTime, Date endTime, String description, Date modifiedDate) {
        this.trip = trip;
+       this.startDate = startDate;
+       this.endDate = endDate;
        this.startTime = startTime;
        this.endTime = endTime;
        this.description = description;
@@ -41,6 +45,20 @@ public class Schedule  implements java.io.Serializable {
     
     public void setTrip(Trip trip) {
         this.trip = trip;
+    }
+    public Date getStartDate() {
+        return this.startDate;
+    }
+    
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+    public Date getEndDate() {
+        return this.endDate;
+    }
+    
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
     public Date getStartTime() {
         return this.startTime;
