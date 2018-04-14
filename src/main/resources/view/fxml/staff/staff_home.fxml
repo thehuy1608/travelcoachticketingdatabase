@@ -118,14 +118,11 @@
                </font>
             </Label>
             <JFXTextField fx:id="txtSearchCustomerInfo" focusColor="#193441" layoutX="252.0" layoutY="153.0" prefHeight="50.0" prefWidth="610.0" promptText="Nhập tên hoặc số điện thoại khách hàng" unFocusColor="#3e606f">
-               <font>
-                  <Font name="System Italic" size="15.0" />
-               </font>
                <cursor>
                   <Cursor fx:constant="TEXT" />
                </cursor>
             </JFXTextField>
-            <JFXButton fx:id="btnSearchCustomerInfo" contentDisplay="GRAPHIC_ONLY" layoutX="862.0" layoutY="153.0" prefHeight="50.0" prefWidth="50.0" ripplerFill="#fcfff5">
+            <JFXButton fx:id="btnSearchCustomerInfo" contentDisplay="GRAPHIC_ONLY" layoutX="862.0" layoutY="153.0" onAction="#search_customer_info_button_action" prefHeight="50.0" prefWidth="50.0" ripplerFill="#fcfff5" text="SearchCustomerInfo">
                <graphic>
                   <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -137,7 +134,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </JFXButton>
-            <JFXTreeTableView fx:id="tblSearchCustomerInfoResult" editable="true" layoutX="32.0" layoutY="275.0" prefHeight="400.0" prefWidth="1050.0">
+            <JFXTreeTableView fx:id="tblSearchCustomerInfoResult" editable="true" layoutX="32.0" layoutY="275.0" prefHeight="400.0" prefWidth="1050.0" tableMenuButtonVisible="true">
                <columns>
                   <TreeTableColumn fx:id="tblSearchCustomerInfoResult_index" prefWidth="40.0" text="STT" />
                   <TreeTableColumn fx:id="tblSearchCustomerInfoResult_name" prefWidth="200.0" text="Họ và tên" />

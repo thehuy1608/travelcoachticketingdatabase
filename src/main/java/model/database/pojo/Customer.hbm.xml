@@ -3,7 +3,7 @@
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <!-- Generated Apr 13, 2018 3:52:31 PM by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
-    <class name="model.database.pojo.Customer" table="customer" catalog="travel_coach_ticketing" optimistic-lock="version">
+    <class name="model.database.pojo.Customer" table="customer" catalog="travel_coach_ticketing" optimistic-lock="version" lazy= "false">
         <id name="customerId" type="java.lang.Integer">
             <column name="CustomerID" />
             <generator class="identity" />

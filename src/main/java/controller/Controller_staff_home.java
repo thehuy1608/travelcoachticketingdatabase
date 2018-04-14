@@ -9,18 +9,26 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXHamburger;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTreeTableView;
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import com.jfoenix.transitions.hamburger.HamburgerBackArrowBasicTransition;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.animation.FillTransition;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -28,6 +36,10 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
+import model.api.validate.ValidateInput;
+import model.database.dao.InvoiceDAO;
+import model.database.pojo.Invoice;
+import model.treetableview.datamodel.TableSearchCustomerInfoDataModel;
 
 /**
  * FXML Controller class
@@ -103,25 +115,27 @@ public class Controller_staff_home implements Initializable {
     @FXML
     private JFXButton btnSearchCustomerInfo;
     @FXML
-    private JFXTreeTableView tblSearchCustomerInfoResult;
+    private JFXTreeTableView<TableSearchCustomerInfoDataModel> tblSearchCustomerInfoResult;
     @FXML
-    private TreeTableColumn tblSearchCustomerInfoResult_index;
+    private TreeTableColumn<TableSearchCustomerInfoDataModel, Integer> tblSearchCustomerInfoResult_index;
     @FXML
-    private TreeTableColumn tblSearchCustomerInfoResult_name;
+    private TreeTableColumn<TableSearchCustomerInfoDataModel, String> tblSearchCustomerInfoResult_name;
     @FXML
-    private TreeTableColumn tblSearchCustomerInfoResult_phone_number;
+    private TreeTableColumn<TableSearchCustomerInfoDataModel, String> tblSearchCustomerInfoResult_phone_number;
     @FXML
-    private TreeTableColumn tblSearchCustomerInfoResult_trip;
+    private TreeTableColumn<TableSearchCustomerInfoDataModel, String> tblSearchCustomerInfoResult_trip;
     @FXML
-    private TreeTableColumn tblSearchCustomerInfoResult_tickets;
+    private TreeTableColumn<TableSearchCustomerInfoDataModel, Integer> tblSearchCustomerInfoResult_tickets;
     @FXML
-    private TreeTableColumn tblSearchCustomerInfoResult_payment_status;
+    private TreeTableColumn<TableSearchCustomerInfoDataModel, String> tblSearchCustomerInfoResult_payment_status;
     @FXML
-    private TreeTableColumn tblSearchCustomerInfoResult_detail;
+    private TreeTableColumn<TableSearchCustomerInfoDataModel, JFXButton> tblSearchCustomerInfoResult_detail;
     @FXML
-    private TreeTableColumn tblSearchCustomerInfoResult_check_out;
-    
+    private TreeTableColumn<TableSearchCustomerInfoDataModel, JFXButton> tblSearchCustomerInfoResult_check_out;
+
     private boolean is_active_customer_scene = false;
+    private ValidateInput validate_input = new ValidateInput();
+    private List<Invoice> invoice_list = null;
 
     /**
      * Initializes the controller class.
@@ -258,7 +272,7 @@ public class Controller_staff_home implements Initializable {
         btnLogOut_Side.setOnMouseExited(event -> {
             animate_sidemenu_button_when_lose_hover(btnLogOut_Side_Background);
         });
-        
+
         //Display scene when click on corresponding button
         btnCustomerInfo.setOnMousePressed(event -> {
             if (is_active_customer_scene) {
@@ -267,13 +281,42 @@ public class Controller_staff_home implements Initializable {
                 animate_pane_when_click_on_menu_button(paneCustomerInfo, 0);
             }
         });
-        
+
         btnCustomerInfo_Side.setOnMousePressed(event -> {
             if (is_active_customer_scene) {
                 animate_pane_when_click_on_menu_button(paneCustomerInfo, -800);
             } else {
                 animate_pane_when_click_on_menu_button(paneCustomerInfo, 0);
             }
+        });
+
+    }
+
+    //btnSearchCustomerInfo button action
+    @FXML
+    private void search_customer_info_button_action() {
+        String search_input = txtSearchCustomerInfo.getText().trim();
+        boolean is_phone_number = validate_input.check_phone(search_input);
+        Task<List> get_customer_invoice_task = new Task<List>() {
+            @Override
+            protected List call() throws Exception {
+                if (is_phone_number) {
+                    //TO-DO when search invoices by phone number
+                    invoice_list = InvoiceDAO.get_10_latest_invoice_by_phone_number(search_input);
+                } else {
+                    //TO-DO when search invoices by name
+                    invoice_list = InvoiceDAO.get_invoice_list_by_name(search_input);
+                }
+
+                return invoice_list;
+            }
+        };
+        Thread thread = new Thread(get_customer_invoice_task);
+        thread.setDaemon(true);
+        thread.start();
+
+        get_customer_invoice_task.setOnSucceeded(handler -> {
+            System.out.println(invoice_list);
         });
     }
 
@@ -294,7 +337,7 @@ public class Controller_staff_home implements Initializable {
         FillTransition ft = new FillTransition(transition_duration, button_background, Color.web("#fcf5a1"), Color.web("#ffffff"));
         ft.play();
     }
-    
+
     private void animate_pane_when_click_on_menu_button(final Pane pane, double layoutY) {
         Duration transition_duration = Duration.millis(500);
         Timeline time_line = new Timeline(new KeyFrame(transition_duration, new KeyValue(pane.layoutYProperty(), layoutY, Interpolator.EASE_BOTH)));
@@ -306,4 +349,27 @@ public class Controller_staff_home implements Initializable {
         }
     }
 
+    //Class for access table customer info search result
+    private class TableSearchCustomerInfoDataModel extends RecursiveTreeObject<TableSearchCustomerInfoDataModel> {
+
+        private final IntegerProperty index;
+        private final StringProperty name;
+        private final StringProperty phone_number;
+        private final StringProperty trip_line_name;
+        private final IntegerProperty number_of_tickets;
+        private final StringProperty payment_status;
+        private final JFXButton detail;
+        private final JFXButton check_out;
+
+        TableSearchCustomerInfoDataModel(int index, String name, String phone_number, String trip_line_name, int number_of_tickets, String payment_status, JFXButton detail, JFXButton check_out) {
+            this.index = new SimpleIntegerProperty(index);
+            this.name = new SimpleStringProperty(name);
+            this.phone_number = new SimpleStringProperty(phone_number);
+            this.trip_line_name = new SimpleStringProperty(trip_line_name);
+            this.number_of_tickets = new SimpleIntegerProperty(number_of_tickets);
+            this.payment_status = new SimpleStringProperty(payment_status);
+            this.detail = detail;
+            this.check_out = check_out;
+        }
+    }
 }

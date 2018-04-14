@@ -43,6 +43,11 @@ public class TripDAO {
         return trip_list;
     }
     
+    /**
+     *Get all trips available in a day specified in parameter, notice that the date in parameter must have the format "dd-MM-yyyy"
+     * @param start_date_string
+     * @return
+     */
     public static List<Trip> get_trip_list_by_start_date(String start_date_string) {
         List<Trip> trip_list = null;
         Session hibernate_session = HibernateUtil.getSessionFactory().openSession();
@@ -61,6 +66,7 @@ public class TripDAO {
             hibernate_session.close();
         return trip_list;
     }
+  
     
     public static void main(String[] args) {
         List<Trip> trip_list = get_trip_list_by_start_date("12-07-2018");
