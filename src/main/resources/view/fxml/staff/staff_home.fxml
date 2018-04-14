@@ -134,16 +134,14 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </JFXButton>
-            <JFXTreeTableView fx:id="tblSearchCustomerInfoResult" editable="true" layoutX="32.0" layoutY="275.0" prefHeight="400.0" prefWidth="1050.0" tableMenuButtonVisible="true">
+            <JFXTreeTableView fx:id="tblSearchCustomerInfoResult" editable="true" layoutX="67.0" layoutY="262.0" prefHeight="400.0" prefWidth="921.0" tableMenuButtonVisible="true">
                <columns>
                   <TreeTableColumn fx:id="tblSearchCustomerInfoResult_index" prefWidth="40.0" text="STT" />
-                  <TreeTableColumn fx:id="tblSearchCustomerInfoResult_name" prefWidth="200.0" text="Họ và tên" />
-                  <TreeTableColumn fx:id="tblSearchCustomerInfoResult_phone_number" prefWidth="150.0" text="Số điện thoại" />
-                  <TreeTableColumn fx:id="tblSearchCustomerInfoResult_trip" prefWidth="250.0" text="Chuyến đi" />
-                  <TreeTableColumn fx:id="tblSearchCustomerInfoResult_tickets" prefWidth="50.0" text="Số vé" />
-                  <TreeTableColumn fx:id="tblSearchCustomerInfoResult_payment_status" prefWidth="185.0" text="Tình trạng thanh toán" />
-                  <TreeTableColumn fx:id="tblSearchCustomerInfoResult_detail" prefWidth="75.0" text="Chi tiết" />
-                  <TreeTableColumn fx:id="tblSearchCustomerInfoResult_check_out" prefWidth="100.0" text="Thanh toán" />
+                  <TreeTableColumn fx:id="tblSearchCustomerInfoResult_name" prefWidth="210.0" text="Họ và tên" />
+                  <TreeTableColumn fx:id="tblSearchCustomerInfoResult_phone_number" prefWidth="164.0" text="Số điện thoại" />
+                  <TreeTableColumn fx:id="tblSearchCustomerInfoResult_trip" prefWidth="257.0" text="Chuyến đi" />
+                  <TreeTableColumn fx:id="tblSearchCustomerInfoResult_tickets" prefWidth="58.0" text="Số vé" />
+                  <TreeTableColumn fx:id="tblSearchCustomerInfoResult_payment_status" prefWidth="174.0" text="Tình trạng thanh toán" />
                </columns>
             </JFXTreeTableView>
          </children>

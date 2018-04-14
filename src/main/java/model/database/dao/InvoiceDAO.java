@@ -8,6 +8,7 @@ package model.database.dao;
 import java.util.List;
 import model.database.hibernate.HibernateUtil;
 import model.database.pojo.Invoice;
+import model.database.pojo.Invoicelineitem;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -44,7 +45,9 @@ public class InvoiceDAO {
     }
 
     /**
-     *Get list of invoices of customer that has name like the name specified in parameter, the result maybe wrong.
+     * Get list of invoices of customer that has name like the name specified in
+     * parameter, the result maybe wrong.
+     *
      * @param name String
      * @return List
      */
@@ -65,9 +68,9 @@ public class InvoiceDAO {
         hibernate_session.close();
         return invoice_list;
     }
-
+    
     public static void main(String[] args) {
-        List<Invoice> invoice_list = get_invoice_list_by_name("D");
+        List<Invoice> invoice_list = get_10_latest_invoice_by_phone_number("0967543010");
         System.out.println(invoice_list.get(0).getInvoiceStatus());
     }
 }
