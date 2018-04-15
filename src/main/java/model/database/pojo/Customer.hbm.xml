@@ -1,13 +1,16 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated Apr 13, 2018 3:52:31 PM by Hibernate Tools 4.3.1 -->
+<!-- Generated Apr 15, 2018 6:35:56 PM by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
-    <class name="model.database.pojo.Customer" table="customer" catalog="travel_coach_ticketing" optimistic-lock="version" lazy= "false">
-        <id name="customerId" type="java.lang.Integer">
-            <column name="CustomerID" />
-            <generator class="identity" />
+    <class name="model.database.pojo.Customer" table="customer" catalog="travel_coach_ticketing" optimistic-lock="version" lazy="false">
+        <id name="invoiceId" type="int">
+            <column name="InvoiceID" />
+            <generator class="foreign">
+                <param name="property">invoice</param>
+            </generator>
         </id>
+        <one-to-one name="invoice" class="model.database.pojo.Invoice" constrained="true"></one-to-one>
         <property name="customerName" type="string">
             <column name="CustomerName" length="100" not-null="true" />
         </property>
@@ -26,11 +29,5 @@
         <property name="modifiedDate" type="date">
             <column name="ModifiedDate" length="10" not-null="true" />
         </property>
-        <set name="invoices" table="invoice" inverse="true" lazy="true" fetch="select">
-            <key>
-                <column name="FK_CustomerID" not-null="true" />
-            </key>
-            <one-to-many class="model.database.pojo.Invoice" />
-        </set>
     </class>
 </hibernate-mapping>

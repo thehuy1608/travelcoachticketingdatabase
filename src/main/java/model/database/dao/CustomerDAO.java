@@ -92,27 +92,6 @@ public class CustomerDAO {
     }
 
     /**
-     * Get customer object by its ID
-     *
-     * @param customer_id int
-     * @return Object
-     */
-    public static Customer get_customer_by_id(int customer_id) {
-        Customer customer = null;
-        Session hibernate_session = HibernateUtil.getSessionFactory().openSession();
-        hibernate_session.beginTransaction();
-        try {
-            customer = (Customer) hibernate_session.get(Customer.class, customer_id);
-        } catch (Exception e) {
-            hibernate_session.flush();
-            hibernate_session.close();
-        }
-        hibernate_session.flush();
-        hibernate_session.close();
-        return customer;
-    }
-
-    /**
      *Get the list of all phone numbers of customers in database
      * @return List
      */

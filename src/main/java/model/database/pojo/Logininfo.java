@@ -1,5 +1,5 @@
 package model.database.pojo;
-// Generated Apr 13, 2018 3:52:30 PM by Hibernate Tools 4.3.1
+// Generated Apr 15, 2018 6:35:56 PM by Hibernate Tools 4.3.1
 
 
 

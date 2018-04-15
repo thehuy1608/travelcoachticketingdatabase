@@ -1,16 +1,13 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated Apr 13, 2018 3:52:31 PM by Hibernate Tools 4.3.1 -->
+<!-- Generated Apr 15, 2018 6:35:56 PM by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
     <class name="model.database.pojo.Invoice" table="invoice" catalog="travel_coach_ticketing" optimistic-lock="version" lazy="false">
         <id name="invoiceId" type="java.lang.Integer">
             <column name="InvoiceID" />
             <generator class="identity" />
         </id>
-        <many-to-one name="customer" class="model.database.pojo.Customer" fetch="select">
-            <column name="FK_CustomerID" not-null="true" />
-        </many-to-one>
         <many-to-one name="trip" class="model.database.pojo.Trip" fetch="select">
             <column name="FK_TripID" not-null="true" />
         </many-to-one>
@@ -29,6 +26,7 @@
         <property name="invoiceStatus" type="string">
             <column name="InvoiceStatus" length="20" not-null="true" />
         </property>
+        <one-to-one name="customer" class="model.database.pojo.Customer"></one-to-one>
         <set name="invoicelineitems" table="invoicelineitem" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="FK_InvoiceID" not-null="true" />

@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated Apr 13, 2018 3:52:31 PM by Hibernate Tools 4.3.1 -->
+<!-- Generated Apr 15, 2018 6:35:56 PM by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
-    <class name="model.database.pojo.Cityordistrict" table="cityordistrict" catalog="travel_coach_ticketing" optimistic-lock="version">
+    <class name="model.database.pojo.Cityordistrict" table="cityordistrict" catalog="travel_coach_ticketing" optimistic-lock="version" lazy="false">
         <id name="cityOrDistrictId" type="java.lang.Integer">
             <column name="CityOrDistrictID" />
             <generator class="identity" />
