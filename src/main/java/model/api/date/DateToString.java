@@ -5,8 +5,11 @@
  */
 package model.api.date;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -16,6 +19,16 @@ public class DateToString {
     public static String convert_date_to_string(Date date)  {
         String date_string = null;
         SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+        try {
+            date_string = format.format(date);
+        } catch (Exception e) {
+        }
+        return date_string;
+    }
+    
+    public static String convert_date_time_to_string(Date date)  {
+        String date_string = null;
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm dd-MM-yyyy");
         try {
             date_string = format.format(date);
         } catch (Exception e) {

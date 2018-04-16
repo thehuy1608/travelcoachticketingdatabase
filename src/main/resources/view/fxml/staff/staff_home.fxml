@@ -132,6 +132,14 @@
                </font>
             </Label>
             <Rectangle fill="#6a8a82" height="30.0" layoutX="37.0" layoutY="725.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="968.0" />
+            <JFXButton fx:id="btnExportInvoice" layoutX="850.0" layoutY="686.0" onAction="#export_invoice_button_action" prefHeight="71.0" prefWidth="156.0" style="-fx-background-color: #a7414a;" text="Xuất hóa đơn" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+               <effect>
+                  <DropShadow />
+               </effect>
+            </JFXButton>
          </children>
       </AnchorPane>
       <AnchorPane fx:id="paneCustomerInfo" layoutX="70.0" layoutY="-800.0" prefHeight="800.0" prefWidth="1130.0">
@@ -176,7 +184,7 @@
       </AnchorPane>
       <ScrollPane fx:id="editInvoiceScrollPane" layoutX="60.0" layoutY="800.0" prefHeight="800.0" prefWidth="1140.0" style="-fx-background-color: #fcfff5;">
         <content>
-          <AnchorPane fx:id="editInvoiceAnchorPane" minHeight="0.0" minWidth="0.0" prefHeight="1750.0" prefWidth="1120.0" style="-fx-background-color: #fcfff5;">
+          <AnchorPane fx:id="editInvoiceAnchorPane" minHeight="0.0" minWidth="0.0" prefHeight="2200.0" prefWidth="1120.0" style="-fx-background-color: #fcfff5;">
                <children>
                   <Label layoutX="150.0" layoutY="90.0" prefHeight="50.0" prefWidth="420.0" text="Thông tin hóa đơn của khách hàng:" textFill="#3e606f">
                      <font>
@@ -245,31 +253,29 @@
                         <Font name="System Bold Italic" size="18.0" />
                      </font>
                   </Label>
-                  <Label layoutX="310.0" layoutY="1214.0" text="Giá vé 1 ghế:" textFill="#193441">
+                  <Label layoutX="310.0" layoutY="1214.0" text="Chi tiết ghế ngồi:" textFill="#193441">
                      <font>
                         <Font name="System Bold Italic" size="18.0" />
                      </font>
                   </Label>
-                  <JFXTextField fx:id="txtInvoicePricePerSeat" editable="false" layoutX="310.0" layoutY="1241.0" prefHeight="50.0" prefWidth="500.0" />
-                  <Label fx:id="lblPricePerSeatMessage" layoutX="310.0" layoutY="1291.0" prefHeight="40.0" prefWidth="500.0" />
-                  <Label layoutX="310.0" layoutY="1331.0" text="Tổng tiền thanh toán:" textFill="#193441">
+                  <Label layoutX="310.0" layoutY="1587.0" text="Tổng tiền thanh toán:" textFill="#193441">
                      <font>
                         <Font name="System Bold Italic" size="18.0" />
                      </font>
                   </Label>
-                  <JFXTextField fx:id="txtInvoiceTotalPrice" editable="false" layoutX="310.0" layoutY="1358.0" prefHeight="50.0" prefWidth="500.0" />
+                  <JFXTextField fx:id="txtInvoiceTotalPrice" editable="false" layoutX="310.0" layoutY="1614.0" prefHeight="50.0" prefWidth="500.0" />
                   <Label fx:id="lblTotalPriceMessage" layoutX="310.0" layoutY="1408.0" prefHeight="40.0" prefWidth="500.0" />
-                  <Label layoutX="310.0" layoutY="1448.0" text="Trạng thái thanh toán:" textFill="#193441">
+                  <Label layoutX="310.0" layoutY="1704.0" text="Trạng thái thanh toán:" textFill="#193441">
                      <font>
                         <Font name="System Bold Italic" size="18.0" />
                      </font>
                   </Label>
-                  <JFXTextField fx:id="txtInvoicePaymentStatus" editable="false" layoutX="310.0" layoutY="1475.0" prefHeight="50.0" prefWidth="500.0">
+                  <JFXTextField fx:id="txtInvoicePaymentStatus" editable="false" layoutX="310.0" layoutY="1731.0" prefHeight="50.0" prefWidth="500.0">
                      <font>
                         <Font name="System Bold" size="15.0" />
                      </font></JFXTextField>
                   <Label fx:id="lblPaymentStatusMessage" layoutX="310.0" layoutY="1525.0" prefHeight="40.0" prefWidth="500.0" />
-                  <JFXButton fx:id="btnInvoiceCheckOut" buttonType="RAISED" layoutX="610.0" layoutY="1597.0" onAction="#invoice_check_out_button_action" prefHeight="50.0" prefWidth="200.0" ripplerFill="#182657" style="-fx-background-color: #182657;" text="Thanh Toán" textFill="WHITE">
+                  <JFXButton fx:id="btnInvoiceCheckOut" buttonType="RAISED" layoutX="610.0" layoutY="1990.0" onAction="#invoice_check_out_button_action" prefHeight="50.0" prefWidth="200.0" ripplerFill="#182657" style="-fx-background-color: #182657;" text="Thanh Toán" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
@@ -277,7 +283,7 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </JFXButton>
-                  <JFXButton fx:id="btnInvoiceUpdate" buttonType="RAISED" layoutX="386.0" layoutY="1597.0" prefHeight="50.0" prefWidth="200.0" ripplerFill="#f05837" style="-fx-background-color: #f05837;" text="Cập Nhật" textFill="WHITE">
+                  <JFXButton fx:id="btnInvoiceUpdate" buttonType="RAISED" layoutX="386.0" layoutY="1990.0" prefHeight="50.0" prefWidth="200.0" ripplerFill="#f05837" style="-fx-background-color: #f05837;" text="Cập Nhật" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
@@ -303,6 +309,25 @@
                   </JFXButton>
                   <JFXTextField fx:id="txtInvoiceDeparture" editable="false" layoutX="310.0" layoutY="584.0" prefHeight="50.0" prefWidth="500.0" />
                   <JFXTextField fx:id="txtInvoiceDestination" editable="false" layoutX="310.0" layoutY="701.0" prefHeight="50.0" prefWidth="500.0" />
+                  <JFXTreeTableView fx:id="tblEditInvoice" layoutX="310.0" layoutY="1248.0" prefHeight="316.0" prefWidth="500.0">
+                     <columns>
+                        <TreeTableColumn fx:id="tblEditInvoice_Index" prefWidth="48.0" style="-fx-alignment: CENTER;" text="STT" />
+                        <TreeTableColumn fx:id="tblEditInvoice_TicketName" prefWidth="155.0" style="-fx-alignment: CENTER;" text="Tên vé" />
+                        <TreeTableColumn fx:id="tblEditInvoice_Quantity" prefWidth="78.0" style="-fx-alignment: CENTER;" text="Số lượng" />
+                        <TreeTableColumn fx:id="tblEditInvoice_SeatNumber" prefWidth="92.0" style="-fx-alignment: CENTER;" text="Mã số ghế" />
+                        <TreeTableColumn fx:id="tblEditInvoice_Price" prefWidth="126.0" style="-fx-alignment: CENTER;" text="Giá tiền" />
+                     </columns>
+                  </JFXTreeTableView>
+                  <Label layoutX="310.0" layoutY="1818.0" text="Biển số xe:" textFill="#193441">
+                     <font>
+                        <Font name="System Bold Italic" size="18.0" />
+                     </font>
+                  </Label>
+                  <JFXTextField fx:id="txtInvoiceNumberPlate" editable="false" layoutX="310.0" layoutY="1845.0" prefHeight="50.0" prefWidth="500.0">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </JFXTextField>
                </children>
             </AnchorPane>
         </content>
