@@ -113,4 +113,20 @@ public class CityOrDistrictDAO {
         hibernate_session.close();
         return city_or_district;
     }
+    
+    /**
+     * Get Cityordistrict ID by its name, the name must be a valid city or
+     * district in Vietnam. Notice "Thành phố Hồ Chí Minh" has different name
+     * format than others.
+     * @param city_or_district_name
+     * @return
+     */
+    public static int get_city_or_district_id_by_name(String city_or_district_name) {
+        int city_or_district_id = 0;
+        Cityordistrict city = get_city_or_district_by_name(city_or_district_name);
+        if (city != null) {
+            city_or_district_id = city.getCityOrDistrictId();
+        }
+        return city_or_district_id;
+    }
 }

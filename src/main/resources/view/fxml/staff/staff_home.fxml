@@ -22,9 +22,6 @@
 <AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="800.0" prefWidth="1200.0" styleClass="application_container" stylesheets="@../../styles/components.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller_staff_home">
    <children>
       <AnchorPane fx:id="paneFinalInvoice" layoutX="109.0" layoutY="16.0" prefHeight="769.0" prefWidth="1042.0" style="-fx-background-color: white;">
-         <effect>
-            <DropShadow />
-         </effect>
          <children>
             <Label layoutX="38.0" layoutY="84.0" text="Hãng xe Minh Nhựt" textFill="#563838">
                <font>
@@ -95,7 +92,7 @@
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <Label fx:id="lblFinalInvoiceDestination" alignment="TOP_LEFT" layoutX="38.0" layoutY="444.0" prefHeight="50.0" prefWidth="363.0" />
+            <Label fx:id="lblFinalInvoiceDestination" alignment="TOP_LEFT" layoutX="38.0" layoutY="444.0" prefHeight="50.0" prefWidth="363.0" wrapText="true" />
             <Label layoutX="38.0" layoutY="494.0" prefHeight="30.0" text="NGÀY - GIỜ KHỞI HÀNH:" textFill="#282726">
                <font>
                   <Font name="System Bold" size="18.0" />
@@ -120,16 +117,16 @@
                   <TreeTableColumn fx:id="tblFinalInvoice_Index" prefWidth="61.0" style="-fx-alignment: CENTER;" text="STT" />
                   <TreeTableColumn fx:id="tblFinalInvoice_TicketName" prefWidth="173.0" style="-fx-alignment: CENTER;" text="Tên vé" />
                   <TreeTableColumn fx:id="tblFinalInvoice_Quantity" prefWidth="86.0" style="-fx-alignment: CENTER;" text="Số lượng" />
-                  <TreeTableColumn fx:id="tblFinalInvoice_SeatNumber" prefWidth="92.0" style="-fx-alignment: CENTER;" text="Số ghế" />
-                  <TreeTableColumn fx:id="tblFinalInvoice_Price" prefWidth="154.0" style="-fx-alignment: CENTER;" text="Giá tiền" />
+                  <TreeTableColumn fx:id="tblFinalInvoice_SeatNumber" prefWidth="102.0" style="-fx-alignment: CENTER;" text="Mã số ghế" />
+                  <TreeTableColumn fx:id="tblFinalInvoice_Price" prefWidth="144.0" style="-fx-alignment: CENTER;" text="Giá tiền" />
                </columns>
             </JFXTreeTableView>
-            <Label layoutX="697.0" layoutY="612.0" text="TỔNG:" textFill="#282726">
+            <Label layoutX="688.0" layoutY="642.0" text="TỔNG:" textFill="#282726">
                <font>
                   <Font name="System Bold" size="24.0" />
                </font>
             </Label>
-            <Label fx:id="lblTotalPrice" alignment="CENTER_RIGHT" layoutX="789.0" layoutY="612.0" prefHeight="35.0" prefWidth="215.0" text="Label" textFill="#a7414a">
+            <Label fx:id="lblFinalInvoiceTotalPrice" alignment="CENTER_RIGHT" layoutX="780.0" layoutY="642.0" prefHeight="35.0" prefWidth="215.0" text="Label" textFill="#a7414a">
                <font>
                   <Font name="System Bold" size="24.0" />
                </font>
@@ -139,6 +136,9 @@
       </AnchorPane>
       <AnchorPane fx:id="paneCustomerInfo" layoutX="70.0" layoutY="-800.0" prefHeight="800.0" prefWidth="1130.0">
          <children>
+             <AnchorPane layoutX="70.0" layoutY="-800.0" prefHeight="800.0" prefWidth="1130.0" style="-fx-background-color: #fcfff5;">
+                 
+             </AnchorPane>
             <Label fx:id="lblSearchCustomerInfo" layoutX="252.0" layoutY="103.0" prefHeight="50.0" prefWidth="420.0" text="Tìm kiếm thông tin khách hàng:" textFill="#193441">
                <font>
                   <Font size="24.0" />

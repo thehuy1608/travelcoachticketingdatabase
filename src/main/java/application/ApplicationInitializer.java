@@ -7,6 +7,7 @@ package application;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 /**
  *
@@ -17,8 +18,7 @@ public class ApplicationInitializer extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         ApplicationConfiguration app_config = new ApplicationConfiguration();
-        app_config.configure_stage(primaryStage, "/view/fxml/staff/staff_home.fxml", "Minh Nhut Corporation", 1200, 800);
-        
+        app_config.configure_stage(primaryStage, "/view/fxml/staff/staff_home.fxml", "Minh Nhut Corporation", 1200, 800);        
         primaryStage.show();
     }
 
