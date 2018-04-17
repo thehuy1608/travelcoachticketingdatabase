@@ -129,4 +129,13 @@ public class CityOrDistrictDAO {
         }
         return city_or_district_id;
     }
+    
+    public static void main(String[] args) {
+        Cityordistrict cod;
+        String cod_name = "Bạc Liêu";
+        cod = get_city_or_district_by_name(cod_name);
+        System.out.println(cod.getCityOrDistrictName());
+        System.out.println(cod.getPostalCode());
+        System.out.println(cod.getCityOrDistrictId());
+    }
 }

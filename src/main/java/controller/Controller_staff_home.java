@@ -293,6 +293,7 @@ public class Controller_staff_home implements Initializable {
     private List<Invoice> invoice_list;
     private LoadingAnchorPane loading_anchor_pane = new LoadingAnchorPane();
     private int current_selected_invoice_id = 0;
+    private int current_selected_invoice_index = 0;
     private Invoice current_invoice = null;
     private FinalInvoice final_invoice = null;
     private double total_price = 0;
@@ -545,73 +546,74 @@ public class Controller_staff_home implements Initializable {
             @Override
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
                 TreeItem<TableSearchCustomerInfoDataModel> selected_item = (TreeItem<TableSearchCustomerInfoDataModel>) newValue;
-                int index = selected_item.getValue().index.getValue() - 1;
-                current_selected_invoice_id = selected_item.getValue().invoice_id.getValue();
+                if (selected_item != null) {
+                    current_selected_invoice_index = selected_item.getValue().index.getValue();
+                    current_selected_invoice_id = selected_item.getValue().invoice_id.getValue();
+                    Task<Void> edit_invoice_task = new Task<Void>() {
+                        @Override
+                        protected Void call() throws Exception {
+                            current_invoice = InvoiceDAO.get_invoice_by_id(current_selected_invoice_id);
+                            List<Invoicelineitem> line_items = InvoicelineitemDAO.get_invoice_line_items_by_invoice(current_invoice);
 
-                Task<Void> edit_invoice_task = new Task<Void>() {
-                    @Override
-                    protected Void call() throws Exception {
-                        current_invoice = InvoiceDAO.get_invoice_by_id(current_selected_invoice_id);
-                        List<Invoicelineitem> line_items = InvoicelineitemDAO.get_invoice_line_items_by_invoice(current_invoice);
+                            //Reset table_final_invoice_list     
+                            table_final_invoice_list.clear();
+                            for (int i = 0; i < line_items.size(); i++) {
+                                int index = i + 1;
+                                String ticket_name = line_items.get(i).getTicket().getTicketName();
+                                int quantity = 1;
+                                int seat_number = line_items.get(i).getTicket().getTicketSeatNumber();
+                                double price = line_items.get(i).getPrice();
+                                TableFinalInvoiceModel row = new TableFinalInvoiceModel(index, ticket_name, quantity, seat_number, price);
+                                table_final_invoice_list.add(row);
+                            }
+                            System.out.println(table_final_invoice_list);
+                            total_price = 0;
+                            for (Invoicelineitem item : line_items) {
+                                total_price += item.getPrice();
+                            }
 
-                        //Reset table_final_invoice_list     
-                        table_final_invoice_list.clear();
-                        for (int i = 0; i < line_items.size(); i++) {
-                            int index = i + 1;
-                            String ticket_name = line_items.get(i).getTicket().getTicketName();
-                            int quantity = 1;
-                            int seat_number = line_items.get(i).getTicket().getTicketSeatNumber();
-                            double price = line_items.get(i).getPrice();
-                            TableFinalInvoiceModel row = new TableFinalInvoiceModel(index, ticket_name, quantity, seat_number, price);
-                            table_final_invoice_list.add(row);
+                            return null;
                         }
-                        System.out.println(table_final_invoice_list);
-                        total_price = 0;
-                        for (Invoicelineitem item : line_items) {
-                            total_price += item.getPrice();
+                    };
+
+                    edit_invoice_task.setOnSucceeded(event2 -> {
+                        //Set data of selected row in table to invoice form
+                        lblInvoiceName.setText(selected_item.getValue().name.getValueSafe());
+                        txtInvoiceName.setText(selected_item.getValue().name.getValueSafe());
+                        txtInvoicePhoneNumber.setText(selected_item.getValue().phone_number.getValueSafe());
+                        txtInvoiceTrip.setText(invoice_list.get(current_selected_invoice_index - 1).getTrip().getTripName());
+                        txtInvoiceDeparture.setText(invoice_list.get(current_selected_invoice_index - 1).getTrip().getLine().getStationByDepartureStationId().getStationName() + " : " + invoice_list.get(current_selected_invoice_index - 1).getTrip().getLine().getStationByDepartureStationId().getStationAddress());
+                        txtInvoiceDestination.setText(invoice_list.get(current_selected_invoice_index - 1).getTrip().getLine().getStationByDestinationStationId().getStationName() + " : " + invoice_list.get(current_selected_invoice_index - 1).getTrip().getLine().getStationByDestinationStationId().getStationAddress());
+                        txtInvoiceStartTime.setValue(TimeToLocalTime.convert_date_to_local_time(invoice_list.get(current_selected_invoice_index - 1).getTrip().getSchedule().getStartTime()));
+                        txtInvoiceStartDate.setValue(DateToLocalDate.convert_date_to_local_date(invoice_list.get(current_selected_invoice_index - 1).getTrip().getSchedule().getStartDate()));
+                        txtInvoiceEndTime.setValue(TimeToLocalTime.convert_date_to_local_time(invoice_list.get(current_selected_invoice_index - 1).getTrip().getSchedule().getEndTime()));
+                        txtInvoiceEndDate.setValue(DateToLocalDate.convert_date_to_local_date(invoice_list.get(current_selected_invoice_index - 1).getTrip().getSchedule().getEndDate()));
+                        txtInvoiceNumberOfTickets.setText(selected_item.getValue().number_of_tickets.getValue().toString());
+                        txtInvoiceTotalPrice.setText(Double.toString(total_price));
+                        txtInvoicePaymentStatus.setText(selected_item.getValue().payment_status.getValueSafe());
+                        CoachDriverTrip coach_driver_trip = CoachDriverTripDAO.get_coach_driver_trip_by_trip(current_invoice.getTrip());
+                        txtInvoiceNumberPlate.setText(coach_driver_trip.getCoach().getNumberPlate());
+
+                        //Set invoice payment status textfield color text fill based on the payment status
+                        //Set invoice update and check out button state (enabled or disabled) and content text based on invoice status
+                        if (txtInvoicePaymentStatus.getText().equals("Chưa thanh toán")) {
+                            txtInvoicePaymentStatus.setStyle("-fx-text-fill: red;");
+                            btnInvoiceCheckOut.setText("Thanh toán");
+                            btnInvoiceUpdate.setDisable(false);
+                        } else if (txtInvoicePaymentStatus.getText().equals("Đã thanh toán")) {
+                            txtInvoicePaymentStatus.setStyle("-fx-text-fill: green;");
+                            btnInvoiceCheckOut.setText("Xem hóa đơn");
+                            btnInvoiceUpdate.setDisable(true);
                         }
-
-                        return null;
-                    }
-                };
-
-                edit_invoice_task.setOnSucceeded(event2 -> {
-                    //Set data of selected row in table to invoice form
-                    lblInvoiceName.setText(selected_item.getValue().name.getValueSafe());
-                    txtInvoiceName.setText(selected_item.getValue().name.getValueSafe());
-                    txtInvoicePhoneNumber.setText(selected_item.getValue().phone_number.getValueSafe());
-                    txtInvoiceTrip.setText(invoice_list.get(index).getTrip().getTripName());
-                    txtInvoiceDeparture.setText(invoice_list.get(index).getTrip().getLine().getStationByDepartureStationId().getStationName() + " : " + invoice_list.get(index).getTrip().getLine().getStationByDepartureStationId().getStationAddress());
-                    txtInvoiceDestination.setText(invoice_list.get(index).getTrip().getLine().getStationByDestinationStationId().getStationName() + " : " + invoice_list.get(index).getTrip().getLine().getStationByDestinationStationId().getStationAddress());
-                    txtInvoiceStartTime.setValue(TimeToLocalTime.convert_date_to_local_time(invoice_list.get(index).getTrip().getSchedule().getStartTime()));
-                    txtInvoiceStartDate.setValue(DateToLocalDate.convert_date_to_local_date(invoice_list.get(index).getTrip().getSchedule().getStartDate()));
-                    txtInvoiceEndTime.setValue(TimeToLocalTime.convert_date_to_local_time(invoice_list.get(index).getTrip().getSchedule().getEndTime()));
-                    txtInvoiceEndDate.setValue(DateToLocalDate.convert_date_to_local_date(invoice_list.get(index).getTrip().getSchedule().getEndDate()));
-                    txtInvoiceNumberOfTickets.setText(selected_item.getValue().number_of_tickets.getValue().toString());
-                    txtInvoiceTotalPrice.setText(Double.toString(total_price));
-                    txtInvoicePaymentStatus.setText(selected_item.getValue().payment_status.getValueSafe());
-                    CoachDriverTrip coach_driver_trip = CoachDriverTripDAO.get_coach_driver_trip_by_trip(current_invoice.getTrip());
-                    txtInvoiceNumberPlate.setText(coach_driver_trip.getCoach().getNumberPlate());
-
-                    //Set invoice payment status textfield color text fill based on the payment status
-                    //Set invoice update and check out button state (enabled or disabled) and content text based on invoice status
-                    if (txtInvoicePaymentStatus.getText().equals("Chưa thanh toán")) {
-                        txtInvoicePaymentStatus.setStyle("-fx-text-fill: red;");
-                        btnInvoiceCheckOut.setText("Thanh toán");
-                        btnInvoiceUpdate.setDisable(false);
-                    } else if (txtInvoicePaymentStatus.getText().equals("Đã thanh toán")) {
-                        txtInvoicePaymentStatus.setStyle("-fx-text-fill: green;");
-                        btnInvoiceCheckOut.setText("Xem hóa đơn");
-                        btnInvoiceUpdate.setDisable(true);
-                    }
-                    clean_current_scenes();
-                    if (!is_active_invoice_scene) {
-                        animate_invoice_form(editInvoiceScrollPane, 0);
-                    }
-                });
-                Thread thread = new Thread(edit_invoice_task);
-                thread.setDaemon(true);
-                thread.start();
+                        clean_current_scenes();
+                        if (!is_active_invoice_scene) {
+                            animate_invoice_form(editInvoiceScrollPane, 0);
+                        }
+                    });
+                    Thread thread = new Thread(edit_invoice_task);
+                    thread.setDaemon(true);
+                    thread.start();
+                }
             }
         });
     }
@@ -639,13 +641,14 @@ public class Controller_staff_home implements Initializable {
                     }
                     for (int i = 0; i < invoice_list.size(); i++) {
                         int invoice_id = invoice_list.get(i).getInvoiceId();
+                        int index = i + 1;
                         String name = invoice_list.get(i).getCustomer().getCustomerName();
                         String phone_number = invoice_list.get(i).getCustomer().getCustomerPhoneNumber();
                         String trip_line_name = invoice_list.get(i).getTrip().getLine().getLineName();
                         int number_of_tickets = InvoicelineitemDAO.count_invoice_line_items(invoice_list.get(i));
                         String payment_status = invoice_list.get(i).getInvoiceStatus();
                         String start_date = DateToString.convert_date_to_string(invoice_list.get(i).getTrip().getSchedule().getStartDate());
-                        TableSearchCustomerInfoDataModel row = new TableSearchCustomerInfoDataModel(invoice_id, i + 1, name, phone_number, trip_line_name, number_of_tickets, payment_status, start_date);
+                        TableSearchCustomerInfoDataModel row = new TableSearchCustomerInfoDataModel(invoice_id, index, name, phone_number, trip_line_name, number_of_tickets, payment_status, start_date);
                         table_customer_info_list.add(row);
                     }
                 }
@@ -669,6 +672,7 @@ public class Controller_staff_home implements Initializable {
         animate_customer_pane_when_click_on_menu_button(paneCustomerInfo, 0);
         is_active_customer_scene = true;
         is_active_invoice_scene = false;
+        tblSearchCustomerInfoResult.getSelectionModel().clearSelection();
     }
 
     @FXML
@@ -743,6 +747,8 @@ public class Controller_staff_home implements Initializable {
             thread.setDaemon(true);
             thread.start();
         } else {
+            //Update customer info list in customer searching table result
+            table_customer_info_list.get(current_selected_invoice_index - 1).payment_status = new SimpleStringProperty("Đang xử lý");
             //Add a confirm dialog will shown up each time the staff clicked on the check out button to confirm data input
             Alert invoice_check_out_alert = new Alert(AlertType.CONFIRMATION);
             invoice_check_out_alert.setTitle("XÁC NHẬN THANH TOÁN");
@@ -780,6 +786,8 @@ public class Controller_staff_home implements Initializable {
                             Date invoice_due_date = new SimpleDateFormat("HH:mm dd-MM-yyyy").parse(invoice_date);
                             current_invoice.setInvoiceDueDate(invoice_due_date);
                             InvoiceDAO.update_invoice(current_invoice);
+                            //Update customer info list in customer searching table result and refresh the table
+                            table_customer_info_list.get(current_selected_invoice_index - 1).payment_status = new SimpleStringProperty("Đã thanh toán");
                         } catch (ParseException e) {
 
                         }
@@ -821,6 +829,11 @@ public class Controller_staff_home implements Initializable {
                         lblFinalInvoiceEndDateTime.setText(final_invoice.end_date_time);
                         lblFinalInvoiceCoach.setText(final_invoice.coach_number_plate);
                         lblFinalInvoiceTotalPrice.setText(final_invoice.total_price + " đồng.");
+
+                        //Refresh table for showing newest record
+                        tblSearchCustomerInfoResult.getColumns().get(5).setVisible(false);
+                        tblSearchCustomerInfoResult.getColumns().get(5).setVisible(true);
+                        tblSearchCustomerInfoResult.getSelectionModel().clearSelection();
                     }
 
                     animate_loading_anchor_pane(loading_anchor_pane, 0);
@@ -834,6 +847,11 @@ public class Controller_staff_home implements Initializable {
                     check_out_success_alert.setContentText("Vui lòng xuất, đóng dấu hóa đơn và cung cấp thông tin cần thiết về chuyến đi cho khách hàng. \nXin cảm ơn!");
                     check_out_success_alert.initStyle(StageStyle.UNDECORATED);
                     Optional<ButtonType> export_image_alert_action = check_out_success_alert.showAndWait();
+                });
+
+                check_out_task.setOnFailed(event2 -> {
+                    //Update customer info list in customer searching table result
+                    table_customer_info_list.get(current_selected_invoice_index - 1).payment_status = new SimpleStringProperty("Chưa thanh toán");
                 });
                 Thread thread = new Thread(check_out_task);
                 thread.setDaemon(true);
@@ -923,6 +941,9 @@ public class Controller_staff_home implements Initializable {
             export_invoice_success_alert.setHeaderText(null);
             export_invoice_success_alert.setContentText("Vui lòng đóng dấu hóa đơn, giao hóa đơn và cung cấp thông tin cần thiết về chuyến đi cho khách hàng. \nXin cảm ơn!");
             Optional<ButtonType> export_image_alert_action = export_invoice_success_alert.showAndWait();
+            if (export_image_alert_action.get() == ButtonType.OK) {
+                btnExportInvoice.setVisible(true);
+            }
         }
 
     }
