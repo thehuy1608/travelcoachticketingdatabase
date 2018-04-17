@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
 <?import com.jfoenix.controls.JFXDatePicker?>
 <?import com.jfoenix.controls.JFXHamburger?>
 <?import com.jfoenix.controls.JFXTextField?>
@@ -182,9 +183,9 @@
             </JFXTreeTableView>
          </children>
       </AnchorPane>
-      <ScrollPane fx:id="editInvoiceScrollPane" layoutX="60.0" layoutY="800.0" prefHeight="2200.0" prefWidth="1140.0" style="-fx-background-color: #fcfff5;">
+      <ScrollPane fx:id="editInvoiceScrollPane" layoutX="60.0" layoutY="800.0" prefHeight="800.0" prefWidth="1140.0" style="-fx-background-color: #fcfff5;">
         <content>
-          <AnchorPane fx:id="editInvoiceAnchorPane" minHeight="0.0" minWidth="0.0" prefHeight="2200.0" prefWidth="1120.0" style="-fx-background-color: #fcfff5;">
+          <AnchorPane fx:id="editInvoiceAnchorPane" minHeight="0.0" minWidth="0.0" prefHeight="3000.0" prefWidth="1120.0" style="-fx-background-color: #fcfff5;">
                <children>
                   <Label layoutX="150.0" layoutY="90.0" prefHeight="50.0" prefWidth="420.0" text="Thông tin hóa đơn của khách hàng:" textFill="#3e606f">
                      <font>
@@ -253,44 +254,28 @@
                         <Font name="System Bold Italic" size="18.0" />
                      </font>
                   </Label>
-                  <Label layoutX="310.0" layoutY="1214.0" text="Chi tiết ghế ngồi:" textFill="#193441">
+                  <Label layoutX="310.0" layoutY="1812.0" text="Chi tiết ghế ngồi:" textFill="#193441">
                      <font>
                         <Font name="System Bold Italic" size="18.0" />
                      </font>
                   </Label>
-                  <Label layoutX="310.0" layoutY="1587.0" text="Tổng tiền thanh toán:  (Không thay đổi mục này)" textFill="#193441">
+                  <Label layoutX="310.0" layoutY="2207.0" text="Tổng tiền thanh toán:  (Không thay đổi mục này)" textFill="#193441">
                      <font>
                         <Font name="System Bold Italic" size="18.0" />
                      </font>
                   </Label>
-                  <JFXTextField fx:id="txtInvoiceTotalPrice" editable="false" layoutX="310.0" layoutY="1614.0" prefHeight="50.0" prefWidth="500.0" />
+                  <JFXTextField fx:id="txtInvoiceTotalPrice" editable="false" layoutX="310.0" layoutY="2234.0" prefHeight="50.0" prefWidth="500.0" />
                   <Label fx:id="lblTotalPriceMessage" layoutX="310.0" layoutY="1408.0" prefHeight="40.0" prefWidth="500.0" />
-                  <Label layoutX="310.0" layoutY="1704.0" text="Trạng thái thanh toán:  (Không thay đổi mục này)" textFill="#193441">
+                  <Label layoutX="310.0" layoutY="2324.0" text="Trạng thái thanh toán:  (Không thay đổi mục này)" textFill="#193441">
                      <font>
                         <Font name="System Bold Italic" size="18.0" />
                      </font>
                   </Label>
-                  <JFXTextField fx:id="txtInvoicePaymentStatus" editable="false" layoutX="310.0" layoutY="1731.0" prefHeight="50.0" prefWidth="500.0">
+                  <JFXTextField fx:id="txtInvoicePaymentStatus" editable="false" layoutX="310.0" layoutY="2351.0" prefHeight="50.0" prefWidth="500.0">
                      <font>
                         <Font name="System Bold" size="15.0" />
                      </font></JFXTextField>
                   <Label fx:id="lblPaymentStatusMessage" layoutX="310.0" layoutY="1525.0" prefHeight="40.0" prefWidth="500.0" />
-                  <JFXButton fx:id="btnInvoiceCheckOut" buttonType="RAISED" layoutX="610.0" layoutY="1990.0" onAction="#invoice_check_out_button_action" prefHeight="50.0" prefWidth="200.0" ripplerFill="#182657" style="-fx-background-color: #182657;" text="Thanh Toán" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </JFXButton>
-                  <JFXButton fx:id="btnInvoiceUpdate" buttonType="RAISED" layoutX="386.0" layoutY="1990.0" prefHeight="50.0" prefWidth="200.0" ripplerFill="#f05837" style="-fx-background-color: #f05837;" text="Cập Nhật" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </JFXButton>
                   <JFXDatePicker fx:id="txtInvoiceStartDate" editable="false" layoutX="541.0" layoutY="818.0" prefHeight="50.0" />
                   <JFXTimePicker fx:id="txtInvoiceStartTime" layoutX="310.0" layoutY="818.0" prefHeight="50.0" />
                   <JFXDatePicker fx:id="txtInvoiceEndDate" editable="false" layoutX="541.0" layoutY="935.0" prefHeight="50.0" />
@@ -309,7 +294,7 @@
                   </JFXButton>
                   <JFXTextField fx:id="txtInvoiceDeparture" editable="false" layoutX="310.0" layoutY="584.0" prefHeight="50.0" prefWidth="500.0" />
                   <JFXTextField fx:id="txtInvoiceDestination" editable="false" layoutX="310.0" layoutY="701.0" prefHeight="50.0" prefWidth="500.0" />
-                  <JFXTreeTableView fx:id="tblEditInvoice" layoutX="310.0" layoutY="1248.0" prefHeight="316.0" prefWidth="500.0">
+                  <JFXTreeTableView fx:id="tblEditInvoice" layoutX="310.0" layoutY="1839.0" prefHeight="316.0" prefWidth="500.0">
                      <columns>
                         <TreeTableColumn fx:id="tblEditInvoice_Index" prefWidth="48.0" style="-fx-alignment: CENTER;" text="STT" />
                         <TreeTableColumn fx:id="tblEditInvoice_TicketName" prefWidth="155.0" style="-fx-alignment: CENTER;" text="Tên vé" />
@@ -318,16 +303,84 @@
                         <TreeTableColumn fx:id="tblEditInvoice_Price" prefWidth="126.0" style="-fx-alignment: CENTER;" text="Giá tiền" />
                      </columns>
                   </JFXTreeTableView>
-                  <Label layoutX="310.0" layoutY="1818.0" text="Biển số xe:  (Không thay đổi mục này)" textFill="#193441">
+                  <Label layoutX="310.0" layoutY="2438.0" text="Biển số xe:  (Không thay đổi mục này)" textFill="#193441">
                      <font>
                         <Font name="System Bold Italic" size="18.0" />
                      </font>
                   </Label>
-                  <JFXTextField fx:id="txtInvoiceNumberPlate" editable="false" layoutX="310.0" layoutY="1845.0" prefHeight="50.0" prefWidth="500.0">
+                  <JFXButton fx:id="btnInvoiceCheckOut" buttonType="RAISED" layoutX="610.0" layoutY="2564.0" onAction="#invoice_check_out_button_action" prefHeight="50.0" prefWidth="200.0" ripplerFill="#182657" style="-fx-background-color: #182657;" text="Thanh Toán" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </JFXButton>
+                  <JFXButton fx:id="btnInvoiceUpdate" buttonType="RAISED" layoutX="386.0" layoutY="2564.0" prefHeight="50.0" prefWidth="200.0" ripplerFill="#f05837" style="-fx-background-color: #f05837;" text="Cập Nhật" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </JFXButton>
+                  <JFXTextField fx:id="txtInvoiceNumberPlate" editable="false" layoutX="310.0" layoutY="2465.0" prefHeight="50.0" prefWidth="500.0">
                      <font>
                         <Font name="System Bold" size="15.0" />
                      </font>
                   </JFXTextField>
+                  <AnchorPane fx:id="paneSeatPlane" layoutX="310.0" layoutY="1191.0" prefHeight="533.0" prefWidth="500.0" style="-fx-background-color: white;">
+                     <effect>
+                        <DropShadow />
+                     </effect>
+                     <children>
+                        <JFXCheckBox fx:id="cbSeat1" layoutX="39.0" layoutY="60.0" text="01" />
+                        <JFXCheckBox fx:id="cbSeat2" layoutX="39.0" layoutY="98.0" text="02" />
+                        <JFXCheckBox fx:id="cbSeat3" layoutX="39.0" layoutY="135.0" text="03" />
+                        <JFXCheckBox fx:id="cbSeat4" layoutX="39.0" layoutY="172.0" text="04" />
+                        <JFXCheckBox fx:id="cbSeat5" layoutX="39.0" layoutY="212.0" prefHeight="21.0" prefWidth="36.0" text="05" />
+                        <JFXCheckBox fx:id="cbSeat6" layoutX="39.0" layoutY="251.0" text="06" />
+                        <JFXCheckBox fx:id="cbSeat7" layoutX="39.0" layoutY="293.0" text="07" />
+                        <JFXCheckBox fx:id="cbSeat8" layoutX="39.0" layoutY="338.0" text="08" />
+                        <JFXCheckBox fx:id="cbSeat9" layoutX="39.0" layoutY="379.0" text="09" />
+                        <JFXCheckBox fx:id="cbSeat10" layoutX="39.0" layoutY="424.0" text="10" />
+                        <JFXCheckBox fx:id="cbSeat11" layoutX="135.0" layoutY="60.0" text="11" />
+                        <JFXCheckBox fx:id="cbSeat12" layoutX="135.0" layoutY="98.0" text="12" />
+                        <JFXCheckBox fx:id="cbSeat13" layoutX="135.0" layoutY="135.0" text="13" />
+                        <JFXCheckBox fx:id="cbSeat14" layoutX="135.0" layoutY="172.0" text="14" />
+                        <JFXCheckBox fx:id="cbSeat15" layoutX="135.0" layoutY="212.0" prefHeight="21.0" prefWidth="36.0" text="15" />
+                        <JFXCheckBox fx:id="cbSeat16" layoutX="135.0" layoutY="251.0" text="16" />
+                        <JFXCheckBox fx:id="cbSeat17" layoutX="135.0" layoutY="293.0" text="17" />
+                        <JFXCheckBox fx:id="cbSeat18" layoutX="135.0" layoutY="338.0" text="18" />
+                        <JFXCheckBox fx:id="cbSeat19" layoutX="135.0" layoutY="379.0" text="19" />
+                        <JFXCheckBox fx:id="cbSeat20" layoutX="135.0" layoutY="424.0" text="20" />
+                        <JFXCheckBox fx:id="cbSeat21" layoutX="321.0" layoutY="58.0" text="21" />
+                        <JFXCheckBox fx:id="cbSeat22" layoutX="321.0" layoutY="96.0" text="22" />
+                        <JFXCheckBox fx:id="cbSeat23" layoutX="321.0" layoutY="133.0" text="23" />
+                        <JFXCheckBox fx:id="cbSeat24" layoutX="321.0" layoutY="170.0" text="24" />
+                        <JFXCheckBox fx:id="cbSeat25" layoutX="321.0" layoutY="210.0" prefHeight="21.0" prefWidth="36.0" text="25" />
+                        <JFXCheckBox fx:id="cbSeat26" layoutX="321.0" layoutY="249.0" text="26" />
+                        <JFXCheckBox fx:id="cbSeat27" layoutX="321.0" layoutY="291.0" text="27" />
+                        <JFXCheckBox fx:id="cbSeat28" layoutX="321.0" layoutY="336.0" text="28" />
+                        <JFXCheckBox fx:id="cbSeat29" layoutX="321.0" layoutY="377.0" text="29" />
+                        <JFXCheckBox fx:id="cbSeat30" layoutX="321.0" layoutY="422.0" text="30" />
+                        <JFXCheckBox fx:id="cbSeat31" layoutX="417.0" layoutY="58.0" text="31" />
+                        <JFXCheckBox fx:id="cbSeat32" layoutX="417.0" layoutY="96.0" text="32" />
+                        <JFXCheckBox fx:id="cbSeat33" layoutX="417.0" layoutY="133.0" text="33" />
+                        <JFXCheckBox fx:id="cbSeat34" layoutX="417.0" layoutY="170.0" text="34" />
+                        <JFXCheckBox fx:id="cbSeat35" layoutX="417.0" layoutY="210.0" prefHeight="21.0" prefWidth="36.0" text="35" />
+                        <JFXCheckBox fx:id="cbSeat36" layoutX="417.0" layoutY="249.0" text="36" />
+                        <JFXCheckBox fx:id="cbSeat37" layoutX="417.0" layoutY="291.0" text="37" />
+                        <JFXCheckBox fx:id="cbSeat38" layoutX="417.0" layoutY="336.0" text="38" />
+                        <JFXCheckBox fx:id="cbSeat39" layoutX="417.0" layoutY="377.0" text="39" />
+                        <JFXCheckBox fx:id="cbSeat40" layoutX="417.0" layoutY="422.0" text="40" />
+                        <JFXCheckBox fx:id="cbSeat45" layoutX="39.0" layoutY="462.0" text="45" />
+                        <JFXCheckBox fx:id="cbSeat44" layoutX="135.0" layoutY="462.0" text="44" />
+                        <JFXCheckBox fx:id="cbSeat42" layoutX="321.0" layoutY="460.0" text="42" />
+                        <JFXCheckBox fx:id="cbSeat41" layoutX="417.0" layoutY="460.0" text="41" />
+                        <JFXCheckBox fx:id="cbSeat43" layoutX="228.0" layoutY="462.0" text="43" />
+                     </children>
+                  </AnchorPane>
                </children>
             </AnchorPane>
         </content>

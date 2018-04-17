@@ -6,6 +6,7 @@
 package controller;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXHamburger;
 import com.jfoenix.controls.JFXScrollPane;
@@ -24,6 +25,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -53,6 +55,7 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -61,6 +64,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
+import javafx.scene.control.TreeTableRow;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -81,9 +85,14 @@ import model.api.validate.ValidateInput;
 import model.database.dao.CoachDriverTripDAO;
 import model.database.dao.InvoiceDAO;
 import model.database.dao.InvoicelineitemDAO;
+import static model.database.dao.InvoicelineitemDAO.get_invoice_line_items_by_invoice;
+import model.database.dao.SeatDAO;
+import model.database.dao.TicketDAO;
 import model.database.pojo.CoachDriverTrip;
 import model.database.pojo.Invoice;
 import model.database.pojo.Invoicelineitem;
+import model.database.pojo.Ticket;
+import model.database.pojo.Trip;
 
 /**
  * FXML Controller class
@@ -283,6 +292,98 @@ public class Controller_staff_home implements Initializable {
     private TreeTableColumn<TableFinalInvoiceModel, Number> tblFinalInvoice_Price;
     @FXML
     private JFXButton btnExportInvoice;
+    @FXML
+    private AnchorPane paneSeatPlane;
+    @FXML
+    private JFXCheckBox cbSeat1;
+    @FXML
+    private JFXCheckBox cbSeat2;
+    @FXML
+    private JFXCheckBox cbSeat3;
+    @FXML
+    private JFXCheckBox cbSeat4;
+    @FXML
+    private JFXCheckBox cbSeat5;
+    @FXML
+    private JFXCheckBox cbSeat6;
+    @FXML
+    private JFXCheckBox cbSeat7;
+    @FXML
+    private JFXCheckBox cbSeat8;
+    @FXML
+    private JFXCheckBox cbSeat9;
+    @FXML
+    private JFXCheckBox cbSeat10;
+    @FXML
+    private JFXCheckBox cbSeat11;
+    @FXML
+    private JFXCheckBox cbSeat12;
+    @FXML
+    private JFXCheckBox cbSeat13;
+    @FXML
+    private JFXCheckBox cbSeat14;
+    @FXML
+    private JFXCheckBox cbSeat15;
+    @FXML
+    private JFXCheckBox cbSeat16;
+    @FXML
+    private JFXCheckBox cbSeat17;
+    @FXML
+    private JFXCheckBox cbSeat18;
+    @FXML
+    private JFXCheckBox cbSeat19;
+    @FXML
+    private JFXCheckBox cbSeat20;
+    @FXML
+    private JFXCheckBox cbSeat21;
+    @FXML
+    private JFXCheckBox cbSeat22;
+    @FXML
+    private JFXCheckBox cbSeat23;
+    @FXML
+    private JFXCheckBox cbSeat24;
+    @FXML
+    private JFXCheckBox cbSeat25;
+    @FXML
+    private JFXCheckBox cbSeat26;
+    @FXML
+    private JFXCheckBox cbSeat27;
+    @FXML
+    private JFXCheckBox cbSeat28;
+    @FXML
+    private JFXCheckBox cbSeat29;
+    @FXML
+    private JFXCheckBox cbSeat30;
+    @FXML
+    private JFXCheckBox cbSeat31;
+    @FXML
+    private JFXCheckBox cbSeat32;
+    @FXML
+    private JFXCheckBox cbSeat33;
+    @FXML
+    private JFXCheckBox cbSeat34;
+    @FXML
+    private JFXCheckBox cbSeat35;
+    @FXML
+    private JFXCheckBox cbSeat36;
+    @FXML
+    private JFXCheckBox cbSeat37;
+    @FXML
+    private JFXCheckBox cbSeat38;
+    @FXML
+    private JFXCheckBox cbSeat39;
+    @FXML
+    private JFXCheckBox cbSeat40;
+    @FXML
+    private JFXCheckBox cbSeat45;
+    @FXML
+    private JFXCheckBox cbSeat44;
+    @FXML
+    private JFXCheckBox cbSeat42;
+    @FXML
+    private JFXCheckBox cbSeat41;
+    @FXML
+    private JFXCheckBox cbSeat43;
     // </editor-fold>
     private boolean is_active_customer_scene = false;
     private boolean is_active_final_invoice = false;
@@ -297,6 +398,9 @@ public class Controller_staff_home implements Initializable {
     private Invoice current_invoice = null;
     private FinalInvoice final_invoice = null;
     private double total_price = 0;
+    private List<Byte> selected_seat_list;
+    private List<Byte> current_customer_selected_seat;
+    private double current_ticket_price;
 
     /**
      * Initializes the controller class.
@@ -542,13 +646,14 @@ public class Controller_staff_home implements Initializable {
         JFXScrollPane.smoothScrolling(editInvoiceScrollPane);
 
         //Show invoice form with corresponding data of row clicked
-        tblSearchCustomerInfoResult.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
-            @Override
-            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-                TreeItem<TableSearchCustomerInfoDataModel> selected_item = (TreeItem<TableSearchCustomerInfoDataModel>) newValue;
-                if (selected_item != null) {
-                    current_selected_invoice_index = selected_item.getValue().index.getValue();
-                    current_selected_invoice_id = selected_item.getValue().invoice_id.getValue();
+        // <editor-fold defaultstate="collapsed" desc="Add row clicking onclick action to tblSearchCustomerInfoResult">
+        tblSearchCustomerInfoResult.setRowFactory(factory -> {
+            TreeTableRow<TableSearchCustomerInfoDataModel> ttr = new TreeTableRow<>();
+            ttr.setOnMouseClicked(event -> {
+                if (!ttr.isEmpty()) {
+                    TableSearchCustomerInfoDataModel selected_item = ttr.getItem();
+                    current_selected_invoice_index = selected_item.index.getValue();
+                    current_selected_invoice_id = selected_item.invoice_id.getValue();
                     Task<Void> edit_invoice_task = new Task<Void>() {
                         @Override
                         protected Void call() throws Exception {
@@ -568,19 +673,24 @@ public class Controller_staff_home implements Initializable {
                             }
                             System.out.println(table_final_invoice_list);
                             total_price = 0;
-                            for (Invoicelineitem item : line_items) {
+                            line_items.forEach((item) -> {
                                 total_price += item.getPrice();
-                            }
+                            });
+                            current_customer_selected_seat = get_all_selected_seat_in_invoice_by_invoice(current_invoice);
 
+                            //Load the selected seat list to the List define at the start of method
+                            CoachDriverTrip coach_driver_trip = CoachDriverTripDAO.get_coach_driver_trip_by_trip(current_invoice.getTrip());
+                            int current_coach_id = coach_driver_trip.getCoach().getCoachId();
+                            selected_seat_list = SeatDAO.get_all_selected_seat_of_trip_by_coach_id(current_coach_id);
                             return null;
                         }
                     };
 
                     edit_invoice_task.setOnSucceeded(event2 -> {
                         //Set data of selected row in table to invoice form
-                        lblInvoiceName.setText(selected_item.getValue().name.getValueSafe());
-                        txtInvoiceName.setText(selected_item.getValue().name.getValueSafe());
-                        txtInvoicePhoneNumber.setText(selected_item.getValue().phone_number.getValueSafe());
+                        lblInvoiceName.setText(selected_item.name.getValueSafe());
+                        txtInvoiceName.setText(selected_item.name.getValueSafe());
+                        txtInvoicePhoneNumber.setText(selected_item.phone_number.getValueSafe());
                         txtInvoiceTrip.setText(invoice_list.get(current_selected_invoice_index - 1).getTrip().getTripName());
                         txtInvoiceDeparture.setText(invoice_list.get(current_selected_invoice_index - 1).getTrip().getLine().getStationByDepartureStationId().getStationName() + " : " + invoice_list.get(current_selected_invoice_index - 1).getTrip().getLine().getStationByDepartureStationId().getStationAddress());
                         txtInvoiceDestination.setText(invoice_list.get(current_selected_invoice_index - 1).getTrip().getLine().getStationByDestinationStationId().getStationName() + " : " + invoice_list.get(current_selected_invoice_index - 1).getTrip().getLine().getStationByDestinationStationId().getStationAddress());
@@ -588,9 +698,9 @@ public class Controller_staff_home implements Initializable {
                         txtInvoiceStartDate.setValue(DateToLocalDate.convert_date_to_local_date(invoice_list.get(current_selected_invoice_index - 1).getTrip().getSchedule().getStartDate()));
                         txtInvoiceEndTime.setValue(TimeToLocalTime.convert_date_to_local_time(invoice_list.get(current_selected_invoice_index - 1).getTrip().getSchedule().getEndTime()));
                         txtInvoiceEndDate.setValue(DateToLocalDate.convert_date_to_local_date(invoice_list.get(current_selected_invoice_index - 1).getTrip().getSchedule().getEndDate()));
-                        txtInvoiceNumberOfTickets.setText(selected_item.getValue().number_of_tickets.getValue().toString());
+                        txtInvoiceNumberOfTickets.setText(selected_item.number_of_tickets.getValue().toString());
                         txtInvoiceTotalPrice.setText(Double.toString(total_price));
-                        txtInvoicePaymentStatus.setText(selected_item.getValue().payment_status.getValueSafe());
+                        txtInvoicePaymentStatus.setText(selected_item.payment_status.getValueSafe());
                         CoachDriverTrip coach_driver_trip = CoachDriverTripDAO.get_coach_driver_trip_by_trip(current_invoice.getTrip());
                         txtInvoiceNumberPlate.setText(coach_driver_trip.getCoach().getNumberPlate());
 
@@ -605,6 +715,11 @@ public class Controller_staff_home implements Initializable {
                             btnInvoiceCheckOut.setText("Xem hóa đơn");
                             btnInvoiceUpdate.setDisable(true);
                         }
+
+                        //check all the selected seat in seat checkboxes
+                        int current_coach_id = coach_driver_trip.getCoach().getCoachId();
+                        load_selected_seats_to_pane_by_coach_id(current_coach_id, selected_seat_list);
+                        disable_selected_seats_of_other_customers(current_coach_id, selected_seat_list, current_customer_selected_seat);
                         clean_current_scenes();
                         if (!is_active_invoice_scene) {
                             animate_invoice_form(editInvoiceScrollPane, 0);
@@ -614,8 +729,65 @@ public class Controller_staff_home implements Initializable {
                     thread.setDaemon(true);
                     thread.start();
                 }
-            }
+            });
+            return ttr;
         });
+        // </editor-fold>
+
+        //Adding listener to each checkbox to track on change event
+        // <editor-fold defaultstate="collapsed" desc="Add a new row to table customer info list to display it on edit invoice phase, but don't update in database yet until CheckOut button is clicked">
+        //Get list of node in paneTicketPlane
+        ObservableList<Node> cbSeat_node_list = paneSeatPlane.getChildren();
+        //Convert cbSeat_node_list to JFXCheckBox list
+        List<JFXCheckBox> cbSeat_checkbox_list = new ArrayList<>();
+        cbSeat_node_list.forEach(temp_seat -> {
+            JFXCheckBox temp = (JFXCheckBox) temp_seat;
+            cbSeat_checkbox_list.add(temp);
+        });
+        //Add change listener to each checkbox
+        cbSeat_checkbox_list.forEach(cbSeat -> {
+            cbSeat.setOnMouseClicked(event -> {
+                if (cbSeat.isSelected()) {
+                    //TO-DO when the current check box is checked.
+                    Task<Void> seat_check_box_checked_task = new Task<Void>() {
+                        @Override
+                        protected Void call() throws Exception {
+                            update_table_search_customer_list_when_check_box_checked(cbSeat, current_invoice);
+                            return null;
+                        }
+                    };
+                    seat_check_box_checked_task.setOnSucceeded(event1 -> {
+                        tblEditInvoice.setVisible(false);
+                        tblEditInvoice.setVisible(true);
+                        txtInvoiceNumberOfTickets.setText(Integer.toString(Integer.parseInt(txtInvoiceNumberOfTickets.getText()) + 1));
+                        txtInvoiceTotalPrice.setText(Double.toString(Double.parseDouble(txtInvoiceTotalPrice.getText()) + current_ticket_price));
+                    });
+                    Thread thread = new Thread(seat_check_box_checked_task);
+                    thread.setDaemon(true);
+                    thread.start();
+                } else {
+                    //TO-DO when the current check box is unchecked
+                    Task<Void> seat_check_box_unchecked_task = new Task<Void>() {
+                        @Override
+                        protected Void call() throws Exception {
+                            update_table_search_customer_list_when_check_box_unchecked(cbSeat);
+                            return null;
+                        }
+                    };
+                    seat_check_box_unchecked_task.setOnSucceeded(event2 -> {
+                        tblEditInvoice.setVisible(false);
+                        tblEditInvoice.setVisible(true);
+                        txtInvoiceNumberOfTickets.setText(Integer.toString(Integer.parseInt(txtInvoiceNumberOfTickets.getText()) - 1));
+                        txtInvoiceTotalPrice.setText(Double.toString(Double.parseDouble(txtInvoiceTotalPrice.getText()) -  current_ticket_price));
+                    });
+                    Thread thread = new Thread(seat_check_box_unchecked_task);
+                    thread.setDaemon(true);
+                    thread.start();
+                }
+            });
+        });
+        // </editor-fold>
+
     }
 
     //btnSearchCustomerInfo button action
@@ -701,9 +873,9 @@ public class Controller_staff_home implements Initializable {
 
                     //Get the total price of invoice
                     total_price = 0;
-                    for (Invoicelineitem item : line_items) {
+                    line_items.forEach((item) -> {
                         total_price += item.getPrice();
-                    }
+                    });
                     CoachDriverTrip coach_driver_trip = CoachDriverTripDAO.get_coach_driver_trip_by_trip(current_invoice.getTrip());
                     //Add necessary data and create new FinalInvoice Object
                     String invoice_name = current_invoice.getCustomer().getCustomerName();
@@ -794,9 +966,9 @@ public class Controller_staff_home implements Initializable {
 
                         //Get the total price of invoice
                         total_price = 0;
-                        for (Invoicelineitem item : line_items) {
+                        line_items.forEach((item) -> {
                             total_price += item.getPrice();
-                        }
+                        });
                         CoachDriverTrip coach_driver_trip = CoachDriverTripDAO.get_coach_driver_trip_by_trip(current_invoice.getTrip());
 
                         //Add necessary data and create new FinalInvoice Object                        
@@ -860,8 +1032,36 @@ public class Controller_staff_home implements Initializable {
         }
 
     }
-    // <editor-fold defaultstate="collapsed" desc="Effects APIs">
 
+    @FXML
+    private void export_invoice_button_action(ActionEvent event) {
+        boolean is_success_export_invoice = false;
+        btnExportInvoice.setVisible(false);
+        try {
+            WritableImage invoice_printable_image = paneFinalInvoice.snapshot(new SnapshotParameters(), null);
+            String path = System.getProperty("user.home") + File.separator + "Documents" + File.separator + "TravelBusTicketing" + File.separator + "Invoice.png";
+            File invoice_printable_image_file = new File(path);
+            Files.deleteIfExists(invoice_printable_image_file.toPath());
+            if (invoice_printable_image_file.createNewFile()) {
+                ImageIO.write(SwingFXUtils.fromFXImage(invoice_printable_image, null), "png", invoice_printable_image_file);
+            }
+            is_success_export_invoice = true;
+        } catch (IOException ex) {
+            Logger.getLogger(Controller_staff_home.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if (is_success_export_invoice) {
+            Alert export_invoice_success_alert = new Alert(AlertType.INFORMATION);
+            export_invoice_success_alert.setHeaderText(null);
+            export_invoice_success_alert.setContentText("Vui lòng đóng dấu hóa đơn, giao hóa đơn và cung cấp thông tin cần thiết về chuyến đi cho khách hàng. \nXin cảm ơn!");
+            Optional<ButtonType> export_image_alert_action = export_invoice_success_alert.showAndWait();
+            if (export_image_alert_action.get() == ButtonType.OK) {
+                btnExportInvoice.setVisible(true);
+            }
+        }
+
+    }
+
+    // <editor-fold defaultstate="collapsed" desc="Effects APIs">
     private void animate_sidemenu(final Pane pane, double layoutX) {
         Duration transition_duration = Duration.millis(500);
         Timeline time_line = new Timeline(new KeyFrame(transition_duration, new KeyValue(pane.layoutXProperty(), layoutX, Interpolator.EASE_BOTH)));
@@ -920,32 +1120,91 @@ public class Controller_staff_home implements Initializable {
         is_active_invoice_scene = false;
     }
 
-    @FXML
-    private void export_invoice_button_action(ActionEvent event) {
-        boolean is_success_export_invoice = false;
-        btnExportInvoice.setVisible(false);
+    private void load_selected_seats_to_pane_by_coach_id(int coach_id, List<Byte> selected_seat_list) {
+        String cbSeat_id_prefix = "cbSeat";
+        ObservableList<Node> cbSeat_node_list = paneSeatPlane.getChildren();
+        selected_seat_list.forEach(selected_seat -> {
+            String cbSeat_id = cbSeat_id_prefix + selected_seat;
+            cbSeat_node_list.forEach(node -> {
+                if (node.getId().equals(cbSeat_id)) {
+                    JFXCheckBox check_box = (JFXCheckBox) node;
+                    check_box.setSelected(true);
+                }
+            });
+        });
+    }
+
+    private void disable_selected_seats_of_other_customers(int coach_id, List<Byte> selected_seat_list, List<Byte> param_current_customer_selected_seat) {
+        List<Byte> other_customers_selected_seat = new ArrayList<>(selected_seat_list);
+        param_current_customer_selected_seat.forEach(current_customer_seats -> {
+            other_customers_selected_seat.remove(current_customer_seats);
+        });
+
+        String cbSeat_id_prefix = "cbSeat";
+        ObservableList<Node> cbSeat_node_list = paneSeatPlane.getChildren();
+        //reset check box state
+        cbSeat_node_list.forEach(node1 -> {
+            node1.setDisable(false);
+        });
+
+        other_customers_selected_seat.forEach(selected_seat -> {
+            String cbSeat_id = cbSeat_id_prefix + selected_seat;
+            cbSeat_node_list.forEach(node -> {
+                if (node.getId().equals(cbSeat_id)) {
+                    JFXCheckBox check_box = (JFXCheckBox) node;
+                    check_box.setDisable(true);
+                }
+            });
+        });
+    }
+
+    private List<Byte> get_all_selected_seat_in_invoice_by_invoice(Invoice invoice) {
+        List<Invoicelineitem> items_list = get_invoice_line_items_by_invoice(invoice);
+        List<Byte> temp_selected_seat_list = new ArrayList<>();
+        items_list.forEach(item -> {
+            Ticket ticket = item.getTicket();
+            byte selected_seat = ticket.getTicketSeatNumber();
+            temp_selected_seat_list.add(selected_seat);
+        });
+        return temp_selected_seat_list;
+    }
+
+    private void update_table_search_customer_list_when_check_box_checked(JFXCheckBox check_box, Invoice invoice) {
         try {
-            WritableImage invoice_printable_image = paneFinalInvoice.snapshot(new SnapshotParameters(), null);
-            String path = System.getProperty("user.home") + File.separator + "Documents" + File.separator + "TravelBusTicketing" + File.separator + "Invoice.png";
-            File invoice_printable_image_file = new File(path);
-            Files.deleteIfExists(invoice_printable_image_file.toPath());
-            if (invoice_printable_image_file.createNewFile()) {
-                ImageIO.write(SwingFXUtils.fromFXImage(invoice_printable_image, null), "png", invoice_printable_image_file);
-            }
-            is_success_export_invoice = true;
-        } catch (IOException ex) {
-            Logger.getLogger(Controller_staff_home.class.getName()).log(Level.SEVERE, null, ex);
+            String check_box_id = check_box.getId().substring(6);
+            byte current_seat_number = Byte.parseByte(check_box_id);
+            Trip trip = invoice.getTrip();
+            Ticket ticket = TicketDAO.get_ticket_by_seat_number_and_trip(current_seat_number, trip);
+            current_ticket_price = ticket.getTicketPrice();
+            int row_count = table_final_invoice_list.size();
+
+            int index = row_count + 1;
+            String ticket_name = ticket.getTicketName();
+            int quantity = 1;
+            int seat_number = ticket.getTicketSeatNumber();
+            double price = ticket.getTicketPrice();
+
+            TableFinalInvoiceModel row = new TableFinalInvoiceModel(index, ticket_name, quantity, seat_number, price);
+            table_final_invoice_list.add(row);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        if (is_success_export_invoice) {
-            Alert export_invoice_success_alert = new Alert(AlertType.INFORMATION);
-            export_invoice_success_alert.setHeaderText(null);
-            export_invoice_success_alert.setContentText("Vui lòng đóng dấu hóa đơn, giao hóa đơn và cung cấp thông tin cần thiết về chuyến đi cho khách hàng. \nXin cảm ơn!");
-            Optional<ButtonType> export_image_alert_action = export_invoice_success_alert.showAndWait();
-            if (export_image_alert_action.get() == ButtonType.OK) {
-                btnExportInvoice.setVisible(true);
+    }
+
+    private void update_table_search_customer_list_when_check_box_unchecked(JFXCheckBox check_box) {
+        String check_box_id = check_box.getId().substring(6);
+        int current_seat_number = Integer.parseInt(check_box_id);
+        for (int i = 0; i < table_final_invoice_list.size(); i++) {
+            if (table_final_invoice_list.get(i).seat_number.getValue() == current_seat_number) {
+                current_ticket_price = table_final_invoice_list.get(i).price.getValue();
+                table_final_invoice_list.remove(i);
             }
         }
 
+        //reset table index
+        for (int i = 0; i < table_final_invoice_list.size(); i++) {
+            table_final_invoice_list.get(i).index = new SimpleIntegerProperty(i + 1);
+        }
     }
 
     //Class for access table customer info search result

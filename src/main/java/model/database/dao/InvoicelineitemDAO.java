@@ -5,12 +5,14 @@
  */
 package model.database.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 import model.database.hibernate.HibernateUtil;
 import model.database.pojo.Invoice;
 import model.database.pojo.Invoicelineitem;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import model.database.pojo.*;
 
 /**
  *
@@ -69,7 +71,8 @@ public class InvoicelineitemDAO {
     }
 
     /**
-     *Get list of items in an invoice by the Invoice Object
+     * Get list of items in an invoice by the Invoice Object
+     *
      * @param invoice Invoice
      * @return
      */
@@ -90,9 +93,10 @@ public class InvoicelineitemDAO {
         hibernate_session.close();
         return items_list;
     }
-    
+
     /**
-     *Get list of items in an invoice by the Invoice ID
+     * Get list of items in an invoice by the Invoice ID
+     *
      * @param invoice_id
      * @return
      */
@@ -112,7 +116,9 @@ public class InvoicelineitemDAO {
         hibernate_session.flush();
         hibernate_session.close();
         return items_list;
-    }   
+    }
+
+    
 
     public static void main(String[] args) {
         System.out.println(get_invoice_line_items_by_invoice_id(1));

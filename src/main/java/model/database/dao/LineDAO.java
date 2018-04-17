@@ -153,8 +153,9 @@ public class LineDAO {
     }
 
     /**
-     *Get the list of all line that has departure station ID equals to
+     * Get the list of all line that has departure station ID equals to
      * departure_station_id in parameter
+     *
      * @param departure_station_id
      * @return
      */
@@ -175,7 +176,7 @@ public class LineDAO {
         hibernate_session.close();
         return line_list;
     }
-    
+
     /**
      * Get the list of all line that has destination station equals to
      * destination_station in parameter
@@ -200,10 +201,11 @@ public class LineDAO {
         hibernate_session.close();
         return line_list;
     }
-    
-     /**
-     *Get the list of all line that has destination station ID equals to
+
+    /**
+     * Get the list of all line that has destination station ID equals to
      * destination_station_id in parameter
+     *
      * @param destination_station_id
      * @return
      */
@@ -226,6 +228,32 @@ public class LineDAO {
     }
 
     /**
+     *Get the ID of the line by its name
+     * @param line_name
+     * @return
+     */
+    public static int get_line_id_by_line_name(String line_name) {
+        int line_id = 0;
+        Session hibernate_session = HibernateUtil.getSessionFactory().openSession();
+        hibernate_session.beginTransaction();
+        try {
+            String hql = "SELECT line.lineId FROM Line line WHERE line.lineName = :line_name";
+            Query query = hibernate_session.createQuery(hql);
+            query.setParameter("line_name", line_name);
+            List<Integer> result = query.list();
+            if (!result.isEmpty()) {
+                line_id = result.get(0);
+            }
+        } catch (Exception e) {
+            hibernate_session.flush();
+            hibernate_session.close();
+        }
+        hibernate_session.flush();
+        hibernate_session.close();
+        return line_id;
+    }
+
+    /**
      *
      * @param args
      */
@@ -241,39 +269,34 @@ public class LineDAO {
 //        line_list.forEach((line) -> {
 //            System.out.println(line.getLineName());
 //        });
-
 //        Cityordistrict departure_city = CityOrDistrictDAO.get_city_or_district_by_id(3);
 //        Cityordistrict destination_city = CityOrDistrictDAO.get_city_or_district_by_id(9);
 //        List<Line> line_list = get_all_line_by_departure_and_destination_cityordistrict(departure_city, destination_city);
 //        line_list.forEach((line) -> {
 //            System.out.println(line.getLineName());
 //        });
-
 //        List<Line> line_list = get_all_line_by_departure_and_destination_cityordistrict_id(3, 9);
 //        line_list.forEach((line) -> {
 //            System.out.println(line.getLineName());
 //        });
-
 //        Station departure_station = StationDAO.get_station_by_station_id(33);
 //        List<Line> line_list = get_all_line_by_departure_station(departure_station);
 //        line_list.forEach((line) -> {
 //            System.out.println(line.getLineName());
 //        });
-        
 //        List<Line> line_list = get_all_line_by_departure_station_id(33);
 //        line_list.forEach((line) -> {
 //            System.out.println(line.getLineName());
 //        });
-
 //        Station destination_station = StationDAO.get_station_by_station_id(33);
 //        List<Line> line_list = get_all_line_by_destination_station(destination_station);
 //        line_list.forEach((line) -> {
 //            System.out.println(line.getLineName());
+////        });
+//        List<Line> line_list = get_all_line_by_destination_station_id(33);
+//        line_list.forEach((line) -> {
+//            System.out.println(line.getLineName());
 //        });
-
-        List<Line> line_list = get_all_line_by_destination_station_id(33);
-        line_list.forEach((line) -> {
-            System.out.println(line.getLineName());
-        });
+        System.out.println(get_line_id_by_line_name("Bến xe Châu Đốc - Bến xe quận 1"));
     }
 }
