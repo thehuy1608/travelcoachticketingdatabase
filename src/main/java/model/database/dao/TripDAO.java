@@ -5,8 +5,12 @@
  */
 package model.database.dao;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.api.date.StringToDate;
 import model.database.hibernate.HibernateUtil;
 import model.database.pojo.Line;
@@ -70,7 +74,8 @@ public class TripDAO {
     }
 
     /**
-     *Get trip ID by trip Name
+     * Get trip ID by trip Name
+     *
      * @param trip_name
      * @return
      */
@@ -94,9 +99,10 @@ public class TripDAO {
         hibernate_session.close();
         return trip_id;
     }
-    
+
     /**
-     *Get trip by its ID
+     * Get trip by its ID
+     *
      * @param trip_id
      * @return
      */
@@ -114,10 +120,64 @@ public class TripDAO {
         hibernate_session.close();
         return trip;
     }
-    
+
+    public static List<Integer> get_trip_id_list_by_city_departure_and_city_destination_id_and_start_date(int city_departure_id, int city_destination_id, String start_date_string) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date start_date = null;
+        try {
+            start_date = sdf.parse(start_date_string);
+        } catch (ParseException ex) {
+            Logger.getLogger(TripDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        List<Integer> trip_id_list = null;
+        Session hibernate_session = HibernateUtil.getSessionFactory().openSession();
+        hibernate_session.beginTransaction();
+        try {
+            String hql = "SELECT trip.tripId FROM Trip trip WHERE trip.schedule.startDate = :start_date AND trip.line.stationByDepartureStationId.cityordistrict.cityOrDistrictId = :city_departure_id AND trip.line.stationByDestinationStationId.cityordistrict.cityOrDistrictId = :city_destination_id";
+            Query query = hibernate_session.createQuery(hql);
+            query.setParameter("start_date", start_date);
+            query.setParameter("city_departure_id", city_departure_id);
+            query.setParameter("city_destination_id", city_destination_id);
+            trip_id_list = query.list();
+        } catch (Exception e) {
+            hibernate_session.flush();
+            hibernate_session.close();
+        }
+        hibernate_session.flush();
+        hibernate_session.close();
+        return trip_id_list;
+    }
+
+    public static List<Trip> get_trip_list_by_line_id_and_start_date_string(int line_id, String start_date_string) {
+        List<Trip> trip_list = null;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date start_date = null;
+        try {
+            start_date = sdf.parse(start_date_string);
+        } catch (ParseException ex) {
+            Logger.getLogger(TripDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        Session hibernate_session = HibernateUtil.getSessionFactory().openSession();
+        hibernate_session.beginTransaction();
+        try {
+            String hql = "SELECT trip FROM Trip trip WHERE trip.line.lineId = :line_id and trip.schedule.startDate=:start_date";
+            Query query = hibernate_session.createQuery(hql);
+            query.setParameter("line_id", line_id);
+            query.setParameter("start_date", start_date);
+            trip_list = query.list();
+        } catch (Exception e) {
+            hibernate_session.flush();
+            hibernate_session.close();
+        }
+        hibernate_session.flush();
+        hibernate_session.close();
+        return trip_list;
+    }
 
     public static void main(String[] args) {
-        List<Trip> trip_list = get_trip_list_by_start_date("12-07-2018");
-        System.out.println(trip_list.get(0).getLine().getLineName());
+        List<Trip> trip_list = get_trip_list_by_line_id_and_start_date_string(2221, "2018-07-12");
+        trip_list.forEach(trip -> {
+            System.out.println(trip.getTripId());
+        });
     }
 }

@@ -77,20 +77,24 @@ import javafx.util.StringConverter;
 import javax.imageio.ImageIO;
 import model.api.date.DateToLocalDate;
 import model.api.date.DateToString;
+import model.api.date.GetCurrentDate;
 import model.api.date.GetCurrentDateTimeString;
 import model.api.date.LocalTimeToString;
 import model.api.date.TimeToLocalTime;
 import model.api.loading_anchor_pane.LoadingAnchorPane;
 import model.api.validate.ValidateInput;
 import model.database.dao.CoachDriverTripDAO;
+import model.database.dao.CustomerDAO;
 import model.database.dao.InvoiceDAO;
 import model.database.dao.InvoicelineitemDAO;
 import static model.database.dao.InvoicelineitemDAO.get_invoice_line_items_by_invoice;
 import model.database.dao.SeatDAO;
 import model.database.dao.TicketDAO;
 import model.database.pojo.CoachDriverTrip;
+import model.database.pojo.Customer;
 import model.database.pojo.Invoice;
 import model.database.pojo.Invoicelineitem;
+import model.database.pojo.Seat;
 import model.database.pojo.Ticket;
 import model.database.pojo.Trip;
 
@@ -395,7 +399,9 @@ public class Controller_staff_home implements Initializable {
     private boolean is_active_invoice_scene = false;
     private final ValidateInput validate_input = new ValidateInput();
     private final ObservableList<TableSearchCustomerInfoDataModel> table_customer_info_list = FXCollections.observableArrayList();
-    private final ObservableList<TableFinalInvoiceModel> table_final_invoice_list = FXCollections.observableArrayList();
+    private ObservableList<TableFinalInvoiceModel> table_final_invoice_list = FXCollections.observableArrayList();
+    private ObservableList<TableFinalInvoiceModel> original_table_final_invoice_list;
+    private ObservableList<TableFinalInvoiceModel> added_table_final_invoice_list = FXCollections.observableArrayList();
     private List<Invoice> invoice_list;
     private LoadingAnchorPane loading_anchor_pane = new LoadingAnchorPane();
     private int current_selected_invoice_id = 0;
@@ -407,6 +413,9 @@ public class Controller_staff_home implements Initializable {
     private List<Byte> current_customer_selected_seat;
     private double current_ticket_price;
     private boolean is_modified_invoice = false;
+    private boolean is_modified_invoice_name = false;
+    private boolean is_modified_invoice_phone_number = false;
+    private boolean is_modified_invoice_seat_number = false;
 
     /**
      * Initializes the controller class.
@@ -652,7 +661,7 @@ public class Controller_staff_home implements Initializable {
 
         //Smooth Scrolling for editInvoiceScrollPane
         JFXScrollPane.smoothScrolling(editInvoiceScrollPane);
-        
+
         //Set non-editable for invoice start time and end time
         txtInvoiceStartTime.setEditable(false);
         txtInvoiceEndTime.setEditable(false);
@@ -734,6 +743,9 @@ public class Controller_staff_home implements Initializable {
                         int current_coach_id = coach_driver_trip.getCoach().getCoachId();
                         load_selected_seats_to_pane_by_coach_id(current_coach_id, selected_seat_list);
                         disable_selected_seats_of_other_customers(current_coach_id, selected_seat_list, current_customer_selected_seat);
+
+                        //Save the table_final_invoice_list to another list to track change
+                        original_table_final_invoice_list = FXCollections.observableArrayList(table_final_invoice_list);
                         clean_current_scenes();
                         if (!is_active_invoice_scene) {
                             animate_invoice_form(editInvoiceScrollPane, 0);
@@ -808,9 +820,7 @@ public class Controller_staff_home implements Initializable {
         //Adding listener to track change on txtInvoiceName and txtInvoiceNumber
         txtInvoiceName.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             String original_invoice_name = table_customer_info_list.get(current_selected_invoice_index - 1).name.getValue();
-            if (!newValue.equals(original_invoice_name)) {
-                is_modified_invoice = true;
-            }
+            is_modified_invoice_name = !newValue.equals(original_invoice_name);
             if (validate_input.check_name(newValue)) {
                 btnInvoiceCheckOut.setDisable(false);
                 btnInvoiceUpdate.setDisable(false);
@@ -826,9 +836,7 @@ public class Controller_staff_home implements Initializable {
 
         txtInvoicePhoneNumber.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             String original_invoice_phone_number = table_customer_info_list.get(current_selected_invoice_index - 1).phone_number.getValue();
-            if (!newValue.equals(original_invoice_phone_number)) {
-                is_modified_invoice = true;
-            }
+            is_modified_invoice_phone_number = !newValue.equals(original_invoice_phone_number);
             if (validate_input.check_phone(newValue)) {
                 btnInvoiceCheckOut.setDisable(false);
                 btnInvoiceUpdate.setDisable(false);
@@ -894,12 +902,34 @@ public class Controller_staff_home implements Initializable {
 
     @FXML
     private void invoice_close_button_action(ActionEvent event) {
+        //Compare table_final_invoice_list and original_table_final_invoice_list.
+        is_modified_invoice_seat_number = !table_final_invoice_list.equals(original_table_final_invoice_list);
+        String modified_invoice_message = "Bạn đã thay đổi những mục sau trong hóa đơn: \n";
+        //If 1 of invoice name, invoice phone number or table final invoice list is modified, then set the value of is_modified_invoice to true
+        //Add information to modified invoice message based on what field is changed
+        if (is_modified_invoice_name) {
+            is_modified_invoice = true;
+            modified_invoice_message += "* Tên khách hàng.\n";
+        }
+        if (is_modified_invoice_phone_number) {
+            is_modified_invoice = true;
+            modified_invoice_message += "* Số điện thoại khách hàng.\n";
+        }
+        if (is_modified_invoice_seat_number) {
+            is_modified_invoice = true;
+            modified_invoice_message += "* Số ghế đặt.\n";
+        }
+        if (is_modified_invoice_name == false && is_modified_invoice_phone_number == false && is_modified_invoice_seat_number == false) {
+            is_modified_invoice = false;
+        }
+        modified_invoice_message += "Bạn có chắc chắn muốn thoát?";
         if (is_modified_invoice) {
             //TO-DO when the current invoice is modified
             Alert modified_invoice_alert = new Alert(AlertType.CONFIRMATION);
+            modified_invoice_alert.getDialogPane().getScene().getWindow().setOnCloseRequest(event_close -> event_close.consume());
             modified_invoice_alert.setTitle("CẬP NHẬT HÓA ĐƠN");
-            modified_invoice_alert.setHeaderText("Bạn chưa cập nhật thay đổi trong hóa đơn, bạn có chắc chắn muốn thoát?");
-            modified_invoice_alert.setContentText("Nhấn nút Cancel và sau đó nhấn cập nhật để lưu thay đổi trong hóa đơn.\nNhấn nút OK nếu như bạn muốn thoát mà không lưu lại thay đổi.");
+            modified_invoice_alert.setHeaderText(modified_invoice_message);
+            modified_invoice_alert.setContentText("Nhấn nút Cancel và sau đó nhấn nút Cập Nhật để lưu thay đổi trong hóa đơn.\nNhấn nút OK nếu như bạn muốn thoát mà không lưu lại thay đổi.");
             Optional<ButtonType> modified_invoice_alert_action = modified_invoice_alert.showAndWait();
             if (modified_invoice_alert_action.get() == ButtonType.OK) {
                 animate_invoice_form(editInvoiceScrollPane, 800);
@@ -907,10 +937,10 @@ public class Controller_staff_home implements Initializable {
                 is_active_customer_scene = true;
                 is_active_invoice_scene = false;
                 is_modified_invoice = false;
+                is_modified_invoice_name = false;
+                is_modified_invoice_phone_number = false;
+                is_modified_invoice_seat_number = false;
                 tblSearchCustomerInfoResult.getSelectionModel().clearSelection();
-            } else {
-                modified_invoice_alert.close();
-                is_modified_invoice = false;
             }
         } else {
             //TO-DO when nothing happens
@@ -919,7 +949,12 @@ public class Controller_staff_home implements Initializable {
             is_active_customer_scene = true;
             is_active_invoice_scene = false;
             is_modified_invoice = false;
+            is_modified_invoice_name = false;
+            is_modified_invoice_phone_number = false;
+            is_modified_invoice_seat_number = false;
             tblSearchCustomerInfoResult.getSelectionModel().clearSelection();
+            tblSearchCustomerInfoResult.setVisible(false);
+            tblSearchCustomerInfoResult.setVisible(true);
         }
     }
 
@@ -995,115 +1030,123 @@ public class Controller_staff_home implements Initializable {
             thread.setDaemon(true);
             thread.start();
         } else {
-            //Update customer info list in customer searching table result
-            table_customer_info_list.get(current_selected_invoice_index - 1).payment_status = new SimpleStringProperty("Đang xử lý");
-            //Add a confirm dialog will shown up each time the staff clicked on the check out button to confirm data input
-            Alert invoice_check_out_alert = new Alert(AlertType.CONFIRMATION);
-            invoice_check_out_alert.setTitle("XÁC NHẬN THANH TOÁN");
-            invoice_check_out_alert.setHeaderText(null);
-            invoice_check_out_alert.setContentText("Bạn có chắc chắn muốn thanh toán?");
-            Optional<ButtonType> invoice_check_out_alert_action = invoice_check_out_alert.showAndWait();
-            if (invoice_check_out_alert_action.get() == ButtonType.OK) {
-                btnExportInvoice.setVisible(true);
-                loading_anchor_pane.toFront();
-                animate_loading_anchor_pane(loading_anchor_pane, 1);
-                Task<Void> check_out_task = new Task<Void>() {
-                    @Override
-                    protected Void call() throws Exception {
-                        current_invoice = InvoiceDAO.get_invoice_by_id(current_selected_invoice_id);
-                        List<Invoicelineitem> line_items = InvoicelineitemDAO.get_invoice_line_items_by_invoice(current_invoice);
+            if (is_modified_invoice) {
+                Alert update_invoice_alert = new Alert(AlertType.WARNING);
+                update_invoice_alert.setTitle("THÔNG BÁO");
+                update_invoice_alert.setHeaderText("Chưa cập nhật hóa đơn.");
+                update_invoice_alert.setContentText("Bạn đã thay đổi thông tin hóa đơn. Vui lòng nhấn nút Cập Nhật trước khi thanh toán.");
+                update_invoice_alert.showAndWait();
+            } else {
+                //Update customer info list in customer searching table result
+                table_customer_info_list.get(current_selected_invoice_index - 1).payment_status = new SimpleStringProperty("Đang xử lý");
+                //Add a confirm dialog will shown up each time the staff clicked on the check out button to confirm data input
+                Alert invoice_check_out_alert = new Alert(AlertType.CONFIRMATION);
+                invoice_check_out_alert.setTitle("XÁC NHẬN THANH TOÁN");
+                invoice_check_out_alert.setHeaderText(null);
+                invoice_check_out_alert.setContentText("Bạn có chắc chắn muốn thanh toán?");
+                Optional<ButtonType> invoice_check_out_alert_action = invoice_check_out_alert.showAndWait();
+                if (invoice_check_out_alert_action.get() == ButtonType.OK) {
+                    btnExportInvoice.setVisible(true);
+                    loading_anchor_pane.toFront();
+                    animate_loading_anchor_pane(loading_anchor_pane, 1);
+                    Task<Void> check_out_task = new Task<Void>() {
+                        @Override
+                        protected Void call() throws Exception {
+                            current_invoice = InvoiceDAO.get_invoice_by_id(current_selected_invoice_id);
+                            List<Invoicelineitem> line_items = InvoicelineitemDAO.get_invoice_line_items_by_invoice(current_invoice);
 
-                        //Reset table_final_invoice_list     
-                        table_final_invoice_list.clear();
-                        for (int i = 0; i < line_items.size(); i++) {
-                            int index = i + 1;
-                            String ticket_name = line_items.get(i).getTicket().getTicketName();
-                            int quantity = 1;
-                            int seat_number = line_items.get(i).getTicket().getTicketSeatNumber();
-                            double price = line_items.get(i).getPrice();
-                            TableFinalInvoiceModel row = new TableFinalInvoiceModel(index, ticket_name, quantity, seat_number, price);
-                            table_final_invoice_list.add(row);
+                            //Reset table_final_invoice_list     
+                            table_final_invoice_list.clear();
+                            for (int i = 0; i < line_items.size(); i++) {
+                                int index = i + 1;
+                                String ticket_name = line_items.get(i).getTicket().getTicketName();
+                                int quantity = 1;
+                                int seat_number = line_items.get(i).getTicket().getTicketSeatNumber();
+                                double price = line_items.get(i).getPrice();
+                                TableFinalInvoiceModel row = new TableFinalInvoiceModel(index, ticket_name, quantity, seat_number, price);
+                                table_final_invoice_list.add(row);
+                            }
+
+                            //Run this line of code first to synchronize the invoiceduedate value display in application and the time writed to datebase
+                            String invoice_date = GetCurrentDateTimeString.get_current_datetime_string();
+                            //Update invoice status to "Đã thanh toán"
+                            try {
+                                current_invoice.setInvoiceStatus("Đã thanh toán");
+                                //Update invoice due date
+                                Date invoice_due_date = new SimpleDateFormat("HH:mm dd-MM-yyyy").parse(invoice_date);
+                                current_invoice.setInvoiceDueDate(invoice_due_date);
+                                InvoiceDAO.update_invoice(current_invoice);
+                                //Update customer info list in customer searching table result and refresh the table
+                                table_customer_info_list.get(current_selected_invoice_index - 1).payment_status = new SimpleStringProperty("Đã thanh toán");
+                            } catch (ParseException e) {
+
+                            }
+
+                            //Get the total price of invoice
+                            total_price = 0;
+                            line_items.forEach((item) -> {
+                                total_price += item.getPrice();
+                            });
+                            CoachDriverTrip coach_driver_trip = CoachDriverTripDAO.get_coach_driver_trip_by_trip(current_invoice.getTrip());
+
+                            //Add necessary data and create new FinalInvoice Object                        
+                            String invoice_name = current_invoice.getCustomer().getCustomerName();
+                            String invoice_number = current_invoice.getInvoiceId().toString();
+                            String invoice_phone_number = current_invoice.getCustomer().getCustomerPhoneNumber();
+                            String trip_name = current_invoice.getTrip().getTripName();
+                            String departure = current_invoice.getTrip().getLine().getStationByDepartureStationId().getStationName() + " : " + current_invoice.getTrip().getLine().getStationByDepartureStationId().getStationAddress();
+                            String destination = current_invoice.getTrip().getLine().getStationByDestinationStationId().getStationName() + " : " + current_invoice.getTrip().getLine().getStationByDestinationStationId().getStationAddress();
+                            String start_date_time = LocalTimeToString.time_to_string(TimeToLocalTime.convert_date_to_local_time(current_invoice.getTrip().getSchedule().getStartTime())) + " - " + DateToString.convert_date_to_string(current_invoice.getTrip().getSchedule().getStartDate());
+                            String end_date_time = LocalTimeToString.time_to_string(TimeToLocalTime.convert_date_to_local_time(current_invoice.getTrip().getSchedule().getEndTime())) + " - " + DateToString.convert_date_to_string(current_invoice.getTrip().getSchedule().getEndDate());
+                            String coach_number_plate = coach_driver_trip.getCoach().getNumberPlate();
+                            String total_price_string = Double.toString(total_price);
+
+                            final_invoice = new FinalInvoice(invoice_name, invoice_number, invoice_phone_number, invoice_date, trip_name, departure, destination, start_date_time, end_date_time, coach_number_plate, total_price_string);
+                            return null;
+                        }
+                    };
+                    check_out_task.setOnSucceeded(event1 -> {
+                        //Set data to final invoice form
+                        if (final_invoice != null) {
+                            lblFinalInvoiceName.setText(final_invoice.invoice_name);
+                            lblFinalInvoiceID.setText(final_invoice.invoice_number);
+                            lblFinalInvoicePhoneNumber.setText(final_invoice.invoice_phone_number);
+                            lblFinalInvoiceDueDate.setText(final_invoice.invoice_date);
+                            lblFinalInvoiceLine.setText(final_invoice.trip_name);
+                            lblFinalInvoiceDeparture.setText(final_invoice.departure);
+                            lblFinalInvoiceDestination.setText(final_invoice.destination);
+                            lblFinalInvoiceStartDateTime.setText(final_invoice.start_date_time);
+                            lblFinalInvoiceEndDateTime.setText(final_invoice.end_date_time);
+                            lblFinalInvoiceCoach.setText(final_invoice.coach_number_plate);
+                            lblFinalInvoiceTotalPrice.setText(final_invoice.total_price + " đồng.");
+
+                            //Refresh table for showing newest record
+                            tblSearchCustomerInfoResult.getColumns().get(5).setVisible(false);
+                            tblSearchCustomerInfoResult.getColumns().get(5).setVisible(true);
+                            tblSearchCustomerInfoResult.getSelectionModel().clearSelection();
                         }
 
-                        //Run this line of code first to synchronize the invoiceduedate value display in application and the time writed to datebase
-                        String invoice_date = GetCurrentDateTimeString.get_current_datetime_string();
-                        //Update invoice status to "Đã thanh toán"
-                        try {
-                            current_invoice.setInvoiceStatus("Đã thanh toán");
-                            //Update invoice due date
-                            Date invoice_due_date = new SimpleDateFormat("HH:mm dd-MM-yyyy").parse(invoice_date);
-                            current_invoice.setInvoiceDueDate(invoice_due_date);
-                            InvoiceDAO.update_invoice(current_invoice);
-                            //Update customer info list in customer searching table result and refresh the table
-                            table_customer_info_list.get(current_selected_invoice_index - 1).payment_status = new SimpleStringProperty("Đã thanh toán");
-                        } catch (ParseException e) {
+                        animate_loading_anchor_pane(loading_anchor_pane, 0);
+                        loading_anchor_pane.toBack();
+                        clean_current_scenes();
+                        animate_final_invoice_pane_when_click_on_menu_button(paneFinalInvoice, 0);
 
-                        }
+                        //Display a dialog to confirm export Invoice to a printable Image
+                        Alert check_out_success_alert = new Alert(AlertType.INFORMATION);
+                        check_out_success_alert.setHeaderText("THANH TOÁN THÀNH CÔNG");
+                        check_out_success_alert.setContentText("Vui lòng xuất, đóng dấu hóa đơn và cung cấp thông tin cần thiết về chuyến đi cho khách hàng. \nXin cảm ơn!");
+                        check_out_success_alert.initStyle(StageStyle.UNDECORATED);
+                        Optional<ButtonType> export_image_alert_action = check_out_success_alert.showAndWait();
+                    });
 
-                        //Get the total price of invoice
-                        total_price = 0;
-                        line_items.forEach((item) -> {
-                            total_price += item.getPrice();
-                        });
-                        CoachDriverTrip coach_driver_trip = CoachDriverTripDAO.get_coach_driver_trip_by_trip(current_invoice.getTrip());
-
-                        //Add necessary data and create new FinalInvoice Object                        
-                        String invoice_name = current_invoice.getCustomer().getCustomerName();
-                        String invoice_number = current_invoice.getInvoiceId().toString();
-                        String invoice_phone_number = current_invoice.getCustomer().getCustomerPhoneNumber();
-                        String trip_name = current_invoice.getTrip().getTripName();
-                        String departure = current_invoice.getTrip().getLine().getStationByDepartureStationId().getStationName() + " : " + current_invoice.getTrip().getLine().getStationByDepartureStationId().getStationAddress();
-                        String destination = current_invoice.getTrip().getLine().getStationByDestinationStationId().getStationName() + " : " + current_invoice.getTrip().getLine().getStationByDestinationStationId().getStationAddress();
-                        String start_date_time = LocalTimeToString.time_to_string(TimeToLocalTime.convert_date_to_local_time(current_invoice.getTrip().getSchedule().getStartTime())) + " - " + DateToString.convert_date_to_string(current_invoice.getTrip().getSchedule().getStartDate());
-                        String end_date_time = LocalTimeToString.time_to_string(TimeToLocalTime.convert_date_to_local_time(current_invoice.getTrip().getSchedule().getEndTime())) + " - " + DateToString.convert_date_to_string(current_invoice.getTrip().getSchedule().getEndDate());
-                        String coach_number_plate = coach_driver_trip.getCoach().getNumberPlate();
-                        String total_price_string = Double.toString(total_price);
-
-                        final_invoice = new FinalInvoice(invoice_name, invoice_number, invoice_phone_number, invoice_date, trip_name, departure, destination, start_date_time, end_date_time, coach_number_plate, total_price_string);
-                        return null;
-                    }
-                };
-                check_out_task.setOnSucceeded(event1 -> {
-                    //Set data to final invoice form
-                    if (final_invoice != null) {
-                        lblFinalInvoiceName.setText(final_invoice.invoice_name);
-                        lblFinalInvoiceID.setText(final_invoice.invoice_number);
-                        lblFinalInvoicePhoneNumber.setText(final_invoice.invoice_phone_number);
-                        lblFinalInvoiceDueDate.setText(final_invoice.invoice_date);
-                        lblFinalInvoiceLine.setText(final_invoice.trip_name);
-                        lblFinalInvoiceDeparture.setText(final_invoice.departure);
-                        lblFinalInvoiceDestination.setText(final_invoice.destination);
-                        lblFinalInvoiceStartDateTime.setText(final_invoice.start_date_time);
-                        lblFinalInvoiceEndDateTime.setText(final_invoice.end_date_time);
-                        lblFinalInvoiceCoach.setText(final_invoice.coach_number_plate);
-                        lblFinalInvoiceTotalPrice.setText(final_invoice.total_price + " đồng.");
-
-                        //Refresh table for showing newest record
-                        tblSearchCustomerInfoResult.getColumns().get(5).setVisible(false);
-                        tblSearchCustomerInfoResult.getColumns().get(5).setVisible(true);
-                        tblSearchCustomerInfoResult.getSelectionModel().clearSelection();
-                    }
-
-                    animate_loading_anchor_pane(loading_anchor_pane, 0);
-                    loading_anchor_pane.toBack();
-                    clean_current_scenes();
-                    animate_final_invoice_pane_when_click_on_menu_button(paneFinalInvoice, 0);
-
-                    //Display a dialog to confirm export Invoice to a printable Image
-                    Alert check_out_success_alert = new Alert(AlertType.INFORMATION);
-                    check_out_success_alert.setHeaderText("THANH TOÁN THÀNH CÔNG");
-                    check_out_success_alert.setContentText("Vui lòng xuất, đóng dấu hóa đơn và cung cấp thông tin cần thiết về chuyến đi cho khách hàng. \nXin cảm ơn!");
-                    check_out_success_alert.initStyle(StageStyle.UNDECORATED);
-                    Optional<ButtonType> export_image_alert_action = check_out_success_alert.showAndWait();
-                });
-
-                check_out_task.setOnFailed(event2 -> {
-                    //Update customer info list in customer searching table result
-                    table_customer_info_list.get(current_selected_invoice_index - 1).payment_status = new SimpleStringProperty("Chưa thanh toán");
-                });
-                Thread thread = new Thread(check_out_task);
-                thread.setDaemon(true);
-                thread.start();
+                    check_out_task.setOnFailed(event2 -> {
+                        //Update customer info list in customer searching table result
+                        table_customer_info_list.get(current_selected_invoice_index - 1).payment_status = new SimpleStringProperty("Chưa thanh toán");
+                    });
+                    Thread thread = new Thread(check_out_task);
+                    thread.setDaemon(true);
+                    thread.start();
+                }
             }
         }
 
@@ -1137,6 +1180,167 @@ public class Controller_staff_home implements Initializable {
 
     }
 
+    @FXML
+    private void update_invoice_button_action(ActionEvent event) {
+        //Compare table_final_invoice_list and original_table_final_invoice_list.
+        is_modified_invoice_seat_number = !table_final_invoice_list.equals(original_table_final_invoice_list);
+        String modified_invoice_message = "Bạn đã thay đổi những mục sau trong hóa đơn: \n";
+        //If 1 of invoice name, invoice phone number or table final invoice list is modified, then set the value of is_modified_invoice to true
+        //Add information to modified invoice message based on what field is changed
+        if (is_modified_invoice_name) {
+            is_modified_invoice = true;
+            modified_invoice_message += "* Tên khách hàng.\n";
+        }
+        if (is_modified_invoice_phone_number) {
+            is_modified_invoice = true;
+            modified_invoice_message += "* Số điện thoại khách hàng.\n";
+        }
+        if (is_modified_invoice_seat_number) {
+            is_modified_invoice = true;
+            modified_invoice_message += "* Số ghế đặt.\n";
+        }
+        if (is_modified_invoice_name == false && is_modified_invoice_phone_number == false && is_modified_invoice_seat_number == false) {
+            is_modified_invoice = false;
+        }
+        modified_invoice_message += "Bạn có chắc chắn muốn cập nhật hóa đơn?";
+        if (is_modified_invoice) {
+            //TO-DO when the current invoice is modified 
+            Alert modified_invoice_alert = new Alert(AlertType.CONFIRMATION);
+            modified_invoice_alert.getDialogPane().getScene().getWindow().setOnCloseRequest(event_close -> event_close.consume());
+            modified_invoice_alert.setTitle("CẬP NHẬT HÓA ĐƠN");
+            modified_invoice_alert.setHeaderText(modified_invoice_message);
+            modified_invoice_alert.setContentText("Nhấn nút OK để cập nhật hóa đơn. Nhấn nút Cancel để đưa hóa đơn về trạng thái ban đầu.");
+            Optional<ButtonType> modified_invoice_alert_action = modified_invoice_alert.showAndWait();
+            if (modified_invoice_alert_action.get() == ButtonType.OK) {
+                //TO-DO when user confirmed to update Invoice
+                String invoice_name = txtInvoiceName.getText();
+                String invoice_phone_number = txtInvoicePhoneNumber.getText();
+                loading_anchor_pane.toFront();
+                animate_loading_anchor_pane(loading_anchor_pane, 1);
+                Task<Void> update_invoice_task = new Task<Void>() {
+                    @Override
+                    protected Void call() throws Exception {
+                        //If the invoice name or phone number is change, update it
+                        if (is_modified_invoice_name || is_modified_invoice_phone_number) {
+                            Customer customer = InvoiceDAO.get_invoice_by_id(current_selected_invoice_id).getCustomer();
+                            if (is_modified_invoice_name) {
+                                customer.setCustomerName(invoice_name);
+                                table_customer_info_list.get(current_selected_invoice_index - 1).name = new SimpleStringProperty(invoice_name);
+                            }
+                            if (is_modified_invoice_phone_number) {
+                                customer.setCustomerPhoneNumber(invoice_phone_number);
+                                table_customer_info_list.get(current_selected_invoice_index - 1).phone_number = new SimpleStringProperty(invoice_phone_number);
+                            }
+                            customer.setModifiedDate(GetCurrentDate.get_current_date());
+                            CustomerDAO.update_customer(customer);
+                        }
+                        //If invoice line items is changes, update it.
+                        if (is_modified_invoice_seat_number) {
+                            Invoice invoice = InvoiceDAO.get_invoice_by_id(current_selected_invoice_id);
+                            Trip trip = InvoiceDAO.get_invoice_by_id(current_selected_invoice_id).getTrip();
+                            CoachDriverTrip cdt = CoachDriverTripDAO.get_coach_driver_trip_by_trip(trip);
+                            int coach_id = cdt.getCoach().getCoachId();
+                            added_table_final_invoice_list.clear();
+                            table_final_invoice_list.forEach(item -> {
+                                if (!original_table_final_invoice_list.contains(item)) {
+                                    added_table_final_invoice_list.add(item);
+                                }
+                            });
+                            added_table_final_invoice_list.forEach(item -> {
+                                //Update seat status
+                                byte seat_number = (byte) item.seat_number.get();
+                                Seat seat = SeatDAO.get_seat_by_coach_id_and_seat_number(coach_id, seat_number);
+                                byte seat_status = 1;
+                                seat.setSeatStatus(seat_status);
+                                seat.setModifiedDate(GetCurrentDate.get_current_date());
+                                SeatDAO.update_seat(seat);
+
+                                //Update number of tickets int table_customer_info_list
+                                int number_of_tickets = table_customer_info_list.get(current_selected_invoice_index - 1).number_of_tickets.get();
+                                table_customer_info_list.get(current_selected_invoice_index - 1).number_of_tickets = new SimpleIntegerProperty(number_of_tickets + 1);
+
+                                //Add new Invoice line item to Invoice
+                                Ticket ticket = TicketDAO.get_ticket_by_seat_number_and_trip(seat_number, trip);
+                                float price = ticket.getTicketPrice();
+                                Invoicelineitem invoice_line_item = new Invoicelineitem(invoice, ticket, price, GetCurrentDate.get_current_date());
+                                InvoicelineitemDAO.add_invoice_line_item(invoice_line_item);
+                            });
+                            //Update invoice price and modified date
+                            invoice.setTotalPrice((float) total_price);
+                            invoice.setModifiedDate(GetCurrentDate.get_current_date());
+                            InvoiceDAO.update_invoice(invoice);
+                        }
+                        return null;
+                    }
+                };
+                update_invoice_task.setOnSucceeded(event2 -> {
+                    //Reset all table
+                    tblSearchCustomerInfoResult.getColumns().get(1).setVisible(false);
+                    tblSearchCustomerInfoResult.getColumns().get(1).setVisible(true);
+                    tblSearchCustomerInfoResult.getColumns().get(2).setVisible(false);
+                    tblSearchCustomerInfoResult.getColumns().get(2).setVisible(true);
+                    tblEditInvoice.setVisible(false);
+                    tblEditInvoice.setVisible(true);
+                    tblFinalInvoice.setVisible(false);
+                    tblFinalInvoice.setVisible(true);
+                    is_modified_invoice = false;
+                    is_modified_invoice_name = false;
+                    is_modified_invoice_phone_number = false;
+                    is_modified_invoice_seat_number = false;
+                    lblInvoiceName.setText(table_customer_info_list.get(current_selected_invoice_index - 1).name.getValue());
+                    animate_loading_anchor_pane(loading_anchor_pane, 0);
+                    loading_anchor_pane.toBack();
+                    //Save the table_final_invoice_list to another list to track change
+                    original_table_final_invoice_list = FXCollections.observableArrayList(table_final_invoice_list);
+                    Alert update_invoice_successfully_alert = new Alert(AlertType.INFORMATION);
+                    update_invoice_successfully_alert.setTitle("THÔNG BÁO");
+                    update_invoice_successfully_alert.setHeaderText("Cập nhật hóa đơn thành công.");
+                    update_invoice_successfully_alert.setContentText(null);
+                    update_invoice_successfully_alert.showAndWait();
+                });
+                Thread thread = new Thread(update_invoice_task);
+                thread.setDaemon(true);
+                thread.start();
+            } else {
+                loading_anchor_pane.toFront();
+                animate_loading_anchor_pane(loading_anchor_pane, 1);
+                Task<Void> reset_seat_pane_task = new Task<Void>() {
+                    @Override
+                    protected Void call() throws Exception {
+                        Trip trip = InvoiceDAO.get_invoice_by_id(current_selected_invoice_id).getTrip();
+                        CoachDriverTrip cdt = CoachDriverTripDAO.get_coach_driver_trip_by_trip(trip);
+                        int coach_id = cdt.getCoach().getCoachId();
+                        load_selected_seats_to_pane_by_coach_id(coach_id, selected_seat_list);
+                        disable_selected_seats_of_other_customers(coach_id, selected_seat_list, current_customer_selected_seat);
+                        total_price = InvoiceDAO.get_total_price(current_invoice);
+                        return null;
+                    }
+                };
+                reset_seat_pane_task.setOnSucceeded(event2 -> {
+                    lblInvoiceName.setText(table_customer_info_list.get(current_selected_invoice_index - 1).name.getValue());
+                    txtInvoiceName.setText(table_customer_info_list.get(current_selected_invoice_index - 1).name.getValue());
+                    txtInvoicePhoneNumber.setText(table_customer_info_list.get(current_selected_invoice_index - 1).phone_number.getValue());
+                    txtInvoiceNumberOfTickets.setText(Integer.toString(table_customer_info_list.get(current_selected_invoice_index - 1).number_of_tickets.getValue()));
+                    txtInvoiceTotalPrice.setText(Double.toString(total_price));
+                    table_final_invoice_list = FXCollections.observableArrayList(original_table_final_invoice_list);
+                    tblEditInvoice.setDisable(true);
+                    tblEditInvoice.setDisable(false);
+                    animate_loading_anchor_pane(loading_anchor_pane, 0);
+                    loading_anchor_pane.toBack();
+                });
+                Thread thread = new Thread(reset_seat_pane_task);
+                thread.setDaemon(true);
+                thread.start();
+            }
+        } else {
+            //Reset invoice tracking changes variables
+            is_modified_invoice = false;
+            is_modified_invoice_name = false;
+            is_modified_invoice_phone_number = false;
+            is_modified_invoice_seat_number = false;
+        }
+    }
+
     // <editor-fold defaultstate="collapsed" desc="Effects APIs">
     private void animate_sidemenu(final Pane pane, double layoutX) {
         Duration transition_duration = Duration.millis(500);
@@ -1160,6 +1364,10 @@ public class Controller_staff_home implements Initializable {
         Duration transition_duration = Duration.millis(500);
         Timeline time_line = new Timeline(new KeyFrame(transition_duration, new KeyValue(pane.layoutYProperty(), layoutY, Interpolator.EASE_BOTH)));
         time_line.play();
+        time_line.setOnFinished(event -> {
+            tblSearchCustomerInfoResult.setVisible(false);
+            tblSearchCustomerInfoResult.setVisible(true);
+        });
         is_active_customer_scene = !is_active_customer_scene;
     }
 
@@ -1205,7 +1413,7 @@ public class Controller_staff_home implements Initializable {
             JFXCheckBox check_box = (JFXCheckBox) node1;
             check_box.setSelected(false);
         });
-        
+
         selected_seat_list.forEach(selected_seat -> {
             String cbSeat_id = cbSeat_id_prefix + selected_seat;
             cbSeat_node_list.forEach(node -> {
@@ -1291,10 +1499,6 @@ public class Controller_staff_home implements Initializable {
         for (int i = 0; i < table_final_invoice_list.size(); i++) {
             table_final_invoice_list.get(i).index = new SimpleIntegerProperty(i + 1);
         }
-    }
-
-    @FXML
-    private void update_invoice_button_action(ActionEvent event) {
     }
 
     //Class for access table customer info search result

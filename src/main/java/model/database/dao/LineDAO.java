@@ -5,6 +5,7 @@
  */
 package model.database.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 import model.database.hibernate.HibernateUtil;
 import model.database.pojo.Cityordistrict;
@@ -252,6 +253,18 @@ public class LineDAO {
         hibernate_session.close();
         return line_id;
     }
+    
+    public static List<Integer> get_line_id_list_by_trip_id_list(List<Integer> trip_id_list) {
+        List<Integer> line_list = new ArrayList<>();
+        trip_id_list.forEach(trip_id -> {
+            Line line = TripDAO.get_trip_by_trip_id(trip_id).getLine();
+            int line_id = line.getLineId();
+            if (!line_list.contains(line_id)) {
+                line_list.add(line_id);
+            }
+        });
+        return line_list;
+    }
 
     /**
      *
@@ -297,6 +310,14 @@ public class LineDAO {
 //        line_list.forEach((line) -> {
 //            System.out.println(line.getLineName());
 //        });
-        System.out.println(get_line_id_by_line_name("Bến xe Châu Đốc - Bến xe quận 1"));
+        List<Integer> trip_id_list = new ArrayList<>();
+        trip_id_list.add(1);
+        trip_id_list.add(2);
+        trip_id_list.add(6);
+        trip_id_list.add(7);
+        List<Integer> line_id_list = get_line_id_list_by_trip_id_list(trip_id_list);
+        line_id_list.forEach(line_id -> {
+            System.out.println(line_id);
+        });
     }
 }

@@ -118,7 +118,24 @@ public class InvoicelineitemDAO {
         return items_list;
     }
 
-    
+    public static boolean add_invoice_line_item(Invoicelineitem item) {
+        Session hibernate_session = HibernateUtil.getSessionFactory().openSession();
+        hibernate_session.beginTransaction();
+        try {
+            hibernate_session.save(item);
+            hibernate_session.getTransaction().commit();
+            return true;
+        } catch (Exception e) {
+            if (hibernate_session.getTransaction().isActive()) {
+                hibernate_session.getTransaction().rollback();
+            }
+            hibernate_session.flush();
+            hibernate_session.close();
+        }
+        hibernate_session.flush();
+        hibernate_session.close();
+        return false;
+    }
 
     public static void main(String[] args) {
         System.out.println(get_invoice_line_items_by_invoice_id(1));

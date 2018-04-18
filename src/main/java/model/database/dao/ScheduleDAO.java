@@ -5,11 +5,17 @@
  */
 package model.database.dao;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.api.date.DateToString;
 import model.database.hibernate.HibernateUtil;
 import model.database.pojo.Schedule;
+import model.database.pojo.Trip;
 import org.hibernate.Session;
 
 /**
@@ -90,9 +96,10 @@ public class ScheduleDAO {
         end_time = schedule.getEndTime();
         return end_time;
     }
-    
+
     /**
-     *Get String of Start Date by trip ID
+     * Get String of Start Date by trip ID
+     *
      * @param trip_id
      * @return
      */
@@ -101,9 +108,10 @@ public class ScheduleDAO {
         String start_date_string = DateToString.convert_date_to_string(start_date);
         return start_date_string;
     }
-    
+
     /**
-     *Get String of End Date by trip ID
+     * Get String of End Date by trip ID
+     *
      * @param trip_id
      * @return
      */
@@ -112,9 +120,10 @@ public class ScheduleDAO {
         String end_date_string = DateToString.convert_date_to_string(end_date);
         return end_date_string;
     }
-    
-     /**
-     *Get String of Start Time by trip ID
+
+    /**
+     * Get String of Start Time by trip ID
+     *
      * @param trip_id
      * @return
      */
@@ -124,9 +133,10 @@ public class ScheduleDAO {
         String start_time_string = format.format(start_time);
         return start_time_string;
     }
-    
+
     /**
-     *Get String of End Time by trip ID
+     * Get String of End Time by trip ID
+     *
      * @param trip_id
      * @return
      */
@@ -137,7 +147,20 @@ public class ScheduleDAO {
         return end_time_string;
     }
 
+    public static List<Schedule> get_schedule_list_by_line_id_and_start_date_string(int line_id, String start_date_string) {
+        List<Schedule> schedule_list = new ArrayList<>();
+        List<Trip> trip_list = TripDAO.get_trip_list_by_line_id_and_start_date_string(line_id, start_date_string);
+        trip_list.forEach(trip -> {
+            Schedule schedule = trip.getSchedule();
+            if ( schedule != null) {
+                schedule_list.add(schedule);
+            }
+        });
+        return schedule_list;
+    }
+
     public static void main(String[] args) {
-        System.out.println(get_schedule_end_time_string(1));
+        List<Schedule> schedule_list = get_schedule_list_by_line_id_and_start_date_string(2221, "2018-07-12");
+        System.out.println(schedule_list.size());
     }
 }
