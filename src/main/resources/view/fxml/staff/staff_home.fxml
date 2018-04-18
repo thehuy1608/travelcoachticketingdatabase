@@ -113,13 +113,13 @@
                </font>
             </Label>
             <Label fx:id="lblFinalInvoiceCoach" layoutX="38.0" layoutY="644.0" prefHeight="30.0" prefWidth="363.0" />
-            <JFXTreeTableView fx:id="tblFinalInvoice" layoutX="437.0" layoutY="275.0" prefHeight="301.0" prefWidth="567.0">
+            <JFXTreeTableView fx:id="tblFinalInvoice" layoutX="422.0" layoutY="275.0" prefHeight="301.0" prefWidth="582.0">
                <columns>
                   <TreeTableColumn fx:id="tblFinalInvoice_Index" prefWidth="61.0" style="-fx-alignment: CENTER;" text="STT" />
                   <TreeTableColumn fx:id="tblFinalInvoice_TicketName" prefWidth="173.0" style="-fx-alignment: CENTER;" text="Tên vé" />
                   <TreeTableColumn fx:id="tblFinalInvoice_Quantity" prefWidth="86.0" style="-fx-alignment: CENTER;" text="Số lượng" />
                   <TreeTableColumn fx:id="tblFinalInvoice_SeatNumber" prefWidth="102.0" style="-fx-alignment: CENTER;" text="Mã số ghế" />
-                  <TreeTableColumn fx:id="tblFinalInvoice_Price" prefWidth="144.0" style="-fx-alignment: CENTER;" text="Giá tiền" />
+                  <TreeTableColumn fx:id="tblFinalInvoice_Price" prefWidth="158.0" style="-fx-alignment: CENTER;" text="Giá tiền" />
                </columns>
             </JFXTreeTableView>
             <Label layoutX="688.0" layoutY="642.0" text="TỔNG:" textFill="#282726">
@@ -215,8 +215,14 @@
                      </font>
                   </Label>
                   <JFXTextField fx:id="txtInvoiceTrip" editable="false" layoutX="310.0" layoutY="467.0" prefHeight="50.0" prefWidth="500.0" />
-                  <Label fx:id="lblInvoiceNameMessage" layoutX="310.0" layoutY="283.0" prefHeight="40.0" prefWidth="500.0" />
-                  <Label fx:id="lblInvoicePhoneNumberMessage" layoutX="310.0" layoutY="400.0" prefHeight="40.0" prefWidth="500.0" />
+                  <Label fx:id="lblInvoiceNameMessage" layoutX="310.0" layoutY="283.0" prefHeight="40.0" prefWidth="500.0" textFill="RED">
+                     <font>
+                        <Font name="System Bold Italic" size="15.0" />
+                     </font></Label>
+                  <Label fx:id="lblInvoicePhoneNumberMessage" layoutX="310.0" layoutY="400.0" prefHeight="40.0" prefWidth="500.0" textFill="RED">
+                     <font>
+                        <Font name="System Bold Italic" size="15.0" />
+                     </font></Label>
                   <Label fx:id="lblInvoiceTripMessage" layoutX="310.0" layoutY="517.0" prefHeight="40.0" prefWidth="500.0" />
                   <Label layoutX="310.0" layoutY="557.0" text="Trạm khởi hành:  (Không thay đổi mục này)" textFill="#193441">
                      <font>
@@ -316,7 +322,7 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </JFXButton>
-                  <JFXButton fx:id="btnInvoiceUpdate" buttonType="RAISED" layoutX="386.0" layoutY="2564.0" prefHeight="50.0" prefWidth="200.0" ripplerFill="#f05837" style="-fx-background-color: #f05837;" text="Cập Nhật" textFill="WHITE">
+                  <JFXButton fx:id="btnInvoiceUpdate" buttonType="RAISED" layoutX="386.0" layoutY="2564.0" onAction="#update_invoice_button_action" prefHeight="50.0" prefWidth="200.0" ripplerFill="#f05837" style="-fx-background-color: #f05837;" text="Cập Nhật" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
@@ -329,7 +335,7 @@
                         <Font name="System Bold" size="15.0" />
                      </font>
                   </JFXTextField>
-                  <AnchorPane fx:id="paneSeatPlane" layoutX="310.0" layoutY="1191.0" prefHeight="533.0" prefWidth="500.0" style="-fx-background-color: white;">
+                  <AnchorPane fx:id="paneSeatPlane" disable="true" layoutX="310.0" layoutY="1191.0" prefHeight="533.0" prefWidth="500.0" style="-fx-background-color: white;">
                      <effect>
                         <DropShadow />
                      </effect>
@@ -381,6 +387,16 @@
                         <JFXCheckBox fx:id="cbSeat43" layoutX="228.0" layoutY="462.0" text="43" />
                      </children>
                   </AnchorPane>
+                  <ImageView fx:id="iconInvoiceName" fitHeight="30.0" fitWidth="30.0" layoutX="810.0" layoutY="243.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                     <image>
+                        <Image url="@../../icon/ContentIcon/attention-sign-outline.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="iconInvoicePhoneNumber" fitHeight="30.0" fitWidth="30.0" layoutX="810.0" layoutY="360.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                     <image>
+                        <Image url="@../../icon/ContentIcon/attention-sign-outline.png" />
+                     </image>
+                  </ImageView>
                </children>
             </AnchorPane>
         </content>

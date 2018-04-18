@@ -44,7 +44,6 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -65,6 +64,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableRow;
+import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -200,6 +200,10 @@ public class Controller_staff_home implements Initializable {
     private Label lblInvoiceNameMessage;
     @FXML
     private Label lblInvoicePhoneNumberMessage;
+    @FXML
+    private ImageView iconInvoiceName;
+    @FXML
+    private ImageView iconInvoicePhoneNumber;
     @FXML
     private Label lblInvoiceTripMessage;
     @FXML
@@ -385,6 +389,7 @@ public class Controller_staff_home implements Initializable {
     @FXML
     private JFXCheckBox cbSeat43;
     // </editor-fold>
+
     private boolean is_active_customer_scene = false;
     private boolean is_active_final_invoice = false;
     private boolean is_active_invoice_scene = false;
@@ -401,6 +406,7 @@ public class Controller_staff_home implements Initializable {
     private List<Byte> selected_seat_list;
     private List<Byte> current_customer_selected_seat;
     private double current_ticket_price;
+    private boolean is_modified_invoice = false;
 
     /**
      * Initializes the controller class.
@@ -598,6 +604,7 @@ public class Controller_staff_home implements Initializable {
         tblEditInvoice.setShowRoot(false);
         // </editor-fold>
 
+        // <editor-fold defaultstate="collapsed" desc="txtInvoiceStartDate and txtInvoiceEndDate DateConverter">
         //Set DateConverter for txtInvoiceStartDate and txtInvoiceEndDate
         txtInvoiceStartDate.setConverter(new StringConverter<LocalDate>() {
             DateTimeFormatter date_formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
@@ -641,9 +648,14 @@ public class Controller_staff_home implements Initializable {
                 }
             }
         });
+        // </editor-fold>
 
         //Smooth Scrolling for editInvoiceScrollPane
         JFXScrollPane.smoothScrolling(editInvoiceScrollPane);
+        
+        //Set non-editable for invoice start time and end time
+        txtInvoiceStartTime.setEditable(false);
+        txtInvoiceEndTime.setEditable(false);
 
         //Show invoice form with corresponding data of row clicked
         // <editor-fold defaultstate="collapsed" desc="Add row clicking onclick action to tblSearchCustomerInfoResult">
@@ -710,10 +722,12 @@ public class Controller_staff_home implements Initializable {
                             txtInvoicePaymentStatus.setStyle("-fx-text-fill: red;");
                             btnInvoiceCheckOut.setText("Thanh toán");
                             btnInvoiceUpdate.setDisable(false);
+                            paneSeatPlane.setDisable(false);
                         } else if (txtInvoicePaymentStatus.getText().equals("Đã thanh toán")) {
                             txtInvoicePaymentStatus.setStyle("-fx-text-fill: green;");
                             btnInvoiceCheckOut.setText("Xem hóa đơn");
                             btnInvoiceUpdate.setDisable(true);
+                            paneSeatPlane.setDisable(true);
                         }
 
                         //check all the selected seat in seat checkboxes
@@ -753,6 +767,7 @@ public class Controller_staff_home implements Initializable {
                         @Override
                         protected Void call() throws Exception {
                             update_table_search_customer_list_when_check_box_checked(cbSeat, current_invoice);
+                            is_modified_invoice = true;
                             return null;
                         }
                     };
@@ -771,6 +786,7 @@ public class Controller_staff_home implements Initializable {
                         @Override
                         protected Void call() throws Exception {
                             update_table_search_customer_list_when_check_box_unchecked(cbSeat);
+                            is_modified_invoice = true;
                             return null;
                         }
                     };
@@ -778,7 +794,7 @@ public class Controller_staff_home implements Initializable {
                         tblEditInvoice.setVisible(false);
                         tblEditInvoice.setVisible(true);
                         txtInvoiceNumberOfTickets.setText(Integer.toString(Integer.parseInt(txtInvoiceNumberOfTickets.getText()) - 1));
-                        txtInvoiceTotalPrice.setText(Double.toString(Double.parseDouble(txtInvoiceTotalPrice.getText()) -  current_ticket_price));
+                        txtInvoiceTotalPrice.setText(Double.toString(Double.parseDouble(txtInvoiceTotalPrice.getText()) - current_ticket_price));
                     });
                     Thread thread = new Thread(seat_check_box_unchecked_task);
                     thread.setDaemon(true);
@@ -788,6 +804,44 @@ public class Controller_staff_home implements Initializable {
         });
         // </editor-fold>
 
+        // <editor-fold defaultstate="collapsed" desc="txtInvoiceName and txtInvoicePhoneNumber Change Listener">
+        //Adding listener to track change on txtInvoiceName and txtInvoiceNumber
+        txtInvoiceName.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            String original_invoice_name = table_customer_info_list.get(current_selected_invoice_index - 1).name.getValue();
+            if (!newValue.equals(original_invoice_name)) {
+                is_modified_invoice = true;
+            }
+            if (validate_input.check_name(newValue)) {
+                btnInvoiceCheckOut.setDisable(false);
+                btnInvoiceUpdate.setDisable(false);
+                lblInvoiceNameMessage.setText("");
+                iconInvoiceName.setVisible(false);
+            } else {
+                btnInvoiceCheckOut.setDisable(true);
+                btnInvoiceUpdate.setDisable(true);
+                lblInvoiceNameMessage.setText("Tên không được chứa số và kí tự đặc biệt.");
+                iconInvoiceName.setVisible(true);
+            }
+        });
+
+        txtInvoicePhoneNumber.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            String original_invoice_phone_number = table_customer_info_list.get(current_selected_invoice_index - 1).phone_number.getValue();
+            if (!newValue.equals(original_invoice_phone_number)) {
+                is_modified_invoice = true;
+            }
+            if (validate_input.check_phone(newValue)) {
+                btnInvoiceCheckOut.setDisable(false);
+                btnInvoiceUpdate.setDisable(false);
+                lblInvoicePhoneNumberMessage.setText("");
+                iconInvoicePhoneNumber.setVisible(false);
+            } else {
+                btnInvoiceCheckOut.setDisable(true);
+                btnInvoiceUpdate.setDisable(true);
+                lblInvoicePhoneNumberMessage.setText("Số điện thoại không hợp lệ.");
+                iconInvoicePhoneNumber.setVisible(true);
+            }
+        });
+        // </editor-fold>
     }
 
     //btnSearchCustomerInfo button action
@@ -840,11 +894,33 @@ public class Controller_staff_home implements Initializable {
 
     @FXML
     private void invoice_close_button_action(ActionEvent event) {
-        animate_invoice_form(editInvoiceScrollPane, 800);
-        animate_customer_pane_when_click_on_menu_button(paneCustomerInfo, 0);
-        is_active_customer_scene = true;
-        is_active_invoice_scene = false;
-        tblSearchCustomerInfoResult.getSelectionModel().clearSelection();
+        if (is_modified_invoice) {
+            //TO-DO when the current invoice is modified
+            Alert modified_invoice_alert = new Alert(AlertType.CONFIRMATION);
+            modified_invoice_alert.setTitle("CẬP NHẬT HÓA ĐƠN");
+            modified_invoice_alert.setHeaderText("Bạn chưa cập nhật thay đổi trong hóa đơn, bạn có chắc chắn muốn thoát?");
+            modified_invoice_alert.setContentText("Nhấn nút Cancel và sau đó nhấn cập nhật để lưu thay đổi trong hóa đơn.\nNhấn nút OK nếu như bạn muốn thoát mà không lưu lại thay đổi.");
+            Optional<ButtonType> modified_invoice_alert_action = modified_invoice_alert.showAndWait();
+            if (modified_invoice_alert_action.get() == ButtonType.OK) {
+                animate_invoice_form(editInvoiceScrollPane, 800);
+                animate_customer_pane_when_click_on_menu_button(paneCustomerInfo, 0);
+                is_active_customer_scene = true;
+                is_active_invoice_scene = false;
+                is_modified_invoice = false;
+                tblSearchCustomerInfoResult.getSelectionModel().clearSelection();
+            } else {
+                modified_invoice_alert.close();
+                is_modified_invoice = false;
+            }
+        } else {
+            //TO-DO when nothing happens
+            animate_invoice_form(editInvoiceScrollPane, 800);
+            animate_customer_pane_when_click_on_menu_button(paneCustomerInfo, 0);
+            is_active_customer_scene = true;
+            is_active_invoice_scene = false;
+            is_modified_invoice = false;
+            tblSearchCustomerInfoResult.getSelectionModel().clearSelection();
+        }
     }
 
     @FXML
@@ -1120,9 +1196,16 @@ public class Controller_staff_home implements Initializable {
         is_active_invoice_scene = false;
     }
 
+    //Check all seat check box which seat numbers are selected in the trip
     private void load_selected_seats_to_pane_by_coach_id(int coach_id, List<Byte> selected_seat_list) {
         String cbSeat_id_prefix = "cbSeat";
         ObservableList<Node> cbSeat_node_list = paneSeatPlane.getChildren();
+        //Reset all seat check box
+        cbSeat_node_list.forEach(node1 -> {
+            JFXCheckBox check_box = (JFXCheckBox) node1;
+            check_box.setSelected(false);
+        });
+        
         selected_seat_list.forEach(selected_seat -> {
             String cbSeat_id = cbSeat_id_prefix + selected_seat;
             cbSeat_node_list.forEach(node -> {
@@ -1134,6 +1217,7 @@ public class Controller_staff_home implements Initializable {
         });
     }
 
+    //Disable all selected seat in trip which not belongs to the current invoice
     private void disable_selected_seats_of_other_customers(int coach_id, List<Byte> selected_seat_list, List<Byte> param_current_customer_selected_seat) {
         List<Byte> other_customers_selected_seat = new ArrayList<>(selected_seat_list);
         param_current_customer_selected_seat.forEach(current_customer_seats -> {
@@ -1158,6 +1242,7 @@ public class Controller_staff_home implements Initializable {
         });
     }
 
+    //Get all selected seat in trip by invoice object
     private List<Byte> get_all_selected_seat_in_invoice_by_invoice(Invoice invoice) {
         List<Invoicelineitem> items_list = get_invoice_line_items_by_invoice(invoice);
         List<Byte> temp_selected_seat_list = new ArrayList<>();
@@ -1169,6 +1254,7 @@ public class Controller_staff_home implements Initializable {
         return temp_selected_seat_list;
     }
 
+    //Add a row corresponding to the unchecked seat check box in tblEditInvoice
     private void update_table_search_customer_list_when_check_box_checked(JFXCheckBox check_box, Invoice invoice) {
         try {
             String check_box_id = check_box.getId().substring(6);
@@ -1186,11 +1272,11 @@ public class Controller_staff_home implements Initializable {
 
             TableFinalInvoiceModel row = new TableFinalInvoiceModel(index, ticket_name, quantity, seat_number, price);
             table_final_invoice_list.add(row);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (NumberFormatException e) {
         }
     }
 
+    //Delete a row corresponding to the unchecked seat check box in tblEditInvoice
     private void update_table_search_customer_list_when_check_box_unchecked(JFXCheckBox check_box) {
         String check_box_id = check_box.getId().substring(6);
         int current_seat_number = Integer.parseInt(check_box_id);
@@ -1205,6 +1291,10 @@ public class Controller_staff_home implements Initializable {
         for (int i = 0; i < table_final_invoice_list.size(); i++) {
             table_final_invoice_list.get(i).index = new SimpleIntegerProperty(i + 1);
         }
+    }
+
+    @FXML
+    private void update_invoice_button_action(ActionEvent event) {
     }
 
     //Class for access table customer info search result
