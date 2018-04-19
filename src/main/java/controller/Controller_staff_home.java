@@ -411,6 +411,7 @@ public class Controller_staff_home implements Initializable {
     private double total_price = 0;
     private List<Byte> selected_seat_list;
     private List<Byte> current_customer_selected_seat;
+    private List<Byte> added_customer_selected_seat;
     private double current_ticket_price;
     private boolean is_modified_invoice = false;
     private boolean is_modified_invoice_name = false;
@@ -1310,9 +1311,23 @@ public class Controller_staff_home implements Initializable {
                         Trip trip = InvoiceDAO.get_invoice_by_id(current_selected_invoice_id).getTrip();
                         CoachDriverTrip cdt = CoachDriverTripDAO.get_coach_driver_trip_by_trip(trip);
                         int coach_id = cdt.getCoach().getCoachId();
+                        selected_seat_list = SeatDAO.get_all_selected_seat_of_trip_by_coach_id(coach_id);
                         load_selected_seats_to_pane_by_coach_id(coach_id, selected_seat_list);
                         disable_selected_seats_of_other_customers(coach_id, selected_seat_list, current_customer_selected_seat);
                         total_price = InvoiceDAO.get_total_price(current_invoice);
+                        List<Invoicelineitem> line_items = InvoicelineitemDAO.get_invoice_line_items_by_invoice(current_invoice);
+
+                        //Reset table_final_invoice_list     
+                        table_final_invoice_list.clear();
+                        for (int i = 0; i < line_items.size(); i++) {
+                            int index = i + 1;
+                            String ticket_name = line_items.get(i).getTicket().getTicketName();
+                            int quantity = 1;
+                            int seat_number = line_items.get(i).getTicket().getTicketSeatNumber();
+                            double price = line_items.get(i).getPrice();
+                            TableFinalInvoiceModel row = new TableFinalInvoiceModel(index, ticket_name, quantity, seat_number, price);
+                            table_final_invoice_list.add(row);
+                        }
                         return null;
                     }
                 };
@@ -1322,9 +1337,8 @@ public class Controller_staff_home implements Initializable {
                     txtInvoicePhoneNumber.setText(table_customer_info_list.get(current_selected_invoice_index - 1).phone_number.getValue());
                     txtInvoiceNumberOfTickets.setText(Integer.toString(table_customer_info_list.get(current_selected_invoice_index - 1).number_of_tickets.getValue()));
                     txtInvoiceTotalPrice.setText(Double.toString(total_price));
-                    table_final_invoice_list = FXCollections.observableArrayList(original_table_final_invoice_list);
-                    tblEditInvoice.setDisable(true);
-                    tblEditInvoice.setDisable(false);
+                    tblEditInvoice.setVisible(false);
+                    tblEditInvoice.setVisible(true);
                     animate_loading_anchor_pane(loading_anchor_pane, 0);
                     loading_anchor_pane.toBack();
                 });

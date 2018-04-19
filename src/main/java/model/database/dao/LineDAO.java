@@ -254,13 +254,27 @@ public class LineDAO {
         return line_id;
     }
     
-    public static List<Integer> get_line_id_list_by_trip_id_list(List<Integer> trip_id_list) {
-        List<Integer> line_list = new ArrayList<>();
+     public static Line get_line_by_line_id(int line_id) {
+         Line line = null;
+        Session hibernate_session = HibernateUtil.getSessionFactory().openSession();
+        hibernate_session.beginTransaction();
+        try {
+           line = (Line) hibernate_session.get(Line.class, line_id);
+        } catch (Exception e) {
+            hibernate_session.flush();
+            hibernate_session.close();
+        }
+        hibernate_session.flush();
+        hibernate_session.close();
+        return line;
+    }
+    
+    public static List<Line> get_line_list_by_trip_id_list(List<Integer> trip_id_list) {
+        List<Line> line_list = new ArrayList<>();
         trip_id_list.forEach(trip_id -> {
             Line line = TripDAO.get_trip_by_trip_id(trip_id).getLine();
-            int line_id = line.getLineId();
-            if (!line_list.contains(line_id)) {
-                line_list.add(line_id);
+            if (!line_list.contains(line)) {
+                line_list.add(line);
             }
         });
         return line_list;
@@ -310,14 +324,6 @@ public class LineDAO {
 //        line_list.forEach((line) -> {
 //            System.out.println(line.getLineName());
 //        });
-        List<Integer> trip_id_list = new ArrayList<>();
-        trip_id_list.add(1);
-        trip_id_list.add(2);
-        trip_id_list.add(6);
-        trip_id_list.add(7);
-        List<Integer> line_id_list = get_line_id_list_by_trip_id_list(trip_id_list);
-        line_id_list.forEach(line_id -> {
-            System.out.println(line_id);
-        });
+        
     }
 }
