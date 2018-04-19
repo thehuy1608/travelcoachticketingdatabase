@@ -101,6 +101,33 @@ public class TripDAO {
     }
 
     /**
+     * Get trip by trip name
+     *
+     * @param trip_name
+     * @return
+     */
+    public static Trip get_trip_by_trip_name(String trip_name) {
+        Trip trip = null;
+        Session hibernate_session = HibernateUtil.getSessionFactory().openSession();
+        hibernate_session.beginTransaction();
+        try {
+            String hql = "SELECT trip FROM Trip trip WHERE trip.tripName = :trip_name";
+            Query query = hibernate_session.createQuery(hql);
+            query.setParameter("trip_name", trip_name);
+            List<Trip> result = query.list();
+            if (!result.isEmpty()) {
+                trip = result.get(0);
+            }
+        } catch (Exception e) {
+            hibernate_session.flush();
+            hibernate_session.close();
+        }
+        hibernate_session.flush();
+        hibernate_session.close();
+        return trip;
+    }
+
+    /**
      * Get trip by its ID
      *
      * @param trip_id

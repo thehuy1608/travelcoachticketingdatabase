@@ -90,6 +90,7 @@ import model.database.dao.InvoicelineitemDAO;
 import static model.database.dao.InvoicelineitemDAO.get_invoice_line_items_by_invoice;
 import model.database.dao.SeatDAO;
 import model.database.dao.TicketDAO;
+import model.database.dao.TripDAO;
 import model.database.pojo.CoachDriverTrip;
 import model.database.pojo.Customer;
 import model.database.pojo.Invoice;
@@ -733,13 +734,23 @@ public class Controller_staff_home implements Initializable {
                         //Set invoice payment status textfield color text fill based on the payment status
                         //Set invoice update and check out button state (enabled or disabled) and content text based on invoice status
                         if (txtInvoicePaymentStatus.getText().equals("Chưa thanh toán")) {
-                            txtInvoicePaymentStatus.setStyle("-fx-text-fill: red;");
+                            txtInvoicePaymentStatus.setStyle("-fx-text-fill: orange;");
                             btnInvoiceCheckOut.setText("Thanh toán");
                             btnInvoiceUpdate.setDisable(false);
+                            btnInvoiceDelete.setDisable(false);
+                            btnInvoiceCheckOut.setDisable(false);
+                            btnInvoiceReset.setDisable(false);
                             paneSeatPlane.setDisable(false);
                         } else if (txtInvoicePaymentStatus.getText().equals("Đã thanh toán")) {
                             txtInvoicePaymentStatus.setStyle("-fx-text-fill: green;");
                             btnInvoiceCheckOut.setText("Xem hóa đơn");
+                            paneSeatPlane.setDisable(true);
+                            btnInvoiceUpdate.setDisable(true);
+                            btnInvoiceDelete.setDisable(true);
+                            btnInvoiceCheckOut.setDisable(false);
+                            btnInvoiceReset.setDisable(false);
+                        } else if (txtInvoicePaymentStatus.getText().equals("Đã hủy")) {
+                            txtInvoicePaymentStatus.setStyle("-fx-text-fill: red;");
                             btnInvoiceUpdate.setDisable(true);
                             paneSeatPlane.setDisable(true);
                             btnInvoiceDelete.setDisable(true);
@@ -1371,54 +1382,144 @@ public class Controller_staff_home implements Initializable {
 
     @FXML
     private void invoice_reset_button_action(ActionEvent event) {
-        loading_anchor_pane.toFront();
-        animate_loading_anchor_pane(loading_anchor_pane, 1);
-        Task<Void> reset_seat_pane_task = new Task<Void>() {
-            @Override
-            protected Void call() throws Exception {
-                Trip trip = InvoiceDAO.get_invoice_by_id(current_selected_invoice_id).getTrip();
-                CoachDriverTrip cdt = CoachDriverTripDAO.get_coach_driver_trip_by_trip(trip);
-                int coach_id = cdt.getCoach().getCoachId();
-                selected_seat_list = SeatDAO.get_all_selected_seat_of_trip_by_coach_id(coach_id);
-                load_selected_seats_to_pane_by_coach_id(coach_id, selected_seat_list);
-                disable_selected_seats_of_other_customers(coach_id, selected_seat_list, current_customer_selected_seat);
-                total_price = InvoiceDAO.get_total_price(current_invoice);
-                List<Invoicelineitem> line_items = InvoicelineitemDAO.get_invoice_line_items_by_invoice(current_invoice);
+        Alert reset_alert = new Alert(AlertType.CONFIRMATION);
+        reset_alert.setTitle("XÁC NHẬN KHÔI PHỤC");
+        reset_alert.setHeaderText("Những thay đổi (nếu có) trong hóa đơn sẽ không được lưu lại.\nBạn có chắc chắn muốn khôi phục hóa đơn?");
+        reset_alert.setContentText(null);
+        Optional<ButtonType> reset_alert_action = reset_alert.showAndWait();
+        if (reset_alert_action.get() == ButtonType.OK) {
+            loading_anchor_pane.toFront();
+            animate_loading_anchor_pane(loading_anchor_pane, 1);
+            Task<Void> reset_seat_pane_task = new Task<Void>() {
+                @Override
+                protected Void call() throws Exception {
+                    Trip trip = InvoiceDAO.get_invoice_by_id(current_selected_invoice_id).getTrip();
+                    CoachDriverTrip cdt = CoachDriverTripDAO.get_coach_driver_trip_by_trip(trip);
+                    int coach_id = cdt.getCoach().getCoachId();
+                    selected_seat_list = SeatDAO.get_all_selected_seat_of_trip_by_coach_id(coach_id);
+                    load_selected_seats_to_pane_by_coach_id(coach_id, selected_seat_list);
+                    disable_selected_seats_of_other_customers(coach_id, selected_seat_list, current_customer_selected_seat);
+                    total_price = InvoiceDAO.get_total_price(current_invoice);
+                    List<Invoicelineitem> line_items = InvoicelineitemDAO.get_invoice_line_items_by_invoice(current_invoice);
 
-                //Reset table_final_invoice_list     
-                table_final_invoice_list.clear();
-                for (int i = 0; i < line_items.size(); i++) {
-                    int index = i + 1;
-                    String ticket_name = line_items.get(i).getTicket().getTicketName();
-                    int quantity = 1;
-                    int seat_number = line_items.get(i).getTicket().getTicketSeatNumber();
-                    double price = line_items.get(i).getPrice();
-                    TableFinalInvoiceModel row = new TableFinalInvoiceModel(index, ticket_name, quantity, seat_number, price);
-                    table_final_invoice_list.add(row);
+                    //Reset table_final_invoice_list     
+                    table_final_invoice_list.clear();
+                    for (int i = 0; i < line_items.size(); i++) {
+                        int index = i + 1;
+                        String ticket_name = line_items.get(i).getTicket().getTicketName();
+                        int quantity = 1;
+                        int seat_number = line_items.get(i).getTicket().getTicketSeatNumber();
+                        double price = line_items.get(i).getPrice();
+                        TableFinalInvoiceModel row = new TableFinalInvoiceModel(index, ticket_name, quantity, seat_number, price);
+                        table_final_invoice_list.add(row);
+                    }
+                    return null;
                 }
-                return null;
-            }
-        };
-        reset_seat_pane_task.setOnSucceeded(event2 -> {
-            lblInvoiceName.setText(table_customer_info_list.get(current_selected_invoice_index - 1).name.getValue());
-            txtInvoiceName.setText(table_customer_info_list.get(current_selected_invoice_index - 1).name.getValue());
-            txtInvoicePhoneNumber.setText(table_customer_info_list.get(current_selected_invoice_index - 1).phone_number.getValue());
-            txtInvoiceNumberOfTickets.setText(Integer.toString(table_customer_info_list.get(current_selected_invoice_index - 1).number_of_tickets.getValue()));
-            txtInvoiceTotalPrice.setText(Double.toString(total_price));
-            tblEditInvoice.setVisible(false);
-            tblEditInvoice.setVisible(true);
-            animate_loading_anchor_pane(loading_anchor_pane, 0);
-            loading_anchor_pane.toBack();
-            //Reset invoice tracking changes variables
-            is_modified_invoice = false;
-            is_modified_invoice_name = false;
-            is_modified_invoice_phone_number = false;
-            is_modified_invoice_seat_number = false;
-            original_table_final_invoice_list = FXCollections.observableArrayList(table_final_invoice_list);
-        });
-        Thread thread = new Thread(reset_seat_pane_task);
-        thread.setDaemon(true);
-        thread.start();
+            };
+            reset_seat_pane_task.setOnSucceeded(event2 -> {
+                lblInvoiceName.setText(table_customer_info_list.get(current_selected_invoice_index - 1).name.getValue());
+                txtInvoiceName.setText(table_customer_info_list.get(current_selected_invoice_index - 1).name.getValue());
+                txtInvoicePhoneNumber.setText(table_customer_info_list.get(current_selected_invoice_index - 1).phone_number.getValue());
+                txtInvoiceNumberOfTickets.setText(Integer.toString(table_customer_info_list.get(current_selected_invoice_index - 1).number_of_tickets.getValue()));
+                txtInvoiceTotalPrice.setText(Double.toString(total_price));
+                tblEditInvoice.setVisible(false);
+                tblEditInvoice.setVisible(true);
+                animate_loading_anchor_pane(loading_anchor_pane, 0);
+                loading_anchor_pane.toBack();
+                //Reset invoice tracking changes variables
+                is_modified_invoice = false;
+                is_modified_invoice_name = false;
+                is_modified_invoice_phone_number = false;
+                is_modified_invoice_seat_number = false;
+                original_table_final_invoice_list = FXCollections.observableArrayList(table_final_invoice_list);
+            });
+            Thread thread = new Thread(reset_seat_pane_task);
+            thread.setDaemon(true);
+            thread.start();
+        }
+    }
+
+    @FXML
+    private void invoice_delete_button_action(ActionEvent event) {
+        Alert delete_alert = new Alert(AlertType.CONFIRMATION);
+        delete_alert.setTitle("XÁC NHẬN XÓA");
+        delete_alert.setHeaderText("Hóa đơn sẽ bị xóa và không thể khôi phục lại.\nBạn có chắc chắn muốn xóa hóa đơn?");
+        delete_alert.setContentText("Bạn sẽ chịu mọi trách nhiệm cho việc xóa hóa đơn mà không có sự đồng ý từ phía khách hàng. \nXin hãy cân nhắc trước khi xóa hóa đơn!");
+        Optional<ButtonType> delete_alert_action = delete_alert.showAndWait();
+        if (delete_alert_action.get() == ButtonType.OK) {
+            Task<Void> delete_invoice_task = new Task<Void>() {
+                @Override
+                protected Void call() throws Exception {
+                    //Update invoice's fields to deprecate field
+                    try {
+                        Invoice invoice = InvoiceDAO.get_invoice_by_id(current_selected_invoice_id);
+
+                        //Delete invoice line items
+                        List<Invoicelineitem> invoice_line_item_list = InvoicelineitemDAO.get_invoice_line_items_by_invoice(invoice);
+                        invoice_line_item_list.forEach(item -> {
+                            InvoicelineitemDAO.delete_invoice_line_item(item);
+                        });
+
+                        //Reset selected seats state
+                        Trip current_trip = invoice.getTrip();
+                        CoachDriverTrip cdt = CoachDriverTripDAO.get_coach_driver_trip_by_trip(current_trip);
+                        int coach_id = cdt.getCoach().getCoachId();
+                        table_final_invoice_list.forEach(item -> {
+                            byte seat_number = (byte) item.seat_number.get();
+                            Seat seat = SeatDAO.get_seat_by_coach_id_and_seat_number(coach_id, seat_number);
+                            byte seat_status = 0;
+                            seat.setSeatStatus(seat_status);
+                            seat.setModifiedDate(GetCurrentDate.get_current_date());
+                            SeatDAO.update_seat(seat);
+                        });
+                        table_final_invoice_list.clear();
+
+                        Trip trip = TripDAO.get_trip_by_trip_name("Trống");
+                        invoice.setTrip(trip);
+                        invoice.setTotalPrice(0);
+                        invoice.setInvoiceStatus("Đã hủy");
+                        InvoiceDAO.update_invoice(invoice);
+
+                        table_customer_info_list.get(current_selected_invoice_index - 1).number_of_tickets = new SimpleIntegerProperty(0);
+                        table_customer_info_list.get(current_selected_invoice_index - 1).payment_status = new SimpleStringProperty("Đã hủy");
+                        table_customer_info_list.get(current_selected_invoice_index - 1).number_of_tickets = new SimpleIntegerProperty(0);
+                    } catch (Exception e) {
+                    }
+                    return null;
+                }
+            };
+            delete_invoice_task.setOnSucceeded(event1 -> {
+                txtInvoiceTotalPrice.setText(Double.toString(0));
+                txtInvoicePaymentStatus.setText("Đã hủy");
+                txtInvoiceNumberOfTickets.setText(Double.toString(0));
+                tblEditInvoice.setVisible(false);
+                tblEditInvoice.setVisible(true);
+                paneSeatPlane.setDisable(true);
+                tblSearchCustomerInfoResult.getColumns().get(5).setVisible(false);
+                tblSearchCustomerInfoResult.getColumns().get(5).setVisible(true);
+                tblSearchCustomerInfoResult.getColumns().get(4).setVisible(false);
+                tblSearchCustomerInfoResult.getColumns().get(4).setVisible(true);
+                tblSearchCustomerInfoResult.getColumns().get(3).setVisible(false);
+                tblSearchCustomerInfoResult.getColumns().get(3).setVisible(true);
+                is_modified_invoice = false;
+                is_modified_invoice_name = false;
+                is_modified_invoice_phone_number = false;
+                is_modified_invoice_seat_number = false;
+                btnInvoiceCheckOut.setDisable(true);
+                btnInvoiceUpdate.setDisable(true);
+                btnInvoiceReset.setDisable(true);
+                btnInvoiceDelete.setDisable(true);
+                original_table_final_invoice_list = FXCollections.observableArrayList(table_final_invoice_list);
+                Alert delete_alert_successfully = new Alert(AlertType.CONFIRMATION);
+                delete_alert_successfully.setTitle("XÓA THÀNH CÔNG");
+                delete_alert_successfully.setHeaderText("Hóa đơn đã được xóa thành công.");
+                delete_alert_successfully.setContentText(null);
+                Optional<ButtonType> delete_alert_successfully_action = delete_alert_successfully.showAndWait();
+            });
+            Thread thread = new Thread(delete_invoice_task);
+            thread.setDaemon(true);
+            thread.start();
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="Effects APIs">
@@ -1524,6 +1625,7 @@ public class Controller_staff_home implements Initializable {
             cbSeat_node_list.forEach(node -> {
                 if (node.getId().equals(cbSeat_id)) {
                     JFXCheckBox check_box = (JFXCheckBox) node;
+                    check_box.setSelected(false);
                     check_box.setDisable(true);
                 }
             });
@@ -1579,10 +1681,6 @@ public class Controller_staff_home implements Initializable {
         for (int i = 0; i < table_final_invoice_list.size(); i++) {
             table_final_invoice_list.get(i).index = new SimpleIntegerProperty(i + 1);
         }
-    }
-
-    @FXML
-    private void invoice_delete_button_action(ActionEvent event) {
     }
 
     //Class for access table customer info search result
