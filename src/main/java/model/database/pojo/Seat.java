@@ -1,5 +1,5 @@
 package model.database.pojo;
-// Generated Apr 15, 2018 6:35:56 PM by Hibernate Tools 4.3.1
+// Generated Apr 19, 2018 11:52:07 PM by Hibernate Tools 4.3.1
 
 
 import java.util.Date;
@@ -11,15 +11,16 @@ public class Seat  implements java.io.Serializable {
 
 
      private Integer seatId;
+     private Long version;
      private Coach coach;
      private byte seatNumber;
      private byte seatStatus;
      private String seatDescription;
      private Date modifiedDate;
-
-    public Seat() {
-    }
-
+     
+     public Seat() {
+         
+     }
 	
     public Seat(Coach coach, byte seatNumber, byte seatStatus, Date modifiedDate) {
         this.coach = coach;
@@ -41,6 +42,13 @@ public class Seat  implements java.io.Serializable {
     
     public void setSeatId(Integer seatId) {
         this.seatId = seatId;
+    }
+    public Long getVersion() {
+        return this.version;
+    }
+    
+    public void setVersion(Long version) {
+        this.version = version;
     }
     public Coach getCoach() {
         return this.coach;

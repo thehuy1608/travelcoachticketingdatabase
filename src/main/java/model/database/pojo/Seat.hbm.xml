@@ -1,13 +1,14 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated Apr 15, 2018 6:35:56 PM by Hibernate Tools 4.3.1 -->
+<!-- Generated Apr 19, 2018 11:52:08 PM by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
-    <class name="model.database.pojo.Seat" table="seat" catalog="travel_coach_ticketing" optimistic-lock="version" lazy="false">
+    <class name="model.database.pojo.Seat" table="seat" catalog="travel_coach_ticketing"  lazy="false">
         <id name="seatId" type="java.lang.Integer">
             <column name="SeatID" />
             <generator class="identity" />
         </id>
+        <version name="version" type="long" column="Version" />
         <many-to-one name="coach" class="model.database.pojo.Coach" fetch="select">
             <column name="FK_CoachID" not-null="true" />
         </many-to-one>

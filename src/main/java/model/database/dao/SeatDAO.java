@@ -63,7 +63,6 @@ public class SeatDAO {
             query.setParameter("seat_status", seat_status);
             selected_seat_list = query.list();
         } catch (Exception e) {
-            e.printStackTrace();
             hibernate_session.flush();
             hibernate_session.close();
         }
@@ -78,23 +77,21 @@ public class SeatDAO {
      * @param seat
      * @return
      */
-    public static boolean update_seat(Seat seat) {
+    public static int update_seat(Seat seat) {
         Session hibernate_session = HibernateUtil.getSessionFactory().openSession();
         hibernate_session.beginTransaction();
         try {
-            hibernate_session.update(seat);
+            hibernate_session.saveOrUpdate(seat);
             hibernate_session.getTransaction().commit();
-            return true;
+            return seat.getSeatNumber();
         } catch (Exception e) {
             if (hibernate_session.getTransaction().isActive()) {
                 hibernate_session.getTransaction().rollback();
             }
             hibernate_session.flush();
             hibernate_session.close();
+            return 0;
         }
-        hibernate_session.flush();
-        hibernate_session.close();
-        return false;
     }
 
     public static void main(String[] args) {
