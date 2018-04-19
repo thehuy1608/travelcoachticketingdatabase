@@ -314,7 +314,7 @@
                         <Font name="System Bold Italic" size="18.0" />
                      </font>
                   </Label>
-                  <JFXButton fx:id="btnInvoiceCheckOut" buttonType="RAISED" layoutX="610.0" layoutY="2564.0" onAction="#invoice_check_out_button_action" prefHeight="50.0" prefWidth="200.0" ripplerFill="#182657" style="-fx-background-color: #182657;" text="Thanh Toán" textFill="WHITE">
+                  <JFXButton fx:id="btnInvoiceCheckOut" buttonType="RAISED" layoutX="610.0" layoutY="2564.0" onAction="#invoice_check_out_button_action" prefHeight="50.0" prefWidth="200.0" ripplerFill="#182657" style="-fx-background-color: #182657;" text="Thanh toán" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
@@ -322,7 +322,7 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </JFXButton>
-                  <JFXButton fx:id="btnInvoiceUpdate" buttonType="RAISED" layoutX="386.0" layoutY="2564.0" onAction="#update_invoice_button_action" prefHeight="50.0" prefWidth="200.0" ripplerFill="#f05837" style="-fx-background-color: #f05837;" text="Cập Nhật" textFill="WHITE">
+                  <JFXButton fx:id="btnInvoiceUpdate" buttonType="RAISED" layoutX="386.0" layoutY="2564.0" onAction="#update_invoice_button_action" prefHeight="50.0" prefWidth="200.0" ripplerFill="#f05837" style="-fx-background-color: #f05837;" text="Cập nhật" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
@@ -397,6 +397,41 @@
                         <Image url="@../../icon/ContentIcon/attention-sign-outline.png" />
                      </image>
                   </ImageView>
+                  <JFXButton fx:id="btnInvoiceDelete" buttonType="RAISED" layoutX="610.0" layoutY="2668.0" onAction="#invoice_delete_button_action" prefHeight="50.0" prefWidth="200.0" ripplerFill="#a7414a" style="-fx-background-color: #a7414a;" text="Xóa hóa đơn" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </JFXButton>
+                  <JFXButton fx:id="btnInvoiceReset" buttonType="RAISED" layoutX="386.0" layoutY="2668.0" onAction="#invoice_reset_button_action" prefHeight="50.0" prefWidth="200.0" ripplerFill="#6465a5" style="-fx-background-color: #6465a5;" text="Khôi phục hóa đơn" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </JFXButton>
+                  <Label layoutX="348.0" layoutY="1199.0" text="Tài xế">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="725.0" layoutY="1199.0" text="Cửa lên">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <JFXCheckBox layoutX="853.0" layoutY="1349.0" selected="true" text="Ghế khách hàng đặt" />
+                  <JFXCheckBox disable="true" layoutX="853.0" layoutY="1304.0" selected="true" text="Đã đặt" />
+                  <JFXCheckBox layoutX="853.0" layoutY="1258.0" text="Ghế trống" />
+                  <Label layoutX="884.0" layoutY="1199.0" text="Chú thích">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <AnchorPane layoutX="825.0" layoutY="1191.0" prefHeight="206.0" prefWidth="207.0" style="-fx-border-color: black; -fx-background-color: transparent;" />
                </children>
             </AnchorPane>
         </content>

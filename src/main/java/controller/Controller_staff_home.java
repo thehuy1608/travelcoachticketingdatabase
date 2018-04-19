@@ -263,6 +263,10 @@ public class Controller_staff_home implements Initializable {
     @FXML
     private JFXButton btnInvoiceCheckOut;
     @FXML
+    private JFXButton btnInvoiceDelete;
+    @FXML
+    private JFXButton btnInvoiceReset;
+    @FXML
     private AnchorPane paneFinalInvoice;
     @FXML
     private Label lblFinalInvoiceName;
@@ -738,6 +742,8 @@ public class Controller_staff_home implements Initializable {
                             btnInvoiceCheckOut.setText("Xem hóa đơn");
                             btnInvoiceUpdate.setDisable(true);
                             paneSeatPlane.setDisable(true);
+                            btnInvoiceDelete.setDisable(true);
+                            btnInvoiceReset.setDisable(true);
                         }
 
                         //check all the selected seat in seat checkboxes
@@ -825,11 +831,13 @@ public class Controller_staff_home implements Initializable {
             if (validate_input.check_name(newValue)) {
                 btnInvoiceCheckOut.setDisable(false);
                 btnInvoiceUpdate.setDisable(false);
+                btnInvoiceReset.setDisable(false);
                 lblInvoiceNameMessage.setText("");
                 iconInvoiceName.setVisible(false);
             } else {
                 btnInvoiceCheckOut.setDisable(true);
                 btnInvoiceUpdate.setDisable(true);
+                btnInvoiceReset.setDisable(true);
                 lblInvoiceNameMessage.setText("Tên không được chứa số và kí tự đặc biệt.");
                 iconInvoiceName.setVisible(true);
             }
@@ -1341,6 +1349,12 @@ public class Controller_staff_home implements Initializable {
                     tblEditInvoice.setVisible(true);
                     animate_loading_anchor_pane(loading_anchor_pane, 0);
                     loading_anchor_pane.toBack();
+                    //Reset invoice tracking changes variables
+                    is_modified_invoice = false;
+                    is_modified_invoice_name = false;
+                    is_modified_invoice_phone_number = false;
+                    is_modified_invoice_seat_number = false;
+                    original_table_final_invoice_list = FXCollections.observableArrayList(table_final_invoice_list);
                 });
                 Thread thread = new Thread(reset_seat_pane_task);
                 thread.setDaemon(true);
@@ -1353,6 +1367,58 @@ public class Controller_staff_home implements Initializable {
             is_modified_invoice_phone_number = false;
             is_modified_invoice_seat_number = false;
         }
+    }
+
+    @FXML
+    private void invoice_reset_button_action(ActionEvent event) {
+        loading_anchor_pane.toFront();
+        animate_loading_anchor_pane(loading_anchor_pane, 1);
+        Task<Void> reset_seat_pane_task = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                Trip trip = InvoiceDAO.get_invoice_by_id(current_selected_invoice_id).getTrip();
+                CoachDriverTrip cdt = CoachDriverTripDAO.get_coach_driver_trip_by_trip(trip);
+                int coach_id = cdt.getCoach().getCoachId();
+                selected_seat_list = SeatDAO.get_all_selected_seat_of_trip_by_coach_id(coach_id);
+                load_selected_seats_to_pane_by_coach_id(coach_id, selected_seat_list);
+                disable_selected_seats_of_other_customers(coach_id, selected_seat_list, current_customer_selected_seat);
+                total_price = InvoiceDAO.get_total_price(current_invoice);
+                List<Invoicelineitem> line_items = InvoicelineitemDAO.get_invoice_line_items_by_invoice(current_invoice);
+
+                //Reset table_final_invoice_list     
+                table_final_invoice_list.clear();
+                for (int i = 0; i < line_items.size(); i++) {
+                    int index = i + 1;
+                    String ticket_name = line_items.get(i).getTicket().getTicketName();
+                    int quantity = 1;
+                    int seat_number = line_items.get(i).getTicket().getTicketSeatNumber();
+                    double price = line_items.get(i).getPrice();
+                    TableFinalInvoiceModel row = new TableFinalInvoiceModel(index, ticket_name, quantity, seat_number, price);
+                    table_final_invoice_list.add(row);
+                }
+                return null;
+            }
+        };
+        reset_seat_pane_task.setOnSucceeded(event2 -> {
+            lblInvoiceName.setText(table_customer_info_list.get(current_selected_invoice_index - 1).name.getValue());
+            txtInvoiceName.setText(table_customer_info_list.get(current_selected_invoice_index - 1).name.getValue());
+            txtInvoicePhoneNumber.setText(table_customer_info_list.get(current_selected_invoice_index - 1).phone_number.getValue());
+            txtInvoiceNumberOfTickets.setText(Integer.toString(table_customer_info_list.get(current_selected_invoice_index - 1).number_of_tickets.getValue()));
+            txtInvoiceTotalPrice.setText(Double.toString(total_price));
+            tblEditInvoice.setVisible(false);
+            tblEditInvoice.setVisible(true);
+            animate_loading_anchor_pane(loading_anchor_pane, 0);
+            loading_anchor_pane.toBack();
+            //Reset invoice tracking changes variables
+            is_modified_invoice = false;
+            is_modified_invoice_name = false;
+            is_modified_invoice_phone_number = false;
+            is_modified_invoice_seat_number = false;
+            original_table_final_invoice_list = FXCollections.observableArrayList(table_final_invoice_list);
+        });
+        Thread thread = new Thread(reset_seat_pane_task);
+        thread.setDaemon(true);
+        thread.start();
     }
 
     // <editor-fold defaultstate="collapsed" desc="Effects APIs">
@@ -1513,6 +1579,10 @@ public class Controller_staff_home implements Initializable {
         for (int i = 0; i < table_final_invoice_list.size(); i++) {
             table_final_invoice_list.get(i).index = new SimpleIntegerProperty(i + 1);
         }
+    }
+
+    @FXML
+    private void invoice_delete_button_action(ActionEvent event) {
     }
 
     //Class for access table customer info search result
