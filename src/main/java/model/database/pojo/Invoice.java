@@ -19,6 +19,7 @@ public class Invoice  implements java.io.Serializable {
      private String description;
      private Date modifiedDate;
      private String invoiceStatus;
+     private Date invoiceAddedDate;
      private Customer customer;
      private Set<Invoicelineitem> invoicelineitems = new HashSet<Invoicelineitem>(0);
 
@@ -26,12 +27,13 @@ public class Invoice  implements java.io.Serializable {
     }
 
 	
-    public Invoice(Trip trip, Date invoiceDueDate, float totalPrice, Date modifiedDate, String invoiceStatus) {
+    public Invoice(Trip trip, Date invoiceDueDate, float totalPrice, Date modifiedDate, String invoiceStatus, Date invoiceAddedDate) {
         this.trip = trip;
         this.invoiceDueDate = invoiceDueDate;
         this.totalPrice = totalPrice;
         this.modifiedDate = modifiedDate;
         this.invoiceStatus = invoiceStatus;
+        this.invoiceAddedDate = invoiceAddedDate;
     }
     public Invoice(Trip trip, Date invoiceDueDate, float totalPrice, String description, Date modifiedDate, String invoiceStatus, Customer customer, Set<Invoicelineitem> invoicelineitems) {
        this.trip = trip;
@@ -108,7 +110,15 @@ public class Invoice  implements java.io.Serializable {
         this.invoicelineitems = invoicelineitems;
     }
 
+    public Date getInvoiceAddedDate() {
+        return invoiceAddedDate;
+    }
 
+    public void setInvoiceAddedDate(Date invoiceAddedDate) {
+        this.invoiceAddedDate = invoiceAddedDate;
+    }
+
+    
 
 
 }

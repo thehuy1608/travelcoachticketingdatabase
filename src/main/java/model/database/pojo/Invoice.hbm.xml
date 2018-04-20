@@ -26,6 +26,9 @@
         <property name="invoiceStatus" type="string">
             <column name="InvoiceStatus" length="20" not-null="true" />
         </property>
+        <property name="invoiceAddedDate" type="date">
+            <column name="InvoiceAddedDate" length="10" not-null="true"/>
+        </property>
         <one-to-one name="customer" class="model.database.pojo.Customer"></one-to-one>
         <set name="invoicelineitems" table="invoicelineitem" inverse="true" lazy="true" fetch="select">
             <key>

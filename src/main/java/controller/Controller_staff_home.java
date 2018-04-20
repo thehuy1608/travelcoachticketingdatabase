@@ -30,6 +30,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.animation.FadeTransition;
@@ -37,13 +38,16 @@ import javafx.animation.FillTransition;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
+import javafx.animation.SequentialTransition;
 import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -119,7 +123,6 @@ public class Controller_staff_home implements Initializable {
     private JFXButton btnLogOut;
     @FXML
     private JFXButton btnCustomerInfo_Side;
-
     @FXML
     private JFXButton btnLockScreen_Side;
     @FXML
@@ -151,6 +154,12 @@ public class Controller_staff_home implements Initializable {
     @FXML
     private JFXButton btnSearchCustomerInfo;
     @FXML
+    private Label lblSearchCustomerInfo_result_count;
+    @FXML
+    private Label lblSearchCustomerInfo_filter;
+    @FXML
+    private JFXTextField txtSearchCustomerInfo_filter;
+    @FXML
     private JFXTreeTableView<TableSearchCustomerInfoDataModel> tblSearchCustomerInfoResult;
     @FXML
     private TreeTableColumn<TableSearchCustomerInfoDataModel, Number> tblSearchCustomerInfoResult_index;
@@ -166,6 +175,8 @@ public class Controller_staff_home implements Initializable {
     private TreeTableColumn<TableSearchCustomerInfoDataModel, String> tblSearchCustomerInfoResult_payment_status;
     @FXML
     private TreeTableColumn<TableSearchCustomerInfoDataModel, String> tblSearchCustomerInfoResult_start_date;
+    @FXML
+    private TreeTableColumn<TableSearchCustomerInfoDataModel, String> tblSearchCustomerInfoResult_added_date;
     @FXML
     private ScrollPane editInvoiceScrollPane;
     @FXML
@@ -376,6 +387,7 @@ public class Controller_staff_home implements Initializable {
     private JFXCheckBox cbSeat43;
     // </editor-fold>
 
+    // <editor-fold defaultstate="collapsed" desc="Other variables">
     private boolean is_active_customer_scene = false;
     private boolean is_active_final_invoice = false;
     private boolean is_active_invoice_scene = false;
@@ -401,6 +413,8 @@ public class Controller_staff_home implements Initializable {
     private boolean is_modified_invoice_seat_number = false;
     private String duplicate_seat_string;
     private int update_seat_result;
+    private boolean is_animated_search_customer_info_components = false;
+    // </editor-fold>
 
     /**
      * Initializes the controller class.
@@ -523,10 +537,19 @@ public class Controller_staff_home implements Initializable {
         tblSearchCustomerInfoResult_payment_status.setCellValueFactory((TreeTableColumn.CellDataFeatures<TableSearchCustomerInfoDataModel, String> param) -> param.getValue().getValue().payment_status);
         tblSearchCustomerInfoResult_tickets.setCellValueFactory((TreeTableColumn.CellDataFeatures<TableSearchCustomerInfoDataModel, Number> param) -> param.getValue().getValue().number_of_tickets);
         tblSearchCustomerInfoResult_start_date.setCellValueFactory((TreeTableColumn.CellDataFeatures<TableSearchCustomerInfoDataModel, String> param) -> param.getValue().getValue().start_date);
+        tblSearchCustomerInfoResult_added_date.setCellValueFactory((TreeTableColumn.CellDataFeatures<TableSearchCustomerInfoDataModel, String> param) -> param.getValue().getValue().added_date);
         TreeItem<TableSearchCustomerInfoDataModel> table_customer_info_root = new RecursiveTreeItem<>(table_customer_info_list, (recursiveTreeObject) -> recursiveTreeObject.getChildren());
         tblSearchCustomerInfoResult.setRoot(table_customer_info_root);
         tblSearchCustomerInfoResult.setShowRoot(false);
-        // </editor-fold>
+        
+        //Add filter by CustomerName, or PhoneNumber, or AddedDate to tblSearchCustomerInfoResult table
+        txtSearchCustomerInfo_filter.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            tblSearchCustomerInfoResult.setPredicate((TreeItem<TableSearchCustomerInfoDataModel> t) -> {
+                boolean flag = t.getValue().name.getValue().contains(newValue) || t.getValue().phone_number.getValue().contains(newValue) || t.getValue().added_date.getValue().contains(newValue);
+                return flag;
+            });
+        });
+       // </editor-fold>
 
         // <editor-fold defaultstate="collapsed" desc="Final Invoice Table TreeTableColumn Initialization">
         tblFinalInvoice_Index.setCellValueFactory((TreeTableColumn.CellDataFeatures<TableFinalInvoiceModel, Number> param) -> param.getValue().getValue().index);
@@ -664,28 +687,34 @@ public class Controller_staff_home implements Initializable {
 
                         //Set invoice payment status textfield color text fill based on the payment status
                         //Set invoice update and check out button state (enabled or disabled) and content text based on invoice status
-                        if (txtInvoicePaymentStatus.getText().equals("Chưa thanh toán")) {
-                            txtInvoicePaymentStatus.setStyle("-fx-text-fill: orange;");
-                            btnInvoiceCheckOut.setText("Thanh toán");
-                            btnInvoiceUpdate.setDisable(false);
-                            btnInvoiceDelete.setDisable(false);
-                            btnInvoiceCheckOut.setDisable(false);
-                            btnInvoiceReset.setDisable(false);
-                            paneSeatPlane.setDisable(false);
-                        } else if (txtInvoicePaymentStatus.getText().equals("Đã thanh toán")) {
-                            txtInvoicePaymentStatus.setStyle("-fx-text-fill: green;");
-                            btnInvoiceCheckOut.setText("Xem hóa đơn");
-                            paneSeatPlane.setDisable(true);
-                            btnInvoiceUpdate.setDisable(true);
-                            btnInvoiceDelete.setDisable(true);
-                            btnInvoiceCheckOut.setDisable(false);
-                            btnInvoiceReset.setDisable(false);
-                        } else if (txtInvoicePaymentStatus.getText().equals("Đã hủy")) {
-                            txtInvoicePaymentStatus.setStyle("-fx-text-fill: red;");
-                            btnInvoiceUpdate.setDisable(true);
-                            paneSeatPlane.setDisable(true);
-                            btnInvoiceDelete.setDisable(true);
-                            btnInvoiceReset.setDisable(true);
+                        switch (txtInvoicePaymentStatus.getText()) {
+                            case "Chưa thanh toán":
+                                txtInvoicePaymentStatus.setStyle("-fx-text-fill: orange;");
+                                btnInvoiceCheckOut.setText("Thanh toán");
+                                btnInvoiceUpdate.setDisable(false);
+                                btnInvoiceDelete.setDisable(false);
+                                btnInvoiceCheckOut.setDisable(false);
+                                btnInvoiceReset.setDisable(false);
+                                paneSeatPlane.setDisable(false);
+                                break;
+                            case "Đã thanh toán":
+                                txtInvoicePaymentStatus.setStyle("-fx-text-fill: green;");
+                                btnInvoiceCheckOut.setText("Xem hóa đơn");
+                                paneSeatPlane.setDisable(true);
+                                btnInvoiceUpdate.setDisable(true);
+                                btnInvoiceDelete.setDisable(true);
+                                btnInvoiceCheckOut.setDisable(false);
+                                btnInvoiceReset.setDisable(false);
+                                break;
+                            case "Đã hủy":
+                                txtInvoicePaymentStatus.setStyle("-fx-text-fill: red;");
+                                btnInvoiceUpdate.setDisable(true);
+                                paneSeatPlane.setDisable(true);
+                                btnInvoiceDelete.setDisable(true);
+                                btnInvoiceReset.setDisable(true);
+                                break;
+                            default:
+                                break;
                         }
 
                         //check all the selected seat in seat checkboxes
@@ -836,7 +865,8 @@ public class Controller_staff_home implements Initializable {
                         int number_of_tickets = InvoicelineitemDAO.count_invoice_line_items(invoice_list.get(i));
                         String payment_status = invoice_list.get(i).getInvoiceStatus();
                         String start_date = DateToString.convert_date_to_string(invoice_list.get(i).getTrip().getSchedule().getStartDate());
-                        TableSearchCustomerInfoDataModel row = new TableSearchCustomerInfoDataModel(invoice_id, index, name, phone_number, trip_line_name, number_of_tickets, payment_status, start_date);
+                        String added_date = DateToString.convert_date_to_string(invoice_list.get(i).getInvoiceAddedDate());
+                        TableSearchCustomerInfoDataModel row = new TableSearchCustomerInfoDataModel(invoice_id, index, name, phone_number, trip_line_name, number_of_tickets, payment_status, start_date, added_date);
                         table_customer_info_list.add(row);
                     }
                 }
@@ -846,8 +876,12 @@ public class Controller_staff_home implements Initializable {
 
         };
         get_customer_invoice_task.setOnSucceeded(event -> {
+            lblSearchCustomerInfo_result_count.setText("Tìm thấy " + table_customer_info_list.size() + " kết quả.");
             animate_loading_anchor_pane(loading_anchor_pane, 0);
             loading_anchor_pane.toBack();
+            if (!is_animated_search_customer_info_components) {
+                animate_customer_pane_component();
+            }
         });
         Thread thread = new Thread(get_customer_invoice_task);
         thread.setDaemon(true);
@@ -1111,6 +1145,7 @@ public class Controller_staff_home implements Initializable {
     private void export_invoice_button_action(ActionEvent event) {
         boolean is_success_export_invoice = false;
         btnExportInvoice.setVisible(false);
+        tblFinalInvoice.getSelectionModel().clearSelection();
         try {
             WritableImage invoice_printable_image = paneFinalInvoice.snapshot(new SnapshotParameters(), null);
             String path = System.getProperty("user.home") + File.separator + "Documents" + File.separator + "TravelBusTicketing" + File.separator + "Invoice.png";
@@ -1475,6 +1510,30 @@ public class Controller_staff_home implements Initializable {
         ft.setToValue(opacity);
         ft.play();
     }
+
+    private void animate_customer_pane_component() {
+        Duration transition_duration = Duration.millis(500);
+
+        FadeTransition lbl_result_count_ft = new FadeTransition(transition_duration, lblSearchCustomerInfo_result_count);
+        lbl_result_count_ft.setFromValue(lblSearchCustomerInfo_result_count.getOpacity());
+        lbl_result_count_ft.setToValue(1);
+
+        FadeTransition lbl_filter_ft = new FadeTransition(transition_duration, lblSearchCustomerInfo_filter);
+        lbl_filter_ft.setFromValue(lblSearchCustomerInfo_filter.getOpacity());
+        lbl_filter_ft.setToValue(1);
+
+        FadeTransition txt_filter_ft = new FadeTransition(transition_duration, txtSearchCustomerInfo_filter);
+        txt_filter_ft.setFromValue(txtSearchCustomerInfo_filter.getOpacity());
+        txt_filter_ft.setToValue(1);
+
+        TranslateTransition table_result_tt = new TranslateTransition(transition_duration, tblSearchCustomerInfoResult);
+        table_result_tt.setFromY(tblSearchCustomerInfoResult.getTranslateY());
+        table_result_tt.setToY(129);
+
+        SequentialTransition seqT = new SequentialTransition(table_result_tt, lbl_result_count_ft, lbl_filter_ft, txt_filter_ft);
+        seqT.play();
+        is_animated_search_customer_info_components = true;
+    }
     // </editor-fold>    
 
     //Clean current scenes before animate a new scene to application viewport
@@ -1648,8 +1707,9 @@ public class Controller_staff_home implements Initializable {
         IntegerProperty number_of_tickets;
         StringProperty payment_status;
         StringProperty start_date;
+        StringProperty added_date;
 
-        TableSearchCustomerInfoDataModel(int invoice_id, int index, String name, String phone_number, String trip_line_name, int number_of_tickets, String payment_status, String start_date) {
+        TableSearchCustomerInfoDataModel(int invoice_id, int index, String name, String phone_number, String trip_line_name, int number_of_tickets, String payment_status, String start_date, String added_date) {
             this.invoice_id = new SimpleIntegerProperty(invoice_id);
             this.index = new SimpleIntegerProperty(index);
             this.name = new SimpleStringProperty(name);
@@ -1658,6 +1718,7 @@ public class Controller_staff_home implements Initializable {
             this.number_of_tickets = new SimpleIntegerProperty(number_of_tickets);
             this.payment_status = new SimpleStringProperty(payment_status);
             this.start_date = new SimpleStringProperty(start_date);
+            this.added_date = new SimpleStringProperty(added_date);
         }
     }
 
