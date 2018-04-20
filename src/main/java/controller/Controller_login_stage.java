@@ -68,7 +68,6 @@ public class Controller_login_stage implements Initializable {
         loading_anchor_pane.setOpacity(0);
         loading_anchor_pane.setCursor(Cursor.WAIT);
         loading_anchor_pane.toBack();
-
     }
 
     @FXML
