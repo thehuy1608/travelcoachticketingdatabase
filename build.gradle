@@ -32,5 +32,8 @@ dependencies {
     
      //JFoeniX version 8.0.3 for JavaSDK version 8.*
     compile 'com.jfoenix:jfoenix:8.0.3' 
+    
+    //Google GSON 2.8.2
+    compile 'com.google.code.gson:gson:2.8.2'
 
 }

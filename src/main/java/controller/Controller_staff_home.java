@@ -9,6 +9,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXHamburger;
+import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXScrollPane;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTimePicker;
@@ -19,6 +20,7 @@ import com.jfoenix.transitions.hamburger.HamburgerBackArrowBasicTransition;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.URL;
 import java.nio.file.Files;
 import java.text.ParseException;
@@ -30,7 +32,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.animation.FadeTransition;
@@ -47,7 +48,6 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -63,6 +63,7 @@ import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TreeItem;
@@ -85,13 +86,17 @@ import model.api.date.GetCurrentDate;
 import model.api.date.GetCurrentDateTimeString;
 import model.api.date.LocalTimeToString;
 import model.api.date.TimeToLocalTime;
+import model.api.json.model.Metadata;
+import model.api.json.read.ReadMetaData;
 import model.api.loading_anchor_pane.LoadingAnchorPane;
+import model.api.security.Encryption;
 import model.api.validate.ValidateInput;
 import model.database.dao.CoachDriverTripDAO;
 import model.database.dao.CustomerDAO;
 import model.database.dao.InvoiceDAO;
 import model.database.dao.InvoicelineitemDAO;
 import static model.database.dao.InvoicelineitemDAO.get_invoice_line_items_by_invoice;
+import model.database.dao.LoginInfoDAO;
 import model.database.dao.SeatDAO;
 import model.database.dao.TicketDAO;
 import model.database.dao.TripDAO;
@@ -108,7 +113,7 @@ import model.database.pojo.Trip;
  *
  * @author User
  */
-public class Controller_staff_home implements Initializable {
+public class Controller_staff_home implements Initializable, Serializable {
 
     // <editor-fold defaultstate="collapsed" desc="FXML Components">
     @FXML
@@ -385,6 +390,16 @@ public class Controller_staff_home implements Initializable {
     private JFXCheckBox cbSeat41;
     @FXML
     private JFXCheckBox cbSeat43;
+    @FXML
+    private AnchorPane paneLockScreen;
+    @FXML
+    private JFXTextField txtUsername;
+    @FXML
+    private JFXButton btnUnlockScreen;
+    @FXML
+    private JFXPasswordField txtPassword;
+    @FXML
+    private Hyperlink link_login_with_another_account;
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Other variables">
@@ -414,6 +429,8 @@ public class Controller_staff_home implements Initializable {
     private String duplicate_seat_string;
     private int update_seat_result;
     private boolean is_animated_search_customer_info_components = false;
+    private Metadata data;
+    private boolean is_match_password;
     // </editor-fold>
 
     /**
@@ -426,6 +443,9 @@ public class Controller_staff_home implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
 
+        //Read data from JSON file
+        data = ReadMetaData.read_JSON_user_data_file();
+
         //Add loading anchor pane and bring it to back
         loading_anchor_pane = new LoadingAnchorPane();
         try {
@@ -437,6 +457,10 @@ public class Controller_staff_home implements Initializable {
         loading_anchor_pane.setOpacity(0);
         loading_anchor_pane.setCursor(Cursor.WAIT);
         loading_anchor_pane.toBack();
+
+        //Bring lock screen pane to back
+        paneLockScreen.toBack();
+
         // <editor-fold defaultstate="collapsed" desc="Initialize Sidemenu Button and effect">
         //Set default rate for btnMenu and btnMenu_Side
         HamburgerBackArrowBasicTransition burger_btnMenu_transition = new HamburgerBackArrowBasicTransition(btnMenu);
@@ -541,7 +565,7 @@ public class Controller_staff_home implements Initializable {
         TreeItem<TableSearchCustomerInfoDataModel> table_customer_info_root = new RecursiveTreeItem<>(table_customer_info_list, (recursiveTreeObject) -> recursiveTreeObject.getChildren());
         tblSearchCustomerInfoResult.setRoot(table_customer_info_root);
         tblSearchCustomerInfoResult.setShowRoot(false);
-        
+
         //Add filter by CustomerName, or PhoneNumber, or AddedDate to tblSearchCustomerInfoResult table
         txtSearchCustomerInfo_filter.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             tblSearchCustomerInfoResult.setPredicate((TreeItem<TableSearchCustomerInfoDataModel> t) -> {
@@ -549,7 +573,7 @@ public class Controller_staff_home implements Initializable {
                 return flag;
             });
         });
-       // </editor-fold>
+        // </editor-fold>
 
         // <editor-fold defaultstate="collapsed" desc="Final Invoice Table TreeTableColumn Initialization">
         tblFinalInvoice_Index.setCellValueFactory((TreeTableColumn.CellDataFeatures<TableFinalInvoiceModel, Number> param) -> param.getValue().getValue().index);
@@ -1459,6 +1483,62 @@ public class Controller_staff_home implements Initializable {
         }
     }
 
+    @FXML
+    private void lock_screen_button_action(ActionEvent event) {
+        paneLockScreen.toFront();
+        txtUsername.setText(data.get_username());
+        animate_lock_screen_anchor_pane(paneLockScreen, 1);
+    }
+
+    @FXML
+    private void unlock_screen_button_action(ActionEvent event) {
+        String username = txtUsername.getText().trim();
+        String password = txtPassword.getText();
+        if (password == null || password.equals("")) {
+            Alert null_textfield_alert = new Alert(AlertType.ERROR);
+            null_textfield_alert.setTitle("Lỗi đăng nhập");
+            null_textfield_alert.setHeaderText("Mật khẩu không được phép để trống.");
+            null_textfield_alert.setContentText(null);
+            null_textfield_alert.show();
+        } else {
+            loading_anchor_pane.toFront();
+            animate_loading_anchor_pane(loading_anchor_pane, 1);
+            Task<Void> check_login_task = new Task<Void>() {
+                @Override
+                protected Void call() throws Exception {
+                    byte[] hash_password = Encryption.encrypt_AES(password);
+                    is_match_password = LoginInfoDAO.check_login(username, hash_password);
+                    return null;
+                }
+            };
+            check_login_task.setOnSucceeded(event1 -> {
+                if (is_match_password) {
+                    animate_loading_anchor_pane(loading_anchor_pane, 0);
+                    loading_anchor_pane.toBack();
+                    animate_lock_screen_anchor_pane(paneLockScreen, 1);
+                    paneLockScreen.toBack();
+                    txtUsername.setText("");
+                    txtPassword.setText("");
+                } else {
+                    animate_loading_anchor_pane(loading_anchor_pane, 0);
+                    loading_anchor_pane.toBack();
+                    Alert failed_login_alert = new Alert(AlertType.ERROR);
+                    failed_login_alert.setTitle("Lỗi đăng nhập");
+                    failed_login_alert.setHeaderText("Tên đăng nhập hoặc mật khẩu không đúng.");
+                    failed_login_alert.setContentText(null);
+                    failed_login_alert.show();
+                }
+            });
+            Thread thread = new Thread(check_login_task);
+            thread.setDaemon(true);
+            thread.start();
+        }
+    }
+
+    @FXML
+    private void login_with_another_account_action(ActionEvent event) {
+    }
+
     // <editor-fold defaultstate="collapsed" desc="Effects APIs">
     private void animate_sidemenu(final Pane pane, double layoutX) {
         Duration transition_duration = Duration.millis(500);
@@ -1504,6 +1584,14 @@ public class Controller_staff_home implements Initializable {
     }
 
     private void animate_loading_anchor_pane(final LoadingAnchorPane pane, double opacity) {
+        Duration transition_duration = Duration.millis(300);
+        FadeTransition ft = new FadeTransition(transition_duration, pane);
+        ft.setFromValue(pane.getOpacity());
+        ft.setToValue(opacity);
+        ft.play();
+    }
+
+    private void animate_lock_screen_anchor_pane(final AnchorPane pane, double opacity) {
         Duration transition_duration = Duration.millis(300);
         FadeTransition ft = new FadeTransition(transition_duration, pane);
         ft.setFromValue(pane.getOpacity());

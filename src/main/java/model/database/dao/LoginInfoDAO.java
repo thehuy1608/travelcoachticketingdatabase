@@ -53,16 +53,15 @@ public class LoginInfoDAO {
      * @param login_password
      * @return
      */
-    public static Users get_user_by_login_name_and_password(String login_name, String login_password) {
+    public static Users get_user_by_login_name_and_password(String login_name, byte[] login_password) {
         Users user = null;
         Session hibernate_session = HibernateUtil.getSessionFactory().openSession();
         hibernate_session.beginTransaction();
         try {
-            byte[] encrypted_login_password = Encryption.encrypt_AES(login_password);
             String hql = "SELECT userId FROM Logininfo login_info WHERE login_info.loginName=:param_login_name AND login_info.loginPassword=:param_login_password";
             Query query = hibernate_session.createQuery(hql);
             query.setString("param_login_name", login_name);
-            query.setBinary("param_login_password", encrypted_login_password);
+            query.setBinary("param_login_password", login_password);
             List<Integer> result_list = query.list();
             int user_id = result_list.get(0);
             if (user_id > 0) {

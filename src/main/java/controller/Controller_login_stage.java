@@ -11,6 +11,7 @@ import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -26,16 +27,19 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import model.api.json.model.Metadata;
+import model.api.json.write.WriteMetaData;
 import model.api.loading_anchor_pane.LoadingAnchorPane;
 import model.api.security.Encryption;
 import model.database.dao.LoginInfoDAO;
+import model.database.pojo.Users;
 
 /**
  * FXML Controller class
  *
  * @author User
  */
-public class Controller_login_stage implements Initializable {
+public class Controller_login_stage implements Initializable, Serializable {
 
     @FXML
     private AnchorPane rootPane;
@@ -75,7 +79,7 @@ public class Controller_login_stage implements Initializable {
         loading_anchor_pane.toFront();
         animate_loading_anchor_pane(loading_anchor_pane, 1);
         String username = txtUsername.getText().trim();
-        String password = txtPassword.getText().trim();
+        String password = txtPassword.getText();
         if (username == null || username.equals("") || password == null || password.equals("")) {
             Alert null_textfield_alert = new Alert(AlertType.ERROR);
             null_textfield_alert.setTitle("Lỗi đăng nhập");
@@ -93,16 +97,32 @@ public class Controller_login_stage implements Initializable {
             };
             check_login_task.setOnSucceeded(event1 -> {
                 if (is_match_password) {
-                    animate_loading_anchor_pane(loading_anchor_pane, 0);
-                    loading_anchor_pane.toBack();
-                    Stage current_stage = (Stage) btnLogin.getScene().getWindow();
-                    ApplicationConfiguration app_config = new ApplicationConfiguration();
-                    try {
-                        app_config.configure_stage(current_stage, "/view/fxml/staff/staff_home.fxml", "Minh Nhut Corporation", 1200, 800);
-                    } catch (IOException ex) {
-                        Logger.getLogger(Controller_login_stage.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    current_stage.show();
+                    Task<Void> write_metadata_task = new Task<Void>() {
+                        @Override
+                        protected Void call() throws Exception {
+                            byte[] hash_password = Encryption.encrypt_AES(password);
+                            Users user = LoginInfoDAO.get_user_by_login_name_and_password(username, hash_password);
+                            int user_id = user.getUserId();
+                            Metadata data = new Metadata(user_id, username);
+                            WriteMetaData.write_JSON_user_data_file(data);
+                            return null;
+                        }
+                    };
+                    write_metadata_task.setOnSucceeded(event2 -> {
+                        animate_loading_anchor_pane(loading_anchor_pane, 0);
+                        loading_anchor_pane.toBack();
+                        Stage current_stage = (Stage) btnLogin.getScene().getWindow();
+                        ApplicationConfiguration app_config = new ApplicationConfiguration();
+                        try {
+                            app_config.configure_stage(current_stage, "/view/fxml/staff/staff_home.fxml", "Minh Nhut Corporation", 1200, 800);
+                        } catch (IOException ex) {
+                            Logger.getLogger(Controller_login_stage.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        current_stage.show();
+                    });
+                    Thread thread = new Thread(write_metadata_task);
+                    thread.setDaemon(true);
+                    thread.start();
                 } else {
                     Alert wrong_login_info = new Alert(AlertType.ERROR);
                     wrong_login_info.setTitle("Lỗi đăng nhập");

@@ -4,11 +4,13 @@
 <?import com.jfoenix.controls.JFXCheckBox?>
 <?import com.jfoenix.controls.JFXDatePicker?>
 <?import com.jfoenix.controls.JFXHamburger?>
+<?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import com.jfoenix.controls.JFXTimePicker?>
 <?import com.jfoenix.controls.JFXTreeTableView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TreeTableColumn?>
@@ -16,572 +18,639 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="800.0" prefWidth="1200.0" styleClass="application_container" stylesheets="@../../styles/components.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller_staff_home">
-   <children>
-      <AnchorPane fx:id="paneFinalInvoice" layoutX="109.0" layoutY="16.0" prefHeight="769.0" prefWidth="1042.0" style="-fx-background-color: white;">
-         <children>
-            <Label layoutX="38.0" layoutY="84.0" text="Hãng xe Minh Nhựt" textFill="#563838">
-               <font>
-                  <Font name="System Bold" size="24.0" />
-               </font>
-            </Label>
-            <ImageView fitHeight="150.0" fitWidth="162.5" layoutX="841.0" layoutY="44.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../icon/SideMenuIcon/LOGO.png" />
-               </image>
-            </ImageView>
-            <Label layoutX="38.0" layoutY="194.0" prefHeight="30.0" text="TÊN KHÁCH HÀNG:" textFill="#282726">
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font>
-            </Label>
-            <Label fx:id="lblFinalInvoiceName" alignment="CENTER_RIGHT" layoutX="211.0" layoutY="194.0" prefHeight="30.0" prefWidth="318.0" text="Label" textFill="#a7414a">
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font>
-            </Label>
-            <Label layoutX="610.0" layoutY="194.0" prefHeight="30.0" text="MÃ HÓA ĐƠN:" textFill="#282726">
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font>
-            </Label>
-            <Label fx:id="lblFinalInvoiceID" alignment="CENTER_RIGHT" layoutX="752.0" layoutY="194.0" prefHeight="30.0" prefWidth="253.0" text="Label" textFill="#a37c27">
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font>
-            </Label>
-            <Label layoutX="610.0" layoutY="224.0" prefHeight="30.0" text="NGÀY XUẤT HÓA ĐƠN:" textFill="#282726">
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font>
-            </Label>
-            <Label fx:id="lblFinalInvoiceDueDate" alignment="CENTER_RIGHT" layoutX="838.0" layoutY="224.0" prefHeight="30.0" prefWidth="166.0" text="Label" textFill="#a37c27">
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font>
-            </Label>
-            <Rectangle fill="#6a8a82" height="30.0" layoutX="37.0" layoutY="14.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="968.0" />
-            <Label layoutX="38.0" layoutY="274.0" prefHeight="30.0" text="CHUYẾN XE:" textFill="#282726">
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font>
-            </Label>
-            <Label fx:id="lblFinalInvoiceLine" layoutX="38.0" layoutY="304.0" prefHeight="30.0" prefWidth="363.0" />
-            <Label layoutX="38.0" layoutY="224.0" prefHeight="30.0" text="SỐ ĐIỆN THOẠI:" textFill="#282726">
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font>
-            </Label>
-            <Label fx:id="lblFinalInvoicePhoneNumber" alignment="CENTER_RIGHT" layoutX="210.0" layoutY="224.0" prefHeight="30.0" prefWidth="318.0" text="Label" textFill="#a7414a">
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font>
-            </Label>
-            <Line endX="868.0" layoutX="137.0" layoutY="265.0" startX="-100.0" stroke="#6a8282" />
-            <Label layoutX="38.0" layoutY="334.0" prefHeight="30.0" text="TRẠM KHỞI HÀNH:" textFill="#282726">
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font>
-            </Label>
-            <Label fx:id="lblFinalInvoiceDeparture" alignment="TOP_LEFT" layoutX="38.0" layoutY="364.0" prefHeight="50.0" prefWidth="363.0" wrapText="true" />
-            <Label layoutX="38.0" layoutY="414.0" prefHeight="30.0" text="TRẠM KẾT THÚC:" textFill="#282726">
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font>
-            </Label>
-            <Label fx:id="lblFinalInvoiceDestination" alignment="TOP_LEFT" layoutX="38.0" layoutY="444.0" prefHeight="50.0" prefWidth="363.0" wrapText="true" />
-            <Label layoutX="38.0" layoutY="494.0" prefHeight="30.0" text="NGÀY - GIỜ KHỞI HÀNH:" textFill="#282726">
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font>
-            </Label>
-            <Label fx:id="lblFinalInvoiceStartDateTime" layoutX="38.0" layoutY="524.0" prefHeight="30.0" prefWidth="363.0" />
-            <Label layoutX="38.0" layoutY="554.0" prefHeight="30.0" text="NGÀY - GIỜ KẾT THÚC (DỰ KIẾN):" textFill="#282726">
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font>
-            </Label>
-            <Label fx:id="lblFinalInvoiceEndDateTime" layoutX="38.0" layoutY="584.0" prefHeight="30.0" prefWidth="363.0" />
-            <Line endX="420.0" layoutX="210.0" layoutY="475.0" rotate="90.0" stroke="#6a8282" visible="false" />
-            <Label layoutX="38.0" layoutY="614.0" prefHeight="30.0" text="BIỂN SỐ XE:" textFill="#282726">
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font>
-            </Label>
-            <Label fx:id="lblFinalInvoiceCoach" layoutX="38.0" layoutY="644.0" prefHeight="30.0" prefWidth="363.0" />
-            <JFXTreeTableView fx:id="tblFinalInvoice" layoutX="422.0" layoutY="275.0" prefHeight="301.0" prefWidth="582.0" stylesheets="@../../styles/components.css">
-               <columns>
-                  <TreeTableColumn fx:id="tblFinalInvoice_Index" prefWidth="61.0" style="-fx-alignment: CENTER;" text="STT" />
-                  <TreeTableColumn fx:id="tblFinalInvoice_TicketName" prefWidth="173.0" style="-fx-alignment: CENTER;" text="Tên vé" />
-                  <TreeTableColumn fx:id="tblFinalInvoice_Quantity" prefWidth="86.0" style="-fx-alignment: CENTER;" text="Số lượng" />
-                  <TreeTableColumn fx:id="tblFinalInvoice_SeatNumber" prefWidth="102.0" style="-fx-alignment: CENTER;" text="Mã số ghế" />
-                  <TreeTableColumn fx:id="tblFinalInvoice_Price" prefWidth="158.0" style="-fx-alignment: CENTER;" text="Giá tiền" />
-               </columns>
-            </JFXTreeTableView>
-            <Label layoutX="688.0" layoutY="642.0" text="TỔNG:" textFill="#282726">
-               <font>
-                  <Font name="System Bold" size="24.0" />
-               </font>
-            </Label>
-            <Label fx:id="lblFinalInvoiceTotalPrice" alignment="CENTER_RIGHT" layoutX="780.0" layoutY="642.0" prefHeight="35.0" prefWidth="215.0" text="Label" textFill="#a7414a">
-               <font>
-                  <Font name="System Bold" size="24.0" />
-               </font>
-            </Label>
-            <Rectangle fill="#6a8a82" height="30.0" layoutX="37.0" layoutY="725.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="968.0" />
-            <JFXButton fx:id="btnExportInvoice" layoutX="850.0" layoutY="686.0" onAction="#export_invoice_button_action" prefHeight="71.0" prefWidth="156.0" style="-fx-background-color: #a7414a;" text="Xuất hóa đơn" textFill="WHITE">
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font>
-               <effect>
-                  <DropShadow />
-               </effect>
-            </JFXButton>
-         </children>
-      </AnchorPane>
-      <AnchorPane fx:id="paneCustomerInfo" layoutX="70.0" layoutY="-800.0" prefHeight="800.0" prefWidth="1130.0" style="-fx-background-color: #fcfff5;">
-         <children>
-             <AnchorPane layoutX="70.0" layoutY="-800.0" prefHeight="800.0" prefWidth="1130.0" style="-fx-background-color: #fcfff5;">
-                 
-             </AnchorPane>
-            <Label fx:id="lblSearchCustomerInfo" layoutX="252.0" layoutY="103.0" prefHeight="50.0" prefWidth="420.0" text="Tìm kiếm thông tin khách hàng:" textFill="#193441">
-               <font>
-                  <Font size="24.0" />
-               </font>
-            </Label>
-            <JFXTextField fx:id="txtSearchCustomerInfo" focusColor="#193441" layoutX="252.0" layoutY="153.0" prefHeight="50.0" prefWidth="610.0" promptText="Nhập tên hoặc số điện thoại khách hàng" unFocusColor="#3e606f">
-               <cursor>
-                  <Cursor fx:constant="TEXT" />
-               </cursor>
-            </JFXTextField>
-            <JFXButton fx:id="btnSearchCustomerInfo" contentDisplay="GRAPHIC_ONLY" layoutX="862.0" layoutY="153.0" onAction="#search_customer_info_button_action" prefHeight="50.0" prefWidth="50.0" ripplerFill="#fcfff5" text="SearchCustomerInfo">
-               <graphic>
-                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../icon/ContentIcon/search.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </JFXButton>
-            <JFXTreeTableView fx:id="tblSearchCustomerInfoResult" editable="true" layoutX="14.0" layoutY="243.0" prefHeight="400.0" prefWidth="1086.0" stylesheets="@../../styles/components.css" tableMenuButtonVisible="true">
-               <columns>
-                  <TreeTableColumn fx:id="tblSearchCustomerInfoResult_index" prefWidth="40.0" style="-fx-alignment: CENTER;" text="STT" />
-                  <TreeTableColumn fx:id="tblSearchCustomerInfoResult_name" prefWidth="184.0" text="Họ và tên" />
-                  <TreeTableColumn fx:id="tblSearchCustomerInfoResult_phone_number" prefWidth="139.0" text="Số điện thoại" />
-                  <TreeTableColumn fx:id="tblSearchCustomerInfoResult_trip" prefWidth="229.0" text="Chuyến đi" />
-                  <TreeTableColumn fx:id="tblSearchCustomerInfoResult_tickets" prefWidth="51.0" style="-fx-alignment: CENTER;" text="Số vé" />
-                  <TreeTableColumn fx:id="tblSearchCustomerInfoResult_payment_status" prefWidth="167.0" text="Tình trạng thanh toán" />
-                  <TreeTableColumn fx:id="tblSearchCustomerInfoResult_start_date" prefWidth="125.0" style="-fx-alignment: CENTER;" text="Ngày khởi hành" />
-                  <TreeTableColumn fx:id="tblSearchCustomerInfoResult_added_date" prefWidth="133.0" style="-fx-alignment: CENTER;" text="Ngày thêm" />
-               </columns>
-            </JFXTreeTableView>
-            <Label fx:id="lblSearchCustomerInfo_result_count" layoutX="252.0" layoutY="213.0" opacity="0.0" prefHeight="30.0" prefWidth="610.0" textFill="#193441">
-               <font>
-                  <Font name="System Italic" size="14.0" />
-               </font>
-            </Label>
-            <Label fx:id="lblSearchCustomerInfo_filter" layoutX="36.0" layoutY="263.0" opacity="0.0" prefHeight="50.0" prefWidth="420.0" text="Bộ lọc kết quả tìm kiếm:" textFill="#193441">
-               <font>
-                  <Font name="System Italic" size="18.0" />
-               </font>
-            </Label>
-            <JFXTextField fx:id="txtSearchCustomerInfo_filter" focusColor="#193441" layoutX="36.0" layoutY="313.0" opacity="0.0" prefHeight="50.0" prefWidth="610.0" promptText="Nhập tên, hoặc số điện thoại khách hàng, hoặc ngày thêm dưới định dạng dd-MM-yyyy" unFocusColor="#3e606f">
-               <cursor>
-                  <Cursor fx:constant="TEXT" />
-               </cursor>
-            </JFXTextField>
-         </children>
-      </AnchorPane>
-      <ScrollPane fx:id="editInvoiceScrollPane" layoutX="60.0" layoutY="800.0" prefHeight="800.0" prefWidth="1140.0" style="-fx-background-color: #fcfff5;">
-        <content>
-          <AnchorPane fx:id="editInvoiceAnchorPane" minHeight="0.0" minWidth="0.0" prefHeight="3000.0" prefWidth="1120.0" style="-fx-background-color: #fcfff5;">
-               <children>
-                  <Label layoutX="150.0" layoutY="90.0" prefHeight="50.0" prefWidth="420.0" text="Thông tin hóa đơn của khách hàng:" textFill="#3e606f">
-                     <font>
+    <children>
+        <AnchorPane  prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: #fcfff5;">
+           
+        </AnchorPane>
+        <AnchorPane fx:id="paneFinalInvoice" layoutX="109.0" layoutY="16.0" prefHeight="769.0" prefWidth="1042.0" style="-fx-background-color: white;">
+            <children>
+                <Label layoutX="38.0" layoutY="84.0" text="Hãng xe Minh Nhựt" textFill="#563838">
+                    <font>
                         <Font name="System Bold" size="24.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="lblInvoiceName" layoutX="570.0" layoutY="90.0" prefHeight="50.0" prefWidth="400.0">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="310.0" layoutY="206.0" text="Họ và tên:" textFill="#193441">
-                     <font>
-                        <Font name="System Bold Italic" size="18.0" />
-                     </font>
-                  </Label>
-                  <JFXTextField fx:id="txtInvoiceName" layoutX="310.0" layoutY="233.0" prefHeight="50.0" prefWidth="500.0" />
-                  <Label layoutX="310.0" layoutY="323.0" text="Số điện thoại:" textFill="#193441">
-                     <font>
-                        <Font name="System Bold Italic" size="18.0" />
-                     </font>
-                  </Label>
-                  <JFXTextField fx:id="txtInvoicePhoneNumber" layoutX="310.0" layoutY="350.0" prefHeight="50.0" prefWidth="500.0" />
-                  <Label layoutX="310.0" layoutY="440.0" text="Chuyến đi: (Không thay đổi mục này)" textFill="#193441">
-                     <font>
-                        <Font name="System Bold Italic" size="18.0" />
-                     </font>
-                  </Label>
-                  <JFXTextField fx:id="txtInvoiceTrip" editable="false" layoutX="310.0" layoutY="467.0" prefHeight="50.0" prefWidth="500.0" />
-                  <Label fx:id="lblInvoiceNameMessage" layoutX="310.0" layoutY="283.0" prefHeight="40.0" prefWidth="500.0" textFill="RED">
-                     <font>
-                        <Font name="System Bold Italic" size="15.0" />
-                     </font></Label>
-                  <Label fx:id="lblInvoicePhoneNumberMessage" layoutX="310.0" layoutY="400.0" prefHeight="40.0" prefWidth="500.0" textFill="RED">
-                     <font>
-                        <Font name="System Bold Italic" size="15.0" />
-                     </font></Label>
-                  <Label fx:id="lblInvoiceTripMessage" layoutX="310.0" layoutY="517.0" prefHeight="40.0" prefWidth="500.0" />
-                  <Label layoutX="310.0" layoutY="557.0" text="Trạm khởi hành:  (Không thay đổi mục này)" textFill="#193441">
-                     <font>
-                        <Font name="System Bold Italic" size="18.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="lblInvoiceDepartureMessage" layoutX="310.0" layoutY="634.0" prefHeight="40.0" prefWidth="500.0" />
-                  <Label layoutX="310.0" layoutY="674.0" text="Trạm kết thúc:  (Không thay đổi mục này)" textFill="#193441">
-                     <font>
-                        <Font name="System Bold Italic" size="18.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="lblInvoiceDestinationMessage" layoutX="310.0" layoutY="751.0" prefHeight="40.0" prefWidth="500.0" />
-                  <Label layoutX="310.0" layoutY="791.0" text="Ngày-giờ khởi hành:  (Không thay đổi mục này)" textFill="#193441">
-                     <font>
-                        <Font name="System Bold Italic" size="18.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="lblInvoiceStartTimeMessage" layoutX="310.0" layoutY="868.0" prefHeight="40.0" prefWidth="500.0" />
-                  <Label layoutX="310.0" layoutY="908.0" text="Ngày-giờ kết thúc (dự kiến):  (Không thay đổi mục này)" textFill="#193441">
-                     <font>
-                        <Font name="System Bold Italic" size="18.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="lblInvoiceEndTimeMessage" layoutX="310.0" layoutY="985.0" prefHeight="40.0" prefWidth="500.0" />
-                  <Label layoutX="310.0" layoutY="1025.0" text="Số vé đã đặt:  (Không thay đổi mục này)" textFill="#193441">
-                     <font>
-                        <Font name="System Bold Italic" size="18.0" />
-                     </font>
-                  </Label>
-                  <JFXTextField fx:id="txtInvoiceNumberOfTickets" editable="false" layoutX="310.0" layoutY="1052.0" prefHeight="50.0" prefWidth="500.0" />
-                  <Label fx:id="lblNumberOfTicketsMessage" layoutX="310.0" layoutY="1102.0" prefHeight="40.0" prefWidth="500.0" />
-                  <Label layoutX="310.0" layoutY="1142.0" text="Sơ đồ ghế ngồi:" textFill="#193441">
-                     <font>
-                        <Font name="System Bold Italic" size="18.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="310.0" layoutY="1812.0" text="Chi tiết ghế ngồi:" textFill="#193441">
-                     <font>
-                        <Font name="System Bold Italic" size="18.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="310.0" layoutY="2207.0" text="Tổng tiền thanh toán:  (Không thay đổi mục này)" textFill="#193441">
-                     <font>
-                        <Font name="System Bold Italic" size="18.0" />
-                     </font>
-                  </Label>
-                  <JFXTextField fx:id="txtInvoiceTotalPrice" editable="false" layoutX="310.0" layoutY="2234.0" prefHeight="50.0" prefWidth="500.0" />
-                  <Label fx:id="lblTotalPriceMessage" layoutX="310.0" layoutY="1408.0" prefHeight="40.0" prefWidth="500.0" />
-                  <Label layoutX="310.0" layoutY="2324.0" text="Trạng thái thanh toán:  (Không thay đổi mục này)" textFill="#193441">
-                     <font>
-                        <Font name="System Bold Italic" size="18.0" />
-                     </font>
-                  </Label>
-                  <JFXTextField fx:id="txtInvoicePaymentStatus" editable="false" layoutX="310.0" layoutY="2351.0" prefHeight="50.0" prefWidth="500.0">
-                     <font>
-                        <Font name="System Bold" size="15.0" />
-                     </font></JFXTextField>
-                  <Label fx:id="lblPaymentStatusMessage" layoutX="310.0" layoutY="1525.0" prefHeight="40.0" prefWidth="500.0" />
-                  <JFXDatePicker fx:id="txtInvoiceStartDate" editable="false" layoutX="541.0" layoutY="818.0" prefHeight="50.0" />
-                  <JFXTimePicker fx:id="txtInvoiceStartTime" layoutX="310.0" layoutY="818.0" prefHeight="50.0" />
-                  <JFXDatePicker fx:id="txtInvoiceEndDate" editable="false" layoutX="541.0" layoutY="935.0" prefHeight="50.0" />
-                  <JFXTimePicker fx:id="txtInvoiceEndTime" layoutX="310.0" layoutY="935.0" prefHeight="50.0" />
-                  <JFXButton fx:id="btnInvoiceClose" contentDisplay="GRAPHIC_ONLY" layoutX="1020.0" layoutY="32.0" onAction="#invoice_close_button_action" prefHeight="30.0" prefWidth="30.0">
-                     <graphic>
-                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../icon/ContentIcon/close.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </JFXButton>
-                  <JFXTextField fx:id="txtInvoiceDeparture" editable="false" layoutX="310.0" layoutY="584.0" prefHeight="50.0" prefWidth="500.0" />
-                  <JFXTextField fx:id="txtInvoiceDestination" editable="false" layoutX="310.0" layoutY="701.0" prefHeight="50.0" prefWidth="500.0" />
-                  <JFXTreeTableView fx:id="tblEditInvoice" layoutX="310.0" layoutY="1839.0" prefHeight="316.0" prefWidth="500.0" stylesheets="@../../styles/components.css">
-                     <columns>
-                        <TreeTableColumn fx:id="tblEditInvoice_Index" prefWidth="48.0" style="-fx-alignment: CENTER;" text="STT" />
-                        <TreeTableColumn fx:id="tblEditInvoice_TicketName" prefWidth="155.0" style="-fx-alignment: CENTER;" text="Tên vé" />
-                        <TreeTableColumn fx:id="tblEditInvoice_Quantity" prefWidth="78.0" style="-fx-alignment: CENTER;" text="Số lượng" />
-                        <TreeTableColumn fx:id="tblEditInvoice_SeatNumber" prefWidth="92.0" style="-fx-alignment: CENTER;" text="Mã số ghế" />
-                        <TreeTableColumn fx:id="tblEditInvoice_Price" prefWidth="126.0" style="-fx-alignment: CENTER;" text="Giá tiền" />
-                     </columns>
-                  </JFXTreeTableView>
-                  <Label layoutX="310.0" layoutY="2438.0" text="Biển số xe:  (Không thay đổi mục này)" textFill="#193441">
-                     <font>
-                        <Font name="System Bold Italic" size="18.0" />
-                     </font>
-                  </Label>
-                  <JFXButton fx:id="btnInvoiceCheckOut" buttonType="RAISED" layoutX="610.0" layoutY="2564.0" onAction="#invoice_check_out_button_action" prefHeight="50.0" prefWidth="200.0" ripplerFill="#182657" style="-fx-background-color: #182657;" text="Thanh toán" textFill="WHITE">
-                     <font>
+                    </font>
+                </Label>
+                <ImageView fitHeight="150.0" fitWidth="162.5" layoutX="841.0" layoutY="44.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../../icon/SideMenuIcon/LOGO.png" />
+                    </image>
+                </ImageView>
+                <Label layoutX="38.0" layoutY="194.0" prefHeight="30.0" text="TÊN KHÁCH HÀNG:" textFill="#282726">
+                    <font>
                         <Font name="System Bold" size="18.0" />
-                     </font>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </JFXButton>
-                  <JFXButton fx:id="btnInvoiceUpdate" buttonType="RAISED" layoutX="386.0" layoutY="2564.0" onAction="#update_invoice_button_action" prefHeight="50.0" prefWidth="200.0" ripplerFill="#f05837" style="-fx-background-color: #f05837;" text="Cập nhật" textFill="WHITE">
-                     <font>
+                    </font>
+                </Label>
+                <Label fx:id="lblFinalInvoiceName" alignment="CENTER_RIGHT" layoutX="211.0" layoutY="194.0" prefHeight="30.0" prefWidth="318.0" text="Label" textFill="#a7414a">
+                    <font>
                         <Font name="System Bold" size="18.0" />
-                     </font>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </JFXButton>
-                  <JFXTextField fx:id="txtInvoiceNumberPlate" editable="false" layoutX="310.0" layoutY="2465.0" prefHeight="50.0" prefWidth="500.0">
-                     <font>
-                        <Font name="System Bold" size="15.0" />
-                     </font>
-                  </JFXTextField>
-                  <AnchorPane fx:id="paneSeatPlane" disable="true" layoutX="310.0" layoutY="1191.0" prefHeight="533.0" prefWidth="500.0" style="-fx-background-color: white;">
-                     <effect>
+                    </font>
+                </Label>
+                <Label layoutX="610.0" layoutY="194.0" prefHeight="30.0" text="MÃ HÓA ĐƠN:" textFill="#282726">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+                <Label fx:id="lblFinalInvoiceID" alignment="CENTER_RIGHT" layoutX="752.0" layoutY="194.0" prefHeight="30.0" prefWidth="253.0" text="Label" textFill="#a37c27">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+                <Label layoutX="610.0" layoutY="224.0" prefHeight="30.0" text="NGÀY XUẤT HÓA ĐƠN:" textFill="#282726">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+                <Label fx:id="lblFinalInvoiceDueDate" alignment="CENTER_RIGHT" layoutX="838.0" layoutY="224.0" prefHeight="30.0" prefWidth="166.0" text="Label" textFill="#a37c27">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+                <Rectangle fill="#6a8a82" height="30.0" layoutX="37.0" layoutY="14.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="968.0" />
+                <Label layoutX="38.0" layoutY="274.0" prefHeight="30.0" text="CHUYẾN XE:" textFill="#282726">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+                <Label fx:id="lblFinalInvoiceLine" layoutX="38.0" layoutY="304.0" prefHeight="30.0" prefWidth="363.0" />
+                <Label layoutX="38.0" layoutY="224.0" prefHeight="30.0" text="SỐ ĐIỆN THOẠI:" textFill="#282726">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+                <Label fx:id="lblFinalInvoicePhoneNumber" alignment="CENTER_RIGHT" layoutX="210.0" layoutY="224.0" prefHeight="30.0" prefWidth="318.0" text="Label" textFill="#a7414a">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+                <Line endX="868.0" layoutX="137.0" layoutY="265.0" startX="-100.0" stroke="#6a8282" />
+                <Label layoutX="38.0" layoutY="334.0" prefHeight="30.0" text="TRẠM KHỞI HÀNH:" textFill="#282726">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+                <Label fx:id="lblFinalInvoiceDeparture" alignment="TOP_LEFT" layoutX="38.0" layoutY="364.0" prefHeight="50.0" prefWidth="363.0" wrapText="true" />
+                <Label layoutX="38.0" layoutY="414.0" prefHeight="30.0" text="TRẠM KẾT THÚC:" textFill="#282726">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+                <Label fx:id="lblFinalInvoiceDestination" alignment="TOP_LEFT" layoutX="38.0" layoutY="444.0" prefHeight="50.0" prefWidth="363.0" wrapText="true" />
+                <Label layoutX="38.0" layoutY="494.0" prefHeight="30.0" text="NGÀY - GIỜ KHỞI HÀNH:" textFill="#282726">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+                <Label fx:id="lblFinalInvoiceStartDateTime" layoutX="38.0" layoutY="524.0" prefHeight="30.0" prefWidth="363.0" />
+                <Label layoutX="38.0" layoutY="554.0" prefHeight="30.0" text="NGÀY - GIỜ KẾT THÚC (DỰ KIẾN):" textFill="#282726">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+                <Label fx:id="lblFinalInvoiceEndDateTime" layoutX="38.0" layoutY="584.0" prefHeight="30.0" prefWidth="363.0" />
+                <Line endX="420.0" layoutX="210.0" layoutY="475.0" rotate="90.0" stroke="#6a8282" visible="false" />
+                <Label layoutX="38.0" layoutY="614.0" prefHeight="30.0" text="BIỂN SỐ XE:" textFill="#282726">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+                <Label fx:id="lblFinalInvoiceCoach" layoutX="38.0" layoutY="644.0" prefHeight="30.0" prefWidth="363.0" />
+                <JFXTreeTableView fx:id="tblFinalInvoice" layoutX="422.0" layoutY="275.0" prefHeight="301.0" prefWidth="582.0" stylesheets="@../../styles/components.css">
+                    <columns>
+                        <TreeTableColumn fx:id="tblFinalInvoice_Index" prefWidth="61.0" style="-fx-alignment: CENTER;" text="STT" />
+                        <TreeTableColumn fx:id="tblFinalInvoice_TicketName" prefWidth="173.0" style="-fx-alignment: CENTER;" text="Tên vé" />
+                        <TreeTableColumn fx:id="tblFinalInvoice_Quantity" prefWidth="86.0" style="-fx-alignment: CENTER;" text="Số lượng" />
+                        <TreeTableColumn fx:id="tblFinalInvoice_SeatNumber" prefWidth="102.0" style="-fx-alignment: CENTER;" text="Mã số ghế" />
+                        <TreeTableColumn fx:id="tblFinalInvoice_Price" prefWidth="158.0" style="-fx-alignment: CENTER;" text="Giá tiền" />
+                    </columns>
+                </JFXTreeTableView>
+                <Label layoutX="688.0" layoutY="642.0" text="TỔNG:" textFill="#282726">
+                    <font>
+                        <Font name="System Bold" size="24.0" />
+                    </font>
+                </Label>
+                <Label fx:id="lblFinalInvoiceTotalPrice" alignment="CENTER_RIGHT" layoutX="780.0" layoutY="642.0" prefHeight="35.0" prefWidth="215.0" text="Label" textFill="#a7414a">
+                    <font>
+                        <Font name="System Bold" size="24.0" />
+                    </font>
+                </Label>
+                <Rectangle fill="#6a8a82" height="30.0" layoutX="37.0" layoutY="725.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="968.0" />
+                <JFXButton fx:id="btnExportInvoice" layoutX="850.0" layoutY="686.0" onAction="#export_invoice_button_action" prefHeight="71.0" prefWidth="156.0" style="-fx-background-color: #a7414a;" text="Xuất hóa đơn" textFill="WHITE">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                    <effect>
                         <DropShadow />
-                     </effect>
-                     <children>
-                        <JFXCheckBox fx:id="cbSeat1" layoutX="39.0" layoutY="60.0" text="01" />
-                        <JFXCheckBox fx:id="cbSeat2" layoutX="39.0" layoutY="98.0" text="02" />
-                        <JFXCheckBox fx:id="cbSeat3" layoutX="39.0" layoutY="135.0" text="03" />
-                        <JFXCheckBox fx:id="cbSeat4" layoutX="39.0" layoutY="172.0" text="04" />
-                        <JFXCheckBox fx:id="cbSeat5" layoutX="39.0" layoutY="212.0" prefHeight="21.0" prefWidth="36.0" text="05" />
-                        <JFXCheckBox fx:id="cbSeat6" layoutX="39.0" layoutY="251.0" text="06" />
-                        <JFXCheckBox fx:id="cbSeat7" layoutX="39.0" layoutY="293.0" text="07" />
-                        <JFXCheckBox fx:id="cbSeat8" layoutX="39.0" layoutY="338.0" text="08" />
-                        <JFXCheckBox fx:id="cbSeat9" layoutX="39.0" layoutY="379.0" text="09" />
-                        <JFXCheckBox fx:id="cbSeat10" layoutX="39.0" layoutY="424.0" text="10" />
-                        <JFXCheckBox fx:id="cbSeat11" layoutX="135.0" layoutY="60.0" text="11" />
-                        <JFXCheckBox fx:id="cbSeat12" layoutX="135.0" layoutY="98.0" text="12" />
-                        <JFXCheckBox fx:id="cbSeat13" layoutX="135.0" layoutY="135.0" text="13" />
-                        <JFXCheckBox fx:id="cbSeat14" layoutX="135.0" layoutY="172.0" text="14" />
-                        <JFXCheckBox fx:id="cbSeat15" layoutX="135.0" layoutY="212.0" prefHeight="21.0" prefWidth="36.0" text="15" />
-                        <JFXCheckBox fx:id="cbSeat16" layoutX="135.0" layoutY="251.0" text="16" />
-                        <JFXCheckBox fx:id="cbSeat17" layoutX="135.0" layoutY="293.0" text="17" />
-                        <JFXCheckBox fx:id="cbSeat18" layoutX="135.0" layoutY="338.0" text="18" />
-                        <JFXCheckBox fx:id="cbSeat19" layoutX="135.0" layoutY="379.0" text="19" />
-                        <JFXCheckBox fx:id="cbSeat20" layoutX="135.0" layoutY="424.0" text="20" />
-                        <JFXCheckBox fx:id="cbSeat21" layoutX="321.0" layoutY="58.0" text="21" />
-                        <JFXCheckBox fx:id="cbSeat22" layoutX="321.0" layoutY="96.0" text="22" />
-                        <JFXCheckBox fx:id="cbSeat23" layoutX="321.0" layoutY="133.0" text="23" />
-                        <JFXCheckBox fx:id="cbSeat24" layoutX="321.0" layoutY="170.0" text="24" />
-                        <JFXCheckBox fx:id="cbSeat25" layoutX="321.0" layoutY="210.0" prefHeight="21.0" prefWidth="36.0" text="25" />
-                        <JFXCheckBox fx:id="cbSeat26" layoutX="321.0" layoutY="249.0" text="26" />
-                        <JFXCheckBox fx:id="cbSeat27" layoutX="321.0" layoutY="291.0" text="27" />
-                        <JFXCheckBox fx:id="cbSeat28" layoutX="321.0" layoutY="336.0" text="28" />
-                        <JFXCheckBox fx:id="cbSeat29" layoutX="321.0" layoutY="377.0" text="29" />
-                        <JFXCheckBox fx:id="cbSeat30" layoutX="321.0" layoutY="422.0" text="30" />
-                        <JFXCheckBox fx:id="cbSeat31" layoutX="417.0" layoutY="58.0" text="31" />
-                        <JFXCheckBox fx:id="cbSeat32" layoutX="417.0" layoutY="96.0" text="32" />
-                        <JFXCheckBox fx:id="cbSeat33" layoutX="417.0" layoutY="133.0" text="33" />
-                        <JFXCheckBox fx:id="cbSeat34" layoutX="417.0" layoutY="170.0" text="34" />
-                        <JFXCheckBox fx:id="cbSeat35" layoutX="417.0" layoutY="210.0" prefHeight="21.0" prefWidth="36.0" text="35" />
-                        <JFXCheckBox fx:id="cbSeat36" layoutX="417.0" layoutY="249.0" text="36" />
-                        <JFXCheckBox fx:id="cbSeat37" layoutX="417.0" layoutY="291.0" text="37" />
-                        <JFXCheckBox fx:id="cbSeat38" layoutX="417.0" layoutY="336.0" text="38" />
-                        <JFXCheckBox fx:id="cbSeat39" layoutX="417.0" layoutY="377.0" text="39" />
-                        <JFXCheckBox fx:id="cbSeat40" layoutX="417.0" layoutY="422.0" text="40" />
-                        <JFXCheckBox fx:id="cbSeat45" layoutX="39.0" layoutY="462.0" text="45" />
-                        <JFXCheckBox fx:id="cbSeat44" layoutX="135.0" layoutY="462.0" text="44" />
-                        <JFXCheckBox fx:id="cbSeat42" layoutX="321.0" layoutY="460.0" text="42" />
-                        <JFXCheckBox fx:id="cbSeat41" layoutX="417.0" layoutY="460.0" text="41" />
-                        <JFXCheckBox fx:id="cbSeat43" layoutX="228.0" layoutY="462.0" text="43" />
-                     </children>
-                  </AnchorPane>
-                  <ImageView fx:id="iconInvoiceName" fitHeight="30.0" fitWidth="30.0" layoutX="810.0" layoutY="243.0" pickOnBounds="true" preserveRatio="true" visible="false">
-                     <image>
-                        <Image url="@../../icon/ContentIcon/attention-sign-outline.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="iconInvoicePhoneNumber" fitHeight="30.0" fitWidth="30.0" layoutX="810.0" layoutY="360.0" pickOnBounds="true" preserveRatio="true" visible="false">
-                     <image>
-                        <Image url="@../../icon/ContentIcon/attention-sign-outline.png" />
-                     </image>
-                  </ImageView>
-                  <JFXButton fx:id="btnInvoiceDelete" buttonType="RAISED" layoutX="610.0" layoutY="2668.0" onAction="#invoice_delete_button_action" prefHeight="50.0" prefWidth="200.0" ripplerFill="#a7414a" style="-fx-background-color: #a7414a;" text="Xóa hóa đơn" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                     <cursor>
+                    </effect>
+                </JFXButton>
+            </children>
+        </AnchorPane>
+        <AnchorPane fx:id="paneCustomerInfo" layoutX="60.0" layoutY="-800.0" prefHeight="800.0" prefWidth="1140.0" style="-fx-background-color: #fcfff5;">
+            <children>
+                <AnchorPane layoutX="70.0" layoutY="-800.0" prefHeight="800.0" prefWidth="1130.0" style="-fx-background-color: #fcfff5;">
+                 
+                </AnchorPane>
+                <Label fx:id="lblSearchCustomerInfo" layoutX="252.0" layoutY="103.0" prefHeight="50.0" prefWidth="420.0" text="Tìm kiếm thông tin khách hàng:" textFill="#193441">
+                    <font>
+                        <Font size="24.0" />
+                    </font>
+                </Label>
+                <JFXTextField fx:id="txtSearchCustomerInfo" focusColor="#193441" layoutX="252.0" layoutY="153.0" prefHeight="50.0" prefWidth="610.0" promptText="Nhập tên hoặc số điện thoại khách hàng" unFocusColor="#3e606f">
+                    <cursor>
+                        <Cursor fx:constant="TEXT" />
+                    </cursor>
+                </JFXTextField>
+                <JFXButton fx:id="btnSearchCustomerInfo" contentDisplay="GRAPHIC_ONLY" layoutX="862.0" layoutY="153.0" onAction="#search_customer_info_button_action" prefHeight="50.0" prefWidth="50.0" ripplerFill="#fcfff5" text="SearchCustomerInfo">
+                    <graphic>
+                        <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../../icon/ContentIcon/search.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                    <cursor>
                         <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </JFXButton>
-                  <JFXButton fx:id="btnInvoiceReset" buttonType="RAISED" layoutX="386.0" layoutY="2668.0" onAction="#invoice_reset_button_action" prefHeight="50.0" prefWidth="200.0" ripplerFill="#6465a5" style="-fx-background-color: #6465a5;" text="Khôi phục hóa đơn" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                     <cursor>
+                    </cursor>
+                </JFXButton>
+                <JFXTreeTableView fx:id="tblSearchCustomerInfoResult" editable="true" layoutX="14.0" layoutY="243.0" prefHeight="400.0" prefWidth="1086.0" stylesheets="@../../styles/components.css" tableMenuButtonVisible="true">
+                    <columns>
+                        <TreeTableColumn fx:id="tblSearchCustomerInfoResult_index" prefWidth="40.0" style="-fx-alignment: CENTER;" text="STT" />
+                        <TreeTableColumn fx:id="tblSearchCustomerInfoResult_name" prefWidth="184.0" text="Họ và tên" />
+                        <TreeTableColumn fx:id="tblSearchCustomerInfoResult_phone_number" prefWidth="139.0" text="Số điện thoại" />
+                        <TreeTableColumn fx:id="tblSearchCustomerInfoResult_trip" prefWidth="229.0" text="Chuyến đi" />
+                        <TreeTableColumn fx:id="tblSearchCustomerInfoResult_tickets" prefWidth="51.0" style="-fx-alignment: CENTER;" text="Số vé" />
+                        <TreeTableColumn fx:id="tblSearchCustomerInfoResult_payment_status" prefWidth="167.0" text="Tình trạng thanh toán" />
+                        <TreeTableColumn fx:id="tblSearchCustomerInfoResult_start_date" prefWidth="125.0" style="-fx-alignment: CENTER;" text="Ngày khởi hành" />
+                        <TreeTableColumn fx:id="tblSearchCustomerInfoResult_added_date" prefWidth="133.0" style="-fx-alignment: CENTER;" text="Ngày thêm" />
+                    </columns>
+                </JFXTreeTableView>
+                <Label fx:id="lblSearchCustomerInfo_result_count" layoutX="252.0" layoutY="213.0" opacity="0.0" prefHeight="30.0" prefWidth="610.0" textFill="#193441">
+                    <font>
+                        <Font name="System Italic" size="14.0" />
+                    </font>
+                </Label>
+                <Label fx:id="lblSearchCustomerInfo_filter" layoutX="36.0" layoutY="263.0" opacity="0.0" prefHeight="50.0" prefWidth="420.0" text="Bộ lọc kết quả tìm kiếm:" textFill="#193441">
+                    <font>
+                        <Font name="System Italic" size="18.0" />
+                    </font>
+                </Label>
+                <JFXTextField fx:id="txtSearchCustomerInfo_filter" focusColor="#193441" layoutX="36.0" layoutY="313.0" opacity="0.0" prefHeight="50.0" prefWidth="610.0" promptText="Nhập tên, hoặc số điện thoại khách hàng, hoặc ngày thêm dưới định dạng dd-MM-yyyy" unFocusColor="#3e606f">
+                    <cursor>
+                        <Cursor fx:constant="TEXT" />
+                    </cursor>
+                </JFXTextField>
+            </children>
+        </AnchorPane>
+        <ScrollPane fx:id="editInvoiceScrollPane" layoutX="60.0" layoutY="800.0" prefHeight="800.0" prefWidth="1140.0" style="-fx-background-color: #fcfff5;">
+            <content>
+                <AnchorPane fx:id="editInvoiceAnchorPane" minHeight="0.0" minWidth="0.0" prefHeight="3000.0" prefWidth="1120.0" style="-fx-background-color: #fcfff5;">
+                    <children>
+                        <Label layoutX="150.0" layoutY="90.0" prefHeight="50.0" prefWidth="420.0" text="Thông tin hóa đơn của khách hàng:" textFill="#3e606f">
+                            <font>
+                                <Font name="System Bold" size="24.0" />
+                            </font>
+                        </Label>
+                        <Label fx:id="lblInvoiceName" layoutX="570.0" layoutY="90.0" prefHeight="50.0" prefWidth="400.0">
+                            <font>
+                                <Font size="24.0" />
+                            </font>
+                        </Label>
+                        <Label layoutX="310.0" layoutY="206.0" text="Họ và tên:" textFill="#193441">
+                            <font>
+                                <Font name="System Bold Italic" size="18.0" />
+                            </font>
+                        </Label>
+                        <JFXTextField fx:id="txtInvoiceName" layoutX="310.0" layoutY="233.0" prefHeight="50.0" prefWidth="500.0" />
+                        <Label layoutX="310.0" layoutY="323.0" text="Số điện thoại:" textFill="#193441">
+                            <font>
+                                <Font name="System Bold Italic" size="18.0" />
+                            </font>
+                        </Label>
+                        <JFXTextField fx:id="txtInvoicePhoneNumber" layoutX="310.0" layoutY="350.0" prefHeight="50.0" prefWidth="500.0" />
+                        <Label layoutX="310.0" layoutY="440.0" text="Chuyến đi: (Không thay đổi mục này)" textFill="#193441">
+                            <font>
+                                <Font name="System Bold Italic" size="18.0" />
+                            </font>
+                        </Label>
+                        <JFXTextField fx:id="txtInvoiceTrip" editable="false" layoutX="310.0" layoutY="467.0" prefHeight="50.0" prefWidth="500.0" />
+                        <Label fx:id="lblInvoiceNameMessage" layoutX="310.0" layoutY="283.0" prefHeight="40.0" prefWidth="500.0" textFill="RED">
+                            <font>
+                                <Font name="System Bold Italic" size="15.0" />
+                            </font>
+                        </Label>
+                        <Label fx:id="lblInvoicePhoneNumberMessage" layoutX="310.0" layoutY="400.0" prefHeight="40.0" prefWidth="500.0" textFill="RED">
+                            <font>
+                                <Font name="System Bold Italic" size="15.0" />
+                            </font>
+                        </Label>
+                        <Label fx:id="lblInvoiceTripMessage" layoutX="310.0" layoutY="517.0" prefHeight="40.0" prefWidth="500.0" />
+                        <Label layoutX="310.0" layoutY="557.0" text="Trạm khởi hành:  (Không thay đổi mục này)" textFill="#193441">
+                            <font>
+                                <Font name="System Bold Italic" size="18.0" />
+                            </font>
+                        </Label>
+                        <Label fx:id="lblInvoiceDepartureMessage" layoutX="310.0" layoutY="634.0" prefHeight="40.0" prefWidth="500.0" />
+                        <Label layoutX="310.0" layoutY="674.0" text="Trạm kết thúc:  (Không thay đổi mục này)" textFill="#193441">
+                            <font>
+                                <Font name="System Bold Italic" size="18.0" />
+                            </font>
+                        </Label>
+                        <Label fx:id="lblInvoiceDestinationMessage" layoutX="310.0" layoutY="751.0" prefHeight="40.0" prefWidth="500.0" />
+                        <Label layoutX="310.0" layoutY="791.0" text="Ngày-giờ khởi hành:  (Không thay đổi mục này)" textFill="#193441">
+                            <font>
+                                <Font name="System Bold Italic" size="18.0" />
+                            </font>
+                        </Label>
+                        <Label fx:id="lblInvoiceStartTimeMessage" layoutX="310.0" layoutY="868.0" prefHeight="40.0" prefWidth="500.0" />
+                        <Label layoutX="310.0" layoutY="908.0" text="Ngày-giờ kết thúc (dự kiến):  (Không thay đổi mục này)" textFill="#193441">
+                            <font>
+                                <Font name="System Bold Italic" size="18.0" />
+                            </font>
+                        </Label>
+                        <Label fx:id="lblInvoiceEndTimeMessage" layoutX="310.0" layoutY="985.0" prefHeight="40.0" prefWidth="500.0" />
+                        <Label layoutX="310.0" layoutY="1025.0" text="Số vé đã đặt:  (Không thay đổi mục này)" textFill="#193441">
+                            <font>
+                                <Font name="System Bold Italic" size="18.0" />
+                            </font>
+                        </Label>
+                        <JFXTextField fx:id="txtInvoiceNumberOfTickets" editable="false" layoutX="310.0" layoutY="1052.0" prefHeight="50.0" prefWidth="500.0" />
+                        <Label fx:id="lblNumberOfTicketsMessage" layoutX="310.0" layoutY="1102.0" prefHeight="40.0" prefWidth="500.0" />
+                        <Label layoutX="310.0" layoutY="1142.0" text="Sơ đồ ghế ngồi:" textFill="#193441">
+                            <font>
+                                <Font name="System Bold Italic" size="18.0" />
+                            </font>
+                        </Label>
+                        <Label layoutX="310.0" layoutY="1812.0" text="Chi tiết ghế ngồi:" textFill="#193441">
+                            <font>
+                                <Font name="System Bold Italic" size="18.0" />
+                            </font>
+                        </Label>
+                        <Label layoutX="310.0" layoutY="2207.0" text="Tổng tiền thanh toán:  (Không thay đổi mục này)" textFill="#193441">
+                            <font>
+                                <Font name="System Bold Italic" size="18.0" />
+                            </font>
+                        </Label>
+                        <JFXTextField fx:id="txtInvoiceTotalPrice" editable="false" layoutX="310.0" layoutY="2234.0" prefHeight="50.0" prefWidth="500.0" />
+                        <Label fx:id="lblTotalPriceMessage" layoutX="310.0" layoutY="1408.0" prefHeight="40.0" prefWidth="500.0" />
+                        <Label layoutX="310.0" layoutY="2324.0" text="Trạng thái thanh toán:  (Không thay đổi mục này)" textFill="#193441">
+                            <font>
+                                <Font name="System Bold Italic" size="18.0" />
+                            </font>
+                        </Label>
+                        <JFXTextField fx:id="txtInvoicePaymentStatus" editable="false" layoutX="310.0" layoutY="2351.0" prefHeight="50.0" prefWidth="500.0">
+                            <font>
+                                <Font name="System Bold" size="15.0" />
+                            </font>
+                        </JFXTextField>
+                        <Label fx:id="lblPaymentStatusMessage" layoutX="310.0" layoutY="1525.0" prefHeight="40.0" prefWidth="500.0" />
+                        <JFXDatePicker fx:id="txtInvoiceStartDate" editable="false" layoutX="541.0" layoutY="818.0" prefHeight="50.0" />
+                        <JFXTimePicker fx:id="txtInvoiceStartTime" layoutX="310.0" layoutY="818.0" prefHeight="50.0" />
+                        <JFXDatePicker fx:id="txtInvoiceEndDate" editable="false" layoutX="541.0" layoutY="935.0" prefHeight="50.0" />
+                        <JFXTimePicker fx:id="txtInvoiceEndTime" layoutX="310.0" layoutY="935.0" prefHeight="50.0" />
+                        <JFXButton fx:id="btnInvoiceClose" contentDisplay="GRAPHIC_ONLY" layoutX="1020.0" layoutY="32.0" onAction="#invoice_close_button_action" prefHeight="30.0" prefWidth="30.0">
+                            <graphic>
+                                <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../../icon/ContentIcon/close.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                            <cursor>
+                                <Cursor fx:constant="HAND" />
+                            </cursor>
+                        </JFXButton>
+                        <JFXTextField fx:id="txtInvoiceDeparture" editable="false" layoutX="310.0" layoutY="584.0" prefHeight="50.0" prefWidth="500.0" />
+                        <JFXTextField fx:id="txtInvoiceDestination" editable="false" layoutX="310.0" layoutY="701.0" prefHeight="50.0" prefWidth="500.0" />
+                        <JFXTreeTableView fx:id="tblEditInvoice" layoutX="310.0" layoutY="1839.0" prefHeight="316.0" prefWidth="500.0" stylesheets="@../../styles/components.css">
+                            <columns>
+                                <TreeTableColumn fx:id="tblEditInvoice_Index" prefWidth="48.0" style="-fx-alignment: CENTER;" text="STT" />
+                                <TreeTableColumn fx:id="tblEditInvoice_TicketName" prefWidth="155.0" style="-fx-alignment: CENTER;" text="Tên vé" />
+                                <TreeTableColumn fx:id="tblEditInvoice_Quantity" prefWidth="78.0" style="-fx-alignment: CENTER;" text="Số lượng" />
+                                <TreeTableColumn fx:id="tblEditInvoice_SeatNumber" prefWidth="92.0" style="-fx-alignment: CENTER;" text="Mã số ghế" />
+                                <TreeTableColumn fx:id="tblEditInvoice_Price" prefWidth="126.0" style="-fx-alignment: CENTER;" text="Giá tiền" />
+                            </columns>
+                        </JFXTreeTableView>
+                        <Label layoutX="310.0" layoutY="2438.0" text="Biển số xe:  (Không thay đổi mục này)" textFill="#193441">
+                            <font>
+                                <Font name="System Bold Italic" size="18.0" />
+                            </font>
+                        </Label>
+                        <JFXButton fx:id="btnInvoiceCheckOut" buttonType="RAISED" layoutX="610.0" layoutY="2564.0" onAction="#invoice_check_out_button_action" prefHeight="50.0" prefWidth="200.0" ripplerFill="#182657" style="-fx-background-color: #182657;" text="Thanh toán" textFill="WHITE">
+                            <font>
+                                <Font name="System Bold" size="18.0" />
+                            </font>
+                            <cursor>
+                                <Cursor fx:constant="HAND" />
+                            </cursor>
+                        </JFXButton>
+                        <JFXButton fx:id="btnInvoiceUpdate" buttonType="RAISED" layoutX="386.0" layoutY="2564.0" onAction="#update_invoice_button_action" prefHeight="50.0" prefWidth="200.0" ripplerFill="#f05837" style="-fx-background-color: #f05837;" text="Cập nhật" textFill="WHITE">
+                            <font>
+                                <Font name="System Bold" size="18.0" />
+                            </font>
+                            <cursor>
+                                <Cursor fx:constant="HAND" />
+                            </cursor>
+                        </JFXButton>
+                        <JFXTextField fx:id="txtInvoiceNumberPlate" editable="false" layoutX="310.0" layoutY="2465.0" prefHeight="50.0" prefWidth="500.0">
+                            <font>
+                                <Font name="System Bold" size="15.0" />
+                            </font>
+                        </JFXTextField>
+                        <AnchorPane fx:id="paneSeatPlane" disable="true" layoutX="310.0" layoutY="1191.0" prefHeight="533.0" prefWidth="500.0" style="-fx-background-color: white;">
+                            <effect>
+                                <DropShadow />
+                            </effect>
+                            <children>
+                                <JFXCheckBox fx:id="cbSeat1" layoutX="39.0" layoutY="60.0" text="01" />
+                                <JFXCheckBox fx:id="cbSeat2" layoutX="39.0" layoutY="98.0" text="02" />
+                                <JFXCheckBox fx:id="cbSeat3" layoutX="39.0" layoutY="135.0" text="03" />
+                                <JFXCheckBox fx:id="cbSeat4" layoutX="39.0" layoutY="172.0" text="04" />
+                                <JFXCheckBox fx:id="cbSeat5" layoutX="39.0" layoutY="212.0" prefHeight="21.0" prefWidth="36.0" text="05" />
+                                <JFXCheckBox fx:id="cbSeat6" layoutX="39.0" layoutY="251.0" text="06" />
+                                <JFXCheckBox fx:id="cbSeat7" layoutX="39.0" layoutY="293.0" text="07" />
+                                <JFXCheckBox fx:id="cbSeat8" layoutX="39.0" layoutY="338.0" text="08" />
+                                <JFXCheckBox fx:id="cbSeat9" layoutX="39.0" layoutY="379.0" text="09" />
+                                <JFXCheckBox fx:id="cbSeat10" layoutX="39.0" layoutY="424.0" text="10" />
+                                <JFXCheckBox fx:id="cbSeat11" layoutX="135.0" layoutY="60.0" text="11" />
+                                <JFXCheckBox fx:id="cbSeat12" layoutX="135.0" layoutY="98.0" text="12" />
+                                <JFXCheckBox fx:id="cbSeat13" layoutX="135.0" layoutY="135.0" text="13" />
+                                <JFXCheckBox fx:id="cbSeat14" layoutX="135.0" layoutY="172.0" text="14" />
+                                <JFXCheckBox fx:id="cbSeat15" layoutX="135.0" layoutY="212.0" prefHeight="21.0" prefWidth="36.0" text="15" />
+                                <JFXCheckBox fx:id="cbSeat16" layoutX="135.0" layoutY="251.0" text="16" />
+                                <JFXCheckBox fx:id="cbSeat17" layoutX="135.0" layoutY="293.0" text="17" />
+                                <JFXCheckBox fx:id="cbSeat18" layoutX="135.0" layoutY="338.0" text="18" />
+                                <JFXCheckBox fx:id="cbSeat19" layoutX="135.0" layoutY="379.0" text="19" />
+                                <JFXCheckBox fx:id="cbSeat20" layoutX="135.0" layoutY="424.0" text="20" />
+                                <JFXCheckBox fx:id="cbSeat21" layoutX="321.0" layoutY="58.0" text="21" />
+                                <JFXCheckBox fx:id="cbSeat22" layoutX="321.0" layoutY="96.0" text="22" />
+                                <JFXCheckBox fx:id="cbSeat23" layoutX="321.0" layoutY="133.0" text="23" />
+                                <JFXCheckBox fx:id="cbSeat24" layoutX="321.0" layoutY="170.0" text="24" />
+                                <JFXCheckBox fx:id="cbSeat25" layoutX="321.0" layoutY="210.0" prefHeight="21.0" prefWidth="36.0" text="25" />
+                                <JFXCheckBox fx:id="cbSeat26" layoutX="321.0" layoutY="249.0" text="26" />
+                                <JFXCheckBox fx:id="cbSeat27" layoutX="321.0" layoutY="291.0" text="27" />
+                                <JFXCheckBox fx:id="cbSeat28" layoutX="321.0" layoutY="336.0" text="28" />
+                                <JFXCheckBox fx:id="cbSeat29" layoutX="321.0" layoutY="377.0" text="29" />
+                                <JFXCheckBox fx:id="cbSeat30" layoutX="321.0" layoutY="422.0" text="30" />
+                                <JFXCheckBox fx:id="cbSeat31" layoutX="417.0" layoutY="58.0" text="31" />
+                                <JFXCheckBox fx:id="cbSeat32" layoutX="417.0" layoutY="96.0" text="32" />
+                                <JFXCheckBox fx:id="cbSeat33" layoutX="417.0" layoutY="133.0" text="33" />
+                                <JFXCheckBox fx:id="cbSeat34" layoutX="417.0" layoutY="170.0" text="34" />
+                                <JFXCheckBox fx:id="cbSeat35" layoutX="417.0" layoutY="210.0" prefHeight="21.0" prefWidth="36.0" text="35" />
+                                <JFXCheckBox fx:id="cbSeat36" layoutX="417.0" layoutY="249.0" text="36" />
+                                <JFXCheckBox fx:id="cbSeat37" layoutX="417.0" layoutY="291.0" text="37" />
+                                <JFXCheckBox fx:id="cbSeat38" layoutX="417.0" layoutY="336.0" text="38" />
+                                <JFXCheckBox fx:id="cbSeat39" layoutX="417.0" layoutY="377.0" text="39" />
+                                <JFXCheckBox fx:id="cbSeat40" layoutX="417.0" layoutY="422.0" text="40" />
+                                <JFXCheckBox fx:id="cbSeat45" layoutX="39.0" layoutY="462.0" text="45" />
+                                <JFXCheckBox fx:id="cbSeat44" layoutX="135.0" layoutY="462.0" text="44" />
+                                <JFXCheckBox fx:id="cbSeat42" layoutX="321.0" layoutY="460.0" text="42" />
+                                <JFXCheckBox fx:id="cbSeat41" layoutX="417.0" layoutY="460.0" text="41" />
+                                <JFXCheckBox fx:id="cbSeat43" layoutX="228.0" layoutY="462.0" text="43" />
+                            </children>
+                        </AnchorPane>
+                        <ImageView fx:id="iconInvoiceName" fitHeight="30.0" fitWidth="30.0" layoutX="810.0" layoutY="243.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                            <image>
+                                <Image url="@../../icon/ContentIcon/attention-sign-outline.png" />
+                            </image>
+                        </ImageView>
+                        <ImageView fx:id="iconInvoicePhoneNumber" fitHeight="30.0" fitWidth="30.0" layoutX="810.0" layoutY="360.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                            <image>
+                                <Image url="@../../icon/ContentIcon/attention-sign-outline.png" />
+                            </image>
+                        </ImageView>
+                        <JFXButton fx:id="btnInvoiceDelete" buttonType="RAISED" layoutX="610.0" layoutY="2668.0" onAction="#invoice_delete_button_action" prefHeight="50.0" prefWidth="200.0" ripplerFill="#a7414a" style="-fx-background-color: #a7414a;" text="Xóa hóa đơn" textFill="WHITE">
+                            <font>
+                                <Font name="System Bold" size="18.0" />
+                            </font>
+                            <cursor>
+                                <Cursor fx:constant="HAND" />
+                            </cursor>
+                        </JFXButton>
+                        <JFXButton fx:id="btnInvoiceReset" buttonType="RAISED" layoutX="386.0" layoutY="2668.0" onAction="#invoice_reset_button_action" prefHeight="50.0" prefWidth="200.0" ripplerFill="#6465a5" style="-fx-background-color: #6465a5;" text="Khôi phục hóa đơn" textFill="WHITE">
+                            <font>
+                                <Font name="System Bold" size="18.0" />
+                            </font>
+                            <cursor>
+                                <Cursor fx:constant="HAND" />
+                            </cursor>
+                        </JFXButton>
+                        <Label layoutX="348.0" layoutY="1199.0" text="Tài xế">
+                            <font>
+                                <Font name="System Bold" size="18.0" />
+                            </font>
+                        </Label>
+                        <Label layoutX="725.0" layoutY="1199.0" text="Cửa lên">
+                            <font>
+                                <Font name="System Bold" size="18.0" />
+                            </font>
+                        </Label>
+                        <JFXCheckBox layoutX="853.0" layoutY="1349.0" selected="true" text="Ghế khách hàng đặt" />
+                        <JFXCheckBox disable="true" layoutX="853.0" layoutY="1304.0" text="Đã đặt" />
+                        <JFXCheckBox layoutX="853.0" layoutY="1258.0" text="Ghế trống" />
+                        <Label layoutX="884.0" layoutY="1199.0" text="Chú thích">
+                            <font>
+                                <Font name="System Bold" size="18.0" />
+                            </font>
+                        </Label>
+                        <AnchorPane layoutX="825.0" layoutY="1191.0" prefHeight="206.0" prefWidth="207.0" style="-fx-border-color: black; -fx-background-color: transparent;" />
+                    </children>
+                </AnchorPane>
+            </content>
+        </ScrollPane>
+        <AnchorPane fx:id="side_menu_bar" prefHeight="800.0" prefWidth="60.0" style="-fx-background-color: white;">
+            <children>
+                <JFXHamburger fx:id="btnMenu_Side" prefHeight="55.0" prefWidth="60.0">
+                    <cursor>
                         <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </JFXButton>
-                  <Label layoutX="348.0" layoutY="1199.0" text="Tài xế">
-                     <font>
+                    </cursor>
+                </JFXHamburger>
+                <Rectangle fx:id="btnCustomerInfo_Side_Background" fill="WHITE" height="55.0" layoutY="101.0" stroke="BLACK" strokeMiterLimit="0.0" strokeType="INSIDE" strokeWidth="0.0" width="60.0" />
+                <Rectangle fx:id="btnLockScreen_Side_Background" fill="WHITE" height="55.0" layoutY="181.0" stroke="BLACK" strokeMiterLimit="0.0" strokeType="INSIDE" strokeWidth="0.0" width="60.0" />
+                <Rectangle fx:id="btnLogOut_Side_Background" fill="WHITE" height="55.0" layoutY="261.0" stroke="BLACK" strokeMiterLimit="0.0" strokeType="INSIDE" strokeWidth="0.0" width="60.0" />
+                <JFXButton fx:id="btnCustomerInfo_Side" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" layoutY="101.0" prefHeight="55.0" prefWidth="60.0" ripplerFill="WHITE" style="-fx-background-color: transparent;" text="CustomerInfo">
+                    <graphic>
+                        <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../../icon/SideMenuIcon/customer_info.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </JFXButton>
+                <JFXButton fx:id="btnLockScreen_Side" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" layoutY="181.0" onAction="#lock_screen_button_action" prefHeight="55.0" prefWidth="60.0" ripplerFill="WHITE" text="LockScreen">
+                    <graphic>
+                        <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../../icon/SideMenuIcon/lock_screen.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </JFXButton>
+                <JFXButton fx:id="btnLogOut_Side" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" layoutY="261.0" prefHeight="55.0" prefWidth="60.0" ripplerFill="WHITE" text="LogOut">
+                    <graphic>
+                        <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../../icon/SideMenuIcon/log_out.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                    <padding>
+                        <Insets left="5.0" />
+                    </padding>
+                </JFXButton>
+            </children>
+            <effect>
+                <DropShadow />
+            </effect>
+        </AnchorPane>
+        <AnchorPane fx:id="side_menu_expand_container" layoutX="-305.0" prefHeight="800.0" prefWidth="300.0" style="-fx-background-color: white;">
+            <children>
+                <JFXHamburger fx:id="btnMenu" alignment="CENTER_RIGHT" prefHeight="55.0" prefWidth="300.0">
+                    <padding>
+                        <Insets right="14.0" />
+                    </padding>
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </JFXHamburger>
+                <Rectangle fx:id="btnCustomerInfo_Background" fill="WHITE" height="55.0" layoutY="101.0" stroke="BLACK" strokeMiterLimit="0.0" strokeType="INSIDE" strokeWidth="0.0" width="300.0" />
+                <Rectangle fx:id="btnLockScreen_Background" fill="WHITE" height="55.0" layoutY="181.0" stroke="BLACK" strokeMiterLimit="0.0" strokeType="INSIDE" strokeWidth="0.0" width="300.0" />
+                <Rectangle fx:id="btnLogOut_Background" fill="WHITE" height="55.0" layoutY="261.0" stroke="BLACK" strokeMiterLimit="0.0" strokeType="INSIDE" strokeWidth="0.0" width="300.0" />
+                <JFXButton fx:id="btnCustomerInfo" alignment="BASELINE_LEFT" graphicTextGap="20.0" layoutY="101.0" prefHeight="55.0" prefWidth="300.0" ripplerFill="WHITE" text="Thông tin khách hàng">
+                    <graphic>
+                        <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../../icon/SideMenuIcon/customer_info.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                    <padding>
+                        <Insets left="35.0" />
+                    </padding>
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </JFXButton>
+                <JFXButton fx:id="btnLockScreen" alignment="BASELINE_LEFT" graphicTextGap="20.0" layoutY="181.0" onAction="#lock_screen_button_action" prefHeight="55.0" prefWidth="300.0" ripplerFill="WHITE" text="Khóa màn hình">
+                    <graphic>
+                        <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../../icon/SideMenuIcon/lock_screen.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                    <padding>
+                        <Insets left="35.0" />
+                    </padding>
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </JFXButton>
+                <JFXButton fx:id="btnLogOut" alignment="BASELINE_LEFT" graphicTextGap="15.0" layoutY="261.0" prefHeight="55.0" prefWidth="300.0" ripplerFill="WHITE" text="Đăng xuất">
+                    <graphic>
+                        <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../../icon/SideMenuIcon/log_out.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                    <padding>
+                        <Insets left="40.0" />
+                    </padding>
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </JFXButton>
+                <ImageView fitHeight="184.6" fitWidth="200.0" layoutX="50.0" layoutY="590.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../../icon/SideMenuIcon/LOGO.png" />
+                    </image>
+                </ImageView>
+            </children>
+            <effect>
+                <DropShadow />
+            </effect>
+        </AnchorPane>
+        <AnchorPane fx:id="paneLockScreen" opacity="0.0" prefHeight="800.0" prefWidth="1200.0">
+            <children>
+                <Rectangle fill="#000000cd" height="800.0" stroke="BLACK" strokeMiterLimit="0.0" strokeType="INSIDE" strokeWidth="0.0" width="1200.0" />
+                <Circle fill="#ffffff00" layoutX="600.0" layoutY="174.0" radius="100.0" stroke="WHITE" strokeType="OUTSIDE" strokeWidth="3.0" />
+                <ImageView fitHeight="120.0" fitWidth="120.0" layoutX="540.0" layoutY="114.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../../icon/ContentIcon/user_lock_screen.png" />
+                    </image>
+                </ImageView>
+                <Rectangle arcHeight="30.0" arcWidth="30.0" fill="#ffffff56" height="53.0" layoutX="435.0" layoutY="416.0" stroke="WHITE" strokeType="OUTSIDE" width="50.0">
+                    <effect>
+                        <DropShadow />
+                    </effect>
+                </Rectangle>
+                <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="448.0" layoutY="340.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../../icon/ContentIcon/username_icon.png" />
+                    </image>
+                </ImageView>
+                <Rectangle arcHeight="30.0" arcWidth="30.0" fill="#ffffff56" height="53.0" layoutX="435.0" layoutY="326.0" stroke="WHITE" strokeType="OUTSIDE" width="50.0">
+                    <effect>
+                        <DropShadow />
+                    </effect>
+                </Rectangle>
+                <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="448.0" layoutY="430.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../../icon/ContentIcon/password_icon.png" />
+                    </image>
+                </ImageView>
+                <JFXTextField fx:id="txtUsername" editable="false" focusColor="#ffffff00" layoutX="434.0" layoutY="324.0" prefHeight="56.0" prefWidth="350.0" promptText="Tên đăng nhập" style="-fx-border-width: 2; -fx-border-radius: 15; -fx-border-color: lightgray; -fx-text-fill: white;" unFocusColor="#ffffff00">
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                    <padding>
+                        <Insets left="70.0" />
+                    </padding>
+                </JFXTextField>
+                <JFXPasswordField fx:id="txtPassword" focusColor="#ffffff00" layoutX="434.0" layoutY="414.0" prefHeight="56.0" prefWidth="350.0" promptText="Mật khẩu" style="-fx-border-width: 2; -fx-border-radius: 15; -fx-border-color: lightgray; -fx-text-fill: white;" unFocusColor="#ffffff00">
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                    <padding>
+                        <Insets left="70.0" />
+                    </padding>
+                </JFXPasswordField>
+                <JFXButton fx:id="btnUnlockScreen" buttonType="RAISED" layoutX="616.0" layoutY="503.0" onAction="#unlock_screen_button_action" prefHeight="50.0" prefWidth="167.0" style="-fx-background-color: darkgreen; -fx-border-width: 1; -fx-border-color: white;" text="Đăng nhập" textFill="WHITE">
+                    <font>
                         <Font name="System Bold" size="18.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="725.0" layoutY="1199.0" text="Cửa lên">
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                  </Label>
-                  <JFXCheckBox layoutX="853.0" layoutY="1349.0" selected="true" text="Ghế khách hàng đặt" />
-                  <JFXCheckBox disable="true" layoutX="853.0" layoutY="1304.0" text="Đã đặt" />
-                  <JFXCheckBox layoutX="853.0" layoutY="1258.0" text="Ghế trống" />
-                  <Label layoutX="884.0" layoutY="1199.0" text="Chú thích">
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                  </Label>
-                  <AnchorPane layoutX="825.0" layoutY="1191.0" prefHeight="206.0" prefWidth="207.0" style="-fx-border-color: black; -fx-background-color: transparent;" />
-               </children>
-            </AnchorPane>
-        </content>
-      </ScrollPane>
-      <AnchorPane fx:id="side_menu_bar" prefHeight="800.0" prefWidth="60.0" style="-fx-background-color: white;">
-         <children>
-            <JFXHamburger fx:id="btnMenu_Side" prefHeight="55.0" prefWidth="60.0">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </JFXHamburger>
-            <Rectangle fx:id="btnCustomerInfo_Side_Background" fill="WHITE" height="55.0" layoutY="101.0" stroke="BLACK" strokeMiterLimit="0.0" strokeType="INSIDE" strokeWidth="0.0" width="60.0" />
-            <Rectangle fx:id="btnLockScreen_Side_Background" fill="WHITE" height="55.0" layoutY="181.0" stroke="BLACK" strokeMiterLimit="0.0" strokeType="INSIDE" strokeWidth="0.0" width="60.0" />
-            <Rectangle fx:id="btnLogOut_Side_Background" fill="WHITE" height="55.0" layoutY="261.0" stroke="BLACK" strokeMiterLimit="0.0" strokeType="INSIDE" strokeWidth="0.0" width="60.0" />
-            <JFXButton fx:id="btnCustomerInfo_Side" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" layoutY="101.0" prefHeight="55.0" prefWidth="60.0" ripplerFill="WHITE" style="-fx-background-color: transparent;" text="CustomerInfo">
-               <graphic>
-                  <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../icon/SideMenuIcon/customer_info.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </JFXButton>
-            <JFXButton fx:id="btnLockScreen_Side" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" layoutY="181.0" prefHeight="55.0" prefWidth="60.0" ripplerFill="WHITE" text="LockScreen">
-               <graphic>
-                  <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../icon/SideMenuIcon/lock_screen.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </JFXButton>
-            <JFXButton fx:id="btnLogOut_Side" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" layoutY="261.0" prefHeight="55.0" prefWidth="60.0" ripplerFill="WHITE" text="LogOut">
-               <graphic>
-                  <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../icon/SideMenuIcon/log_out.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-               <padding>
-                  <Insets left="5.0" />
-               </padding>
-            </JFXButton>
-         </children>
-         <effect>
-            <DropShadow />
-         </effect>
-      </AnchorPane>
-      <AnchorPane fx:id="side_menu_expand_container" layoutX="-305.0" prefHeight="800.0" prefWidth="300.0" style="-fx-background-color: white;">
-         <children>
-            <JFXHamburger fx:id="btnMenu" alignment="CENTER_RIGHT" prefHeight="55.0" prefWidth="300.0">
-               <padding>
-                  <Insets right="14.0" />
-               </padding>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </JFXHamburger>
-            <Rectangle fx:id="btnCustomerInfo_Background" fill="WHITE" height="55.0" layoutY="101.0" stroke="BLACK" strokeMiterLimit="0.0" strokeType="INSIDE" strokeWidth="0.0" width="300.0" />
-            <Rectangle fx:id="btnLockScreen_Background" fill="WHITE" height="55.0" layoutY="181.0" stroke="BLACK" strokeMiterLimit="0.0" strokeType="INSIDE" strokeWidth="0.0" width="300.0" />
-            <Rectangle fx:id="btnLogOut_Background" fill="WHITE" height="55.0" layoutY="261.0" stroke="BLACK" strokeMiterLimit="0.0" strokeType="INSIDE" strokeWidth="0.0" width="300.0" />
-            <JFXButton fx:id="btnCustomerInfo" alignment="BASELINE_LEFT" graphicTextGap="20.0" layoutY="101.0" prefHeight="55.0" prefWidth="300.0" ripplerFill="WHITE" text="Thông tin khách hàng">
-               <graphic>
-                  <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../icon/SideMenuIcon/customer_info.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-               <padding>
-                  <Insets left="35.0" />
-               </padding>
-               <font>
-                  <Font size="18.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </JFXButton>
-            <JFXButton fx:id="btnLockScreen" alignment="BASELINE_LEFT" graphicTextGap="20.0" layoutY="181.0" prefHeight="55.0" prefWidth="300.0" ripplerFill="WHITE" text="Khóa màn hình">
-               <graphic>
-                  <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../icon/SideMenuIcon/lock_screen.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-               <padding>
-                  <Insets left="35.0" />
-               </padding>
-               <font>
-                  <Font size="18.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </JFXButton>
-            <JFXButton fx:id="btnLogOut" alignment="BASELINE_LEFT" graphicTextGap="15.0" layoutY="261.0" prefHeight="55.0" prefWidth="300.0" ripplerFill="WHITE" text="Đăng xuất">
-               <graphic>
-                  <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../icon/SideMenuIcon/log_out.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-               <padding>
-                  <Insets left="40.0" />
-               </padding>
-               <font>
-                  <Font size="18.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </JFXButton>
-            <ImageView fitHeight="184.6" fitWidth="200.0" layoutX="50.0" layoutY="590.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../icon/SideMenuIcon/LOGO.png" />
-               </image>
-            </ImageView>
-         </children>
-         <effect>
-            <DropShadow />
-         </effect>
-      </AnchorPane>
-   </children>
+                    </font>
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </JFXButton>
+                <Hyperlink fx:id="link_login_with_another_account" alignment="CENTER_RIGHT" layoutX="537.0" layoutY="575.0" onAction="#login_with_another_account_action" prefHeight="29.0" prefWidth="246.0" text="Đăng nhập bằng tài khoản khác" textAlignment="RIGHT" textFill="WHITE">
+                    <font>
+                        <Font name="System Bold Italic" size="15.0" />
+                    </font>
+                </Hyperlink>
+            </children>
+        </AnchorPane>
+    </children>
 </AnchorPane>
