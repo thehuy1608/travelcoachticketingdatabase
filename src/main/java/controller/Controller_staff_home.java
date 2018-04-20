@@ -5,6 +5,7 @@
  */
 package controller;
 
+import application.ApplicationConfiguration;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXDatePicker;
@@ -76,6 +77,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import javafx.util.StringConverter;
@@ -1537,6 +1539,42 @@ public class Controller_staff_home implements Initializable, Serializable {
 
     @FXML
     private void login_with_another_account_action(ActionEvent event) {
+        Alert logout_alert = new Alert(AlertType.CONFIRMATION);
+        logout_alert.getDialogPane().getScene().getWindow().setOnCloseRequest(event_close -> event_close.consume());
+        logout_alert.setTitle("ĐĂNG XUẤT");
+        logout_alert.setHeaderText("Bạn có chắc chắn muốn đăng nhập bằng tài khoản khác không?");
+        logout_alert.setContentText(null);
+        Optional<ButtonType> logout_alert_action = logout_alert.showAndWait();
+        if (logout_alert_action.get() == ButtonType.OK) {
+            Stage current_stage = (Stage) rootPane.getScene().getWindow();
+            ApplicationConfiguration app_config = new ApplicationConfiguration();
+            try {
+                app_config.configure_stage(current_stage, "/view/fxml/staff/login_stage.fxml", "Minh Nhut Corporation", 1200, 800);
+            } catch (IOException ex) {
+                Logger.getLogger(Controller_login_stage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            current_stage.show();
+        }
+    }
+
+    @FXML
+    private void logout_button_action(ActionEvent event) {
+        Alert logout_alert = new Alert(AlertType.CONFIRMATION);
+        logout_alert.getDialogPane().getScene().getWindow().setOnCloseRequest(event_close -> event_close.consume());
+        logout_alert.setTitle("ĐĂNG XUẤT");
+        logout_alert.setHeaderText("Bạn có chắc chắn muốn đăng xuất không?");
+        logout_alert.setContentText(null);
+        Optional<ButtonType> logout_alert_action = logout_alert.showAndWait();
+        if (logout_alert_action.get() == ButtonType.OK) {
+            Stage current_stage = (Stage) rootPane.getScene().getWindow();
+            ApplicationConfiguration app_config = new ApplicationConfiguration();
+            try {
+                app_config.configure_stage(current_stage, "/view/fxml/staff/login_stage.fxml", "Minh Nhut Corporation", 1200, 800);
+            } catch (IOException ex) {
+                Logger.getLogger(Controller_login_stage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            current_stage.show();
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="Effects APIs">

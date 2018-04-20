@@ -25,7 +25,7 @@
 
 <AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="800.0" prefWidth="1200.0" styleClass="application_container" stylesheets="@../../styles/components.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller_staff_home">
     <children>
-        <AnchorPane  prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: #fcfff5;">
+        <AnchorPane prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: #fcfff5;">
            
         </AnchorPane>
         <AnchorPane fx:id="paneFinalInvoice" layoutX="109.0" layoutY="16.0" prefHeight="769.0" prefWidth="1042.0" style="-fx-background-color: white;">
@@ -495,7 +495,7 @@
                         <Cursor fx:constant="HAND" />
                     </cursor>
                 </JFXButton>
-                <JFXButton fx:id="btnLogOut_Side" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" layoutY="261.0" prefHeight="55.0" prefWidth="60.0" ripplerFill="WHITE" text="LogOut">
+                <JFXButton fx:id="btnLogOut_Side" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" layoutY="261.0" onAction="#logout_button_action" prefHeight="55.0" prefWidth="60.0" ripplerFill="WHITE" text="LogOut">
                     <graphic>
                         <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
                             <image>
@@ -564,7 +564,7 @@
                         <Cursor fx:constant="HAND" />
                     </cursor>
                 </JFXButton>
-                <JFXButton fx:id="btnLogOut" alignment="BASELINE_LEFT" graphicTextGap="15.0" layoutY="261.0" prefHeight="55.0" prefWidth="300.0" ripplerFill="WHITE" text="Đăng xuất">
+                <JFXButton fx:id="btnLogOut" alignment="BASELINE_LEFT" graphicTextGap="15.0" layoutY="261.0" onAction="#logout_button_action" prefHeight="55.0" prefWidth="300.0" ripplerFill="WHITE" text="Đăng xuất">
                     <graphic>
                         <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
                             <image>

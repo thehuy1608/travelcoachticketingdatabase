@@ -111,7 +111,7 @@ public class Controller_login_stage implements Initializable, Serializable {
                     write_metadata_task.setOnSucceeded(event2 -> {
                         animate_loading_anchor_pane(loading_anchor_pane, 0);
                         loading_anchor_pane.toBack();
-                        Stage current_stage = (Stage) btnLogin.getScene().getWindow();
+                        Stage current_stage = (Stage) rootPane.getScene().getWindow();
                         ApplicationConfiguration app_config = new ApplicationConfiguration();
                         try {
                             app_config.configure_stage(current_stage, "/view/fxml/staff/staff_home.fxml", "Minh Nhut Corporation", 1200, 800);
