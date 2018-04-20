@@ -77,20 +77,20 @@ public class SeatDAO {
      * @param seat
      * @return
      */
-    public static int update_seat(Seat seat) {
+    public static boolean update_seat(Seat seat) {
         Session hibernate_session = HibernateUtil.getSessionFactory().openSession();
         hibernate_session.beginTransaction();
         try {
             hibernate_session.saveOrUpdate(seat);
             hibernate_session.getTransaction().commit();
-            return seat.getSeatNumber();
+            return true;
         } catch (Exception e) {
             if (hibernate_session.getTransaction().isActive()) {
                 hibernate_session.getTransaction().rollback();
             }
             hibernate_session.flush();
             hibernate_session.close();
-            return 0;
+            return false;
         }
     }
 

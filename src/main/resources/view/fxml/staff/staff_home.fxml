@@ -444,11 +444,8 @@
                </cursor>
             </JFXHamburger>
             <Rectangle fx:id="btnCustomerInfo_Side_Background" fill="WHITE" height="55.0" layoutY="101.0" stroke="BLACK" strokeMiterLimit="0.0" strokeType="INSIDE" strokeWidth="0.0" width="60.0" />
-            <Rectangle fx:id="btnTripInfo_Side_Background" fill="WHITE" height="55.0" layoutY="186.0" stroke="BLACK" strokeMiterLimit="0.0" strokeType="INSIDE" strokeWidth="0.0" width="60.0" />
-            <Rectangle fx:id="btnTicketing_Side_Background" fill="WHITE" height="55.0" layoutY="271.0" stroke="BLACK" strokeMiterLimit="0.0" strokeType="INSIDE" strokeWidth="0.0" width="60.0" />
-            <Rectangle fx:id="btnCheckOut_Side_Background" fill="WHITE" height="55.0" layoutY="356.0" stroke="BLACK" strokeMiterLimit="0.0" strokeType="INSIDE" strokeWidth="0.0" width="60.0" />
-            <Rectangle fx:id="btnLockScreen_Side_Background" fill="WHITE" height="55.0" layoutY="441.0" stroke="BLACK" strokeMiterLimit="0.0" strokeType="INSIDE" strokeWidth="0.0" width="60.0" />
-            <Rectangle fx:id="btnLogOut_Side_Background" fill="WHITE" height="55.0" layoutY="526.0" stroke="BLACK" strokeMiterLimit="0.0" strokeType="INSIDE" strokeWidth="0.0" width="60.0" />
+            <Rectangle fx:id="btnLockScreen_Side_Background" fill="WHITE" height="55.0" layoutY="181.0" stroke="BLACK" strokeMiterLimit="0.0" strokeType="INSIDE" strokeWidth="0.0" width="60.0" />
+            <Rectangle fx:id="btnLogOut_Side_Background" fill="WHITE" height="55.0" layoutY="261.0" stroke="BLACK" strokeMiterLimit="0.0" strokeType="INSIDE" strokeWidth="0.0" width="60.0" />
             <JFXButton fx:id="btnCustomerInfo_Side" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" layoutY="101.0" prefHeight="55.0" prefWidth="60.0" ripplerFill="WHITE" style="-fx-background-color: transparent;" text="CustomerInfo">
                <graphic>
                   <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
@@ -461,43 +458,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </JFXButton>
-            <JFXButton fx:id="btnTripInfo_Side" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" layoutY="186.0" prefHeight="55.0" prefWidth="60.0" ripplerFill="WHITE" text="TripInfo">
-               <graphic>
-                  <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../icon/SideMenuIcon/trip_info.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </JFXButton>
-            <JFXButton fx:id="btnTicketing_Side" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" layoutY="271.0" prefHeight="55.0" prefWidth="60.0" ripplerFill="WHITE" text="Ticketing">
-               <graphic>
-                  <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../icon/SideMenuIcon/ticket.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </JFXButton>
-            <JFXButton fx:id="btnCheckOut_Side" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" layoutY="356.0" prefHeight="55.0" prefWidth="60.0" ripplerFill="WHITE" text="CheckOut">
-               <graphic>
-                  <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../icon/SideMenuIcon/check_out.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </JFXButton>
-            <JFXButton fx:id="btnLockScreen_Side" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" layoutY="441.0" prefHeight="55.0" prefWidth="60.0" ripplerFill="WHITE" text="LockScreen">
+            <JFXButton fx:id="btnLockScreen_Side" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" layoutY="181.0" prefHeight="55.0" prefWidth="60.0" ripplerFill="WHITE" text="LockScreen">
                <graphic>
                   <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -509,7 +470,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </JFXButton>
-            <JFXButton fx:id="btnLogOut_Side" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" layoutY="526.0" prefHeight="55.0" prefWidth="60.0" ripplerFill="WHITE" text="LogOut">
+            <JFXButton fx:id="btnLogOut_Side" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" layoutY="261.0" prefHeight="55.0" prefWidth="60.0" ripplerFill="WHITE" text="LogOut">
                <graphic>
                   <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -540,11 +501,8 @@
                </cursor>
             </JFXHamburger>
             <Rectangle fx:id="btnCustomerInfo_Background" fill="WHITE" height="55.0" layoutY="101.0" stroke="BLACK" strokeMiterLimit="0.0" strokeType="INSIDE" strokeWidth="0.0" width="300.0" />
-            <Rectangle fx:id="btnTripInfo_Background" fill="WHITE" height="55.0" layoutY="186.0" stroke="BLACK" strokeMiterLimit="0.0" strokeType="INSIDE" strokeWidth="0.0" width="300.0" />
-            <Rectangle fx:id="btnTicketing_Background" fill="WHITE" height="55.0" stroke="BLACK" strokeMiterLimit="0.0" strokeType="INSIDE" strokeWidth="0.0" width="300.0" y="271.0" />
-            <Rectangle fx:id="btnCheckOut_Background" fill="WHITE" height="55.0" layoutY="356.0" stroke="BLACK" strokeMiterLimit="0.0" strokeType="INSIDE" strokeWidth="0.0" width="300.0" />
-            <Rectangle fx:id="btnLockScreen_Background" fill="WHITE" height="55.0" layoutY="441.0" stroke="BLACK" strokeMiterLimit="0.0" strokeType="INSIDE" strokeWidth="0.0" width="300.0" />
-            <Rectangle fx:id="btnLogOut_Background" fill="WHITE" height="55.0" layoutY="526.0" stroke="BLACK" strokeMiterLimit="0.0" strokeType="INSIDE" strokeWidth="0.0" width="300.0" />
+            <Rectangle fx:id="btnLockScreen_Background" fill="WHITE" height="55.0" layoutY="181.0" stroke="BLACK" strokeMiterLimit="0.0" strokeType="INSIDE" strokeWidth="0.0" width="300.0" />
+            <Rectangle fx:id="btnLogOut_Background" fill="WHITE" height="55.0" layoutY="261.0" stroke="BLACK" strokeMiterLimit="0.0" strokeType="INSIDE" strokeWidth="0.0" width="300.0" />
             <JFXButton fx:id="btnCustomerInfo" alignment="BASELINE_LEFT" graphicTextGap="20.0" layoutY="101.0" prefHeight="55.0" prefWidth="300.0" ripplerFill="WHITE" text="Thông tin khách hàng">
                <graphic>
                   <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
@@ -563,61 +521,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </JFXButton>
-            <JFXButton fx:id="btnTripInfo" alignment="BASELINE_LEFT" graphicTextGap="20.0" layoutY="186.0" prefHeight="55.0" prefWidth="300.0" ripplerFill="WHITE" text="Thông tin chuyến đi">
-               <graphic>
-                  <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../icon/SideMenuIcon/trip_info.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-               <padding>
-                  <Insets left="35.0" />
-               </padding>
-               <font>
-                  <Font size="18.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </JFXButton>
-            <JFXButton fx:id="btnTicketing" alignment="BASELINE_LEFT" graphicTextGap="20.0" layoutY="271.0" prefHeight="55.0" prefWidth="300.0" ripplerFill="WHITE" text="Đặt vé xe">
-               <graphic>
-                  <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../icon/SideMenuIcon/ticket.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-               <padding>
-                  <Insets left="35.0" />
-               </padding>
-               <font>
-                  <Font size="18.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </JFXButton>
-            <JFXButton fx:id="btnCheckOut" alignment="BASELINE_LEFT" graphicTextGap="20.0" layoutY="356.0" prefHeight="55.0" prefWidth="300.0" ripplerFill="WHITE" text="Thanh toán vé xe">
-               <graphic>
-                  <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../icon/SideMenuIcon/check_out.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-               <padding>
-                  <Insets left="35.0" />
-               </padding>
-               <font>
-                  <Font size="18.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </JFXButton>
-            <JFXButton fx:id="btnLockScreen" alignment="BASELINE_LEFT" graphicTextGap="20.0" layoutY="441.0" prefHeight="55.0" prefWidth="300.0" ripplerFill="WHITE" text="Khóa màn hình">
+            <JFXButton fx:id="btnLockScreen" alignment="BASELINE_LEFT" graphicTextGap="20.0" layoutY="181.0" prefHeight="55.0" prefWidth="300.0" ripplerFill="WHITE" text="Khóa màn hình">
                <graphic>
                   <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -635,7 +539,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </JFXButton>
-            <JFXButton fx:id="btnLogOut" alignment="BASELINE_LEFT" graphicTextGap="15.0" layoutY="526.0" prefHeight="55.0" prefWidth="300.0" ripplerFill="WHITE" text="Đăng xuất">
+            <JFXButton fx:id="btnLogOut" alignment="BASELINE_LEFT" graphicTextGap="15.0" layoutY="261.0" prefHeight="55.0" prefWidth="300.0" ripplerFill="WHITE" text="Đăng xuất">
                <graphic>
                   <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
                      <image>

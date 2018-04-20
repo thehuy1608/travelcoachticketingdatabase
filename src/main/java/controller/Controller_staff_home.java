@@ -114,23 +114,12 @@ public class Controller_staff_home implements Initializable {
     @FXML
     private JFXButton btnCustomerInfo;
     @FXML
-    private JFXButton btnTripInfo;
-    @FXML
-    private JFXButton btnTicketing;
-    @FXML
-    private JFXButton btnCheckOut;
-    @FXML
     private JFXButton btnLockScreen;
     @FXML
     private JFXButton btnLogOut;
     @FXML
     private JFXButton btnCustomerInfo_Side;
-    @FXML
-    private JFXButton btnTripInfo_Side;
-    @FXML
-    private JFXButton btnTicketing_Side;
-    @FXML
-    private JFXButton btnCheckOut_Side;
+
     @FXML
     private JFXButton btnLockScreen_Side;
     @FXML
@@ -144,23 +133,11 @@ public class Controller_staff_home implements Initializable {
     @FXML
     private Rectangle btnCustomerInfo_Side_Background;
     @FXML
-    private Rectangle btnTripInfo_Side_Background;
-    @FXML
-    private Rectangle btnTicketing_Side_Background;
-    @FXML
-    private Rectangle btnCheckOut_Side_Background;
-    @FXML
     private Rectangle btnLockScreen_Side_Background;
     @FXML
     private Rectangle btnLogOut_Side_Background;
     @FXML
     private Rectangle btnCustomerInfo_Background;
-    @FXML
-    private Rectangle btnTripInfo_Background;
-    @FXML
-    private Rectangle btnTicketing_Background;
-    @FXML
-    private Rectangle btnCheckOut_Background;
     @FXML
     private Rectangle btnLockScreen_Background;
     @FXML
@@ -423,6 +400,7 @@ public class Controller_staff_home implements Initializable {
     private boolean is_modified_invoice_phone_number = false;
     private boolean is_modified_invoice_seat_number = false;
     private String duplicate_seat_string;
+    private int update_seat_result;
 
     /**
      * Initializes the controller class.
@@ -483,30 +461,6 @@ public class Controller_staff_home implements Initializable {
             animate_sidemenu_button_when_lose_hover(btnCustomerInfo_Background);
         });
 
-        btnTripInfo.setOnMouseEntered(event -> {
-            animate_sidemenu_button_when_hover(btnTripInfo_Background);
-        });
-
-        btnTripInfo.setOnMouseExited(event -> {
-            animate_sidemenu_button_when_lose_hover(btnTripInfo_Background);
-        });
-
-        btnTicketing.setOnMouseEntered(event -> {
-            animate_sidemenu_button_when_hover(btnTicketing_Background);
-        });
-
-        btnTicketing.setOnMouseExited(event -> {
-            animate_sidemenu_button_when_lose_hover(btnTicketing_Background);
-        });
-
-        btnCheckOut.setOnMouseEntered(event -> {
-            animate_sidemenu_button_when_hover(btnCheckOut_Background);
-        });
-
-        btnCheckOut.setOnMouseExited(event -> {
-            animate_sidemenu_button_when_lose_hover(btnCheckOut_Background);
-        });
-
         btnLockScreen.setOnMouseEntered(event -> {
             animate_sidemenu_button_when_hover(btnLockScreen_Background);
         });
@@ -530,30 +484,6 @@ public class Controller_staff_home implements Initializable {
 
         btnCustomerInfo_Side.setOnMouseExited(event -> {
             animate_sidemenu_button_when_lose_hover(btnCustomerInfo_Side_Background);
-        });
-
-        btnTripInfo_Side.setOnMouseEntered(event -> {
-            animate_sidemenu_button_when_hover(btnTripInfo_Side_Background);
-        });
-
-        btnTripInfo_Side.setOnMouseExited(event -> {
-            animate_sidemenu_button_when_lose_hover(btnTripInfo_Side_Background);
-        });
-
-        btnTicketing_Side.setOnMouseEntered(event -> {
-            animate_sidemenu_button_when_hover(btnTicketing_Side_Background);
-        });
-
-        btnTicketing_Side.setOnMouseExited(event -> {
-            animate_sidemenu_button_when_lose_hover(btnTicketing_Side_Background);
-        });
-
-        btnCheckOut_Side.setOnMouseEntered(event -> {
-            animate_sidemenu_button_when_hover(btnCheckOut_Side_Background);
-        });
-
-        btnCheckOut_Side.setOnMouseExited(event -> {
-            animate_sidemenu_button_when_lose_hover(btnCheckOut_Side_Background);
         });
 
         btnLockScreen_Side.setOnMouseEntered(event -> {
@@ -871,6 +801,9 @@ public class Controller_staff_home implements Initializable {
             }
         });
         // </editor-fold>
+
+        clean_current_scenes();
+        animate_customer_pane_when_click_on_menu_button(paneCustomerInfo, 0);
     }
 
     //btnSearchCustomerInfo button action
@@ -1276,22 +1209,21 @@ public class Controller_staff_home implements Initializable {
                                 byte seat_status = 1;
                                 seat.setSeatStatus(seat_status);
                                 seat.setModifiedDate(GetCurrentDate.get_current_date());
-                                int update_seat_result = SeatDAO.update_seat(seat);
+                                update_seat_result = added_table_final_invoice_list.get(i).seat_number.get();
 
-                                if (update_seat_result == 0) {
-                                    //Update number of tickets int table_customer_info_list
-                                    int number_of_tickets = table_customer_info_list.get(current_selected_invoice_index - 1).number_of_tickets.get();
-                                    table_customer_info_list.get(current_selected_invoice_index - 1).number_of_tickets = new SimpleIntegerProperty(number_of_tickets + 1);
+                                //Will throw an exception if the Optimistic Locking occurs
+                                SeatDAO.update_seat(seat);
 
-                                    //Add new Invoice line item to Invoice
-                                    Ticket ticket = TicketDAO.get_ticket_by_seat_number_and_trip(seat_number, trip);
-                                    float price = ticket.getTicketPrice();
-                                    Invoicelineitem invoice_line_item = new Invoicelineitem(invoice, ticket, price, GetCurrentDate.get_current_date());
-                                    InvoicelineitemDAO.add_invoice_line_item(invoice_line_item);
-                                } else {
-                                    duplicate_seat_string = duplicate_seat_string + Integer.toString(update_seat_result) + "; ";
-                                    break;
-                                }
+                                //Update number of tickets int table_customer_info_list
+                                int number_of_tickets = table_customer_info_list.get(current_selected_invoice_index - 1).number_of_tickets.get();
+                                table_customer_info_list.get(current_selected_invoice_index - 1).number_of_tickets = new SimpleIntegerProperty(number_of_tickets + 1);
+
+                                //Add new Invoice line item to Invoice
+                                Ticket ticket = TicketDAO.get_ticket_by_seat_number_and_trip(seat_number, trip);
+                                float price = ticket.getTicketPrice();
+                                Invoicelineitem invoice_line_item = new Invoicelineitem(invoice, ticket, price, GetCurrentDate.get_current_date());
+                                InvoicelineitemDAO.add_invoice_line_item(invoice_line_item);
+
                             }
                             //Update invoice price and modified date
                             invoice.setTotalPrice((float) total_price);
@@ -1328,6 +1260,7 @@ public class Controller_staff_home implements Initializable {
                 });
                 update_invoice_task.setOnFailed(event2 -> {
                     reset_invoice();
+                    duplicate_seat_string = duplicate_seat_string + Integer.toString(update_seat_result) + "; ";
                     Alert update_invoice_successfully_alert = new Alert(AlertType.INFORMATION);
                     update_invoice_successfully_alert.setTitle("THÔNG BÁO");
                     update_invoice_successfully_alert.setHeaderText("Ghế " + duplicate_seat_string + "đã được đặt.\nXin vui lòng chọn ghế khác.");
