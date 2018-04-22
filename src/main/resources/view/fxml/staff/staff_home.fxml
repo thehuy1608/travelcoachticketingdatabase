@@ -119,7 +119,7 @@
                     </font>
                 </Label>
                 <Label fx:id="lblFinalInvoiceCoach" layoutX="38.0" layoutY="644.0" prefHeight="30.0" prefWidth="363.0" />
-                <JFXTreeTableView fx:id="tblFinalInvoice" layoutX="422.0" layoutY="275.0" prefHeight="301.0" prefWidth="582.0" stylesheets="@../../styles/components.css">
+                <JFXTreeTableView fx:id="tblFinalInvoice" layoutX="422.0" layoutY="275.0" prefHeight="320.0" prefWidth="582.0" stylesheets="@../../styles/components.css">
                     <columns>
                         <TreeTableColumn fx:id="tblFinalInvoice_Index" prefWidth="61.0" style="-fx-alignment: CENTER;" text="STT" />
                         <TreeTableColumn fx:id="tblFinalInvoice_TicketName" prefWidth="173.0" style="-fx-alignment: CENTER;" text="Tên vé" />
@@ -325,7 +325,7 @@
                         </JFXButton>
                         <JFXTextField fx:id="txtInvoiceDeparture" editable="false" layoutX="310.0" layoutY="584.0" prefHeight="50.0" prefWidth="500.0" />
                         <JFXTextField fx:id="txtInvoiceDestination" editable="false" layoutX="310.0" layoutY="701.0" prefHeight="50.0" prefWidth="500.0" />
-                        <JFXTreeTableView fx:id="tblEditInvoice" layoutX="310.0" layoutY="1839.0" prefHeight="316.0" prefWidth="500.0" stylesheets="@../../styles/components.css">
+                        <JFXTreeTableView fx:id="tblEditInvoice" layoutX="310.0" layoutY="1839.0" prefHeight="322.0" prefWidth="500.0" stylesheets="@../../styles/components.css">
                             <columns>
                                 <TreeTableColumn fx:id="tblEditInvoice_Index" prefWidth="48.0" style="-fx-alignment: CENTER;" text="STT" />
                                 <TreeTableColumn fx:id="tblEditInvoice_TicketName" prefWidth="155.0" style="-fx-alignment: CENTER;" text="Tên vé" />
