@@ -18,6 +18,7 @@ import com.jfoenix.controls.JFXTreeTableView;
 import com.jfoenix.controls.RecursiveTreeItem;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import com.jfoenix.transitions.hamburger.HamburgerBackArrowBasicTransition;
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -1172,10 +1173,12 @@ public class Controller_staff_home implements Initializable, Serializable {
         boolean is_success_export_invoice = false;
         btnExportInvoice.setVisible(false);
         tblFinalInvoice.getSelectionModel().clearSelection();
+        String path = "";
+        File invoice_printable_image_file = null;
         try {
             WritableImage invoice_printable_image = paneFinalInvoice.snapshot(new SnapshotParameters(), null);
-            String path = System.getProperty("user.home") + File.separator + "Documents" + File.separator + "TravelBusTicketing" + File.separator + "Invoice.png";
-            File invoice_printable_image_file = new File(path);
+            path = System.getProperty("user.home") + File.separator + "Documents" + File.separator + "TravelBusTicketing" + File.separator + "Invoice.png";
+            invoice_printable_image_file = new File(path);
             Files.deleteIfExists(invoice_printable_image_file.toPath());
             if (invoice_printable_image_file.createNewFile()) {
                 ImageIO.write(SwingFXUtils.fromFXImage(invoice_printable_image, null), "png", invoice_printable_image_file);
@@ -1191,6 +1194,11 @@ public class Controller_staff_home implements Initializable, Serializable {
             Optional<ButtonType> export_image_alert_action = export_invoice_success_alert.showAndWait();
             if (export_image_alert_action.get() == ButtonType.OK) {
                 btnExportInvoice.setVisible(true);
+                try {
+                    Desktop.getDesktop().open(invoice_printable_image_file);
+                } catch (IOException ex) {
+                    Logger.getLogger(Controller_staff_home.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
 
