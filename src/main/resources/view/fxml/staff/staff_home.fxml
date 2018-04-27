@@ -185,7 +185,7 @@
                         <TreeTableColumn fx:id="tblSearchCustomerInfoResult_tickets" prefWidth="51.0" style="-fx-alignment: CENTER;" text="Số vé" />
                         <TreeTableColumn fx:id="tblSearchCustomerInfoResult_payment_status" prefWidth="167.0" text="Tình trạng thanh toán" />
                         <TreeTableColumn fx:id="tblSearchCustomerInfoResult_start_date" prefWidth="125.0" style="-fx-alignment: CENTER;" text="Ngày khởi hành" />
-                        <TreeTableColumn fx:id="tblSearchCustomerInfoResult_added_date" prefWidth="133.0" style="-fx-alignment: CENTER;" text="Ngày thêm" />
+                        <TreeTableColumn fx:id="tblSearchCustomerInfoResult_added_date" prefWidth="133.0" style="-fx-alignment: CENTER;" text="Ngày lập" />
                     </columns>
                 </JFXTreeTableView>
                 <Label fx:id="lblSearchCustomerInfo_result_count" layoutX="252.0" layoutY="213.0" opacity="0.0" prefHeight="30.0" prefWidth="610.0" textFill="#193441">

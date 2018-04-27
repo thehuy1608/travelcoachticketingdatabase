@@ -413,7 +413,6 @@ public class Controller_staff_home implements Initializable, Serializable {
     private final ObservableList<TableSearchCustomerInfoDataModel> table_customer_info_list = FXCollections.observableArrayList();
     private ObservableList<TableFinalInvoiceModel> table_final_invoice_list = FXCollections.observableArrayList();
     private ObservableList<TableFinalInvoiceModel> original_table_final_invoice_list;
-    private ObservableList<TableFinalInvoiceModel> added_table_final_invoice_list = FXCollections.observableArrayList();
     private List<Invoice> invoice_list;
     private LoadingAnchorPane loading_anchor_pane = new LoadingAnchorPane();
     private int current_selected_invoice_id = 0;
@@ -1264,27 +1263,38 @@ public class Controller_staff_home implements Initializable, Serializable {
                             Invoice invoice = InvoiceDAO.get_invoice_by_id(current_selected_invoice_id);
                             Trip trip = InvoiceDAO.get_invoice_by_id(current_selected_invoice_id).getTrip();
                             CoachDriverTrip cdt = CoachDriverTripDAO.get_coach_driver_trip_by_trip(trip);
-                            int coach_id = cdt.getCoach().getCoachId();
-                            added_table_final_invoice_list.clear();
-                            table_final_invoice_list.forEach(item -> {
-                                if (!original_table_final_invoice_list.contains(item)) {
-                                    added_table_final_invoice_list.add(item);
-                                }
-                            });
-                            for (int i = 0; i < added_table_final_invoice_list.size(); i++) {
+                            int coach_id = cdt.getCoach().getCoachId();                            
+                            for (int i = 0; i < original_table_final_invoice_list.size(); i++) {
                                 //Update seat status
-                                byte seat_number = (byte) added_table_final_invoice_list.get(i).seat_number.get();
+                                byte seat_number = (byte) original_table_final_invoice_list.get(i).seat_number.get();
+                                Seat seat = SeatDAO.get_seat_by_coach_id_and_seat_number(coach_id, seat_number);
+                                byte seat_status = 0;
+                                seat.setSeatStatus(seat_status);
+                                seat.setModifiedDate(GetCurrentDate.get_current_date());
+                                update_seat_result = original_table_final_invoice_list.get(i).seat_number.get();
+
+                                //Will throw an exception if the Optimistic Locking occurs
+                                SeatDAO.update_seat(seat);
+                                
+                                List<Invoicelineitem> list_invoice_line_item = InvoicelineitemDAO.get_invoice_line_items_by_invoice_id(current_selected_invoice_id);
+                                list_invoice_line_item.forEach(invoice_line_item -> {
+                                    InvoicelineitemDAO.delete_invoice_line_item(invoice_line_item);
+                                });
+                            }
+                            int number_of_tickets = 0;
+                            for (int i = 0; i < table_final_invoice_list.size(); i++) {
+                                //Update seat status
+                                byte seat_number = (byte) table_final_invoice_list.get(i).seat_number.get();
                                 Seat seat = SeatDAO.get_seat_by_coach_id_and_seat_number(coach_id, seat_number);
                                 byte seat_status = 1;
                                 seat.setSeatStatus(seat_status);
                                 seat.setModifiedDate(GetCurrentDate.get_current_date());
-                                update_seat_result = added_table_final_invoice_list.get(i).seat_number.get();
+                                update_seat_result = table_final_invoice_list.get(i).seat_number.get();
 
                                 //Will throw an exception if the Optimistic Locking occurs
                                 SeatDAO.update_seat(seat);
 
-                                //Update number of tickets int table_customer_info_list
-                                int number_of_tickets = table_customer_info_list.get(current_selected_invoice_index - 1).number_of_tickets.get();
+                                //Update number of tickets int table_customer_info_list                                
                                 table_customer_info_list.get(current_selected_invoice_index - 1).number_of_tickets = new SimpleIntegerProperty(number_of_tickets + 1);
 
                                 //Add new Invoice line item to Invoice
